@@ -13,7 +13,7 @@ namespace GibFrame.UI
     /// <summary>
     ///   Button press utility. Attach this component to a UI image.
     /// </summary>
-    public class TButton : MonoBehaviour
+    public class GButton : MonoBehaviour
     {
         public bool colorPressEffect;
         public Color32 pressedColor;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace GibFrame.UI
 {
-    public class ToggleButton : TButton
+    public class ToggleButton : GButton
     {
         public bool colorChange;
         public bool spriteChange;

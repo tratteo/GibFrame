@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GibFrame.Plugins
 {
-    public class TVibrator
+    public class Vibrator
     {
         private AndroidJavaClass unityPlayer;
         private AndroidJavaObject activity;
@@ -14,7 +14,7 @@ namespace GibFrame.Plugins
         private bool usesModenAPI = false;
         private int defaultAmplitude;
 
-        public TVibrator()
+        public Vibrator()
         {
             if (IsOnAndroid())
             {

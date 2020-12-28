@@ -5,10 +5,10 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-[CustomEditor(typeof(TButton))]
-public class TButton_CE : Editor
+[CustomEditor(typeof(GButton))]
+public class GButton_CE : Editor
 {
-    private TButton script;
+    private GButton script;
     private SerializedProperty pointerDownProp, pointerUpProp;
 
     public override void OnInspectorGUI()
@@ -36,7 +36,7 @@ public class TButton_CE : Editor
 
     protected virtual void OnEnable()
     {
-        script = (TButton)target;
+        script = (GButton)target;
 
         pointerDownProp = serializedObject.FindProperty("onPressed");
         pointerUpProp = serializedObject.FindProperty("onReleased");

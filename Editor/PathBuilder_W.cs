@@ -14,15 +14,15 @@ public class PathBuilder_W : EditorWindow
     private float sProb = 1F;
     private GUIStyle sectionsStyle;
 
-    [MenuItem("Window/TUtils/Path Builder")]
+    [MenuItem("Window/GibFrame/Path Builder")]
     public static void ShowWindow()
     {
-        GetWindow(typeof(PathBuilder_W)).titleContent = new GUIContent("TPath Builder");
+        GetWindow(typeof(PathBuilder_W)).titleContent = new GUIContent("Path Builder");
     }
 
     private void OnEnable()
     {
-        waypoint = Resources.Load("TUtils/PathBuilder/Waypoint") as GameObject;
+        waypoint = Resources.Load("GibFrame/PathBuilder/Waypoint_P") as GameObject;
         sectionsStyle = new GUIStyle();
         to = new List<Waypoint> { null };
         from = null;

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(ToggleButton))]
-public class ToggleButton_CE : TButton_CE
+public class ToggleButton_CE : GButton_CE
 {
     private ToggleButton script;
     private GUIStyle style;
