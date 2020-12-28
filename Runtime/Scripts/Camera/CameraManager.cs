@@ -1,5 +1,6 @@
 ﻿// Copyright (c) 2020 Matteo Beltrame
 
+using GibFrame.Patterns;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -9,11 +10,9 @@ namespace GibFrame.CameraUtils
     /// <summary>
     ///   Attach this component to a GameObject and insert all the cameras in the slot, then use this component to acces and manipulate them
     /// </summary>
-    public class CameraManager : MonoBehaviour
+    public class CameraManager : MonoSingleton<CameraManager>
     {
         [SerializeField] private CameraInfo[] cameras;
-
-        public static CameraManager Instance { get; private set; } = null;
 
         public CameraEffects Effects { get; private set; }
 
@@ -99,17 +98,9 @@ namespace GibFrame.CameraUtils
             return camera;
         }
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
+            base.Awake();
             int length = cameras.Length;
             for (int i = 0; i < length; i++)
             {

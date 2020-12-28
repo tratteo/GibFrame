@@ -1,12 +1,13 @@
 ﻿// Copyright (c) 2020 Matteo Beltrame
 
+using GibFrame.Patterns;
 using System;
 using System.Collections;
 using UnityEngine;
 
 namespace GibFrame.Audio
 {
-    public class AudioManager : MonoBehaviour
+    public class AudioManager : MonoSingleton<AudioManager>
     {
         [SerializeField] private Sound[] sounds = null;
         [SerializeField] private Sound[] musics = null;
@@ -15,8 +16,6 @@ namespace GibFrame.Audio
         private bool musicActive = true;
 
         private Sound currentMusic = null;
-
-        public static AudioManager Instance { get; private set; } = null;
 
         /// <summary>
         ///   <para> Smooth out a sound in a specified time with specified stride chunks </para>
@@ -226,6 +225,33 @@ namespace GibFrame.Audio
             this.musicActive = musicActive;
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            int length = sounds.Length;
+            for (int i = 0; i < length; i++)
+            {
+                sounds[i].source = gameObject.AddComponent<AudioSource>();
+                sounds[i].source.clip = sounds[i].clip;
+                sounds[i].source.volume = sounds[i].volume;
+                sounds[i].currentVolume = sounds[i].volume;
+                sounds[i].source.pitch = sounds[i].pitch;
+                sounds[i].source.loop = sounds[i].loop;
+            }
+
+            length = musics.Length;
+            for (int i = 0; i < length; i++)
+            {
+                musics[i].source = gameObject.AddComponent<AudioSource>();
+                musics[i].source.clip = musics[i].clip;
+                musics[i].source.volume = musics[i].volume;
+                musics[i].currentVolume = musics[i].volume;
+                musics[i].source.pitch = musics[i].pitch;
+                musics[i].source.loop = musics[i].loop;
+            }
+        }
+
         private IEnumerator SmoothOutSound_C(Sound s, float duration)
         {
             if (s != null)
@@ -263,43 +289,6 @@ namespace GibFrame.Audio
                 }
                 s.source.volume = s.currentVolume;
                 s.isSmoothing = false;
-            }
-        }
-
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            DontDestroyOnLoad(gameObject);
-
-            int length = sounds.Length;
-            for (int i = 0; i < length; i++)
-            {
-                sounds[i].source = gameObject.AddComponent<AudioSource>();
-                sounds[i].source.clip = sounds[i].clip;
-                sounds[i].source.volume = sounds[i].volume;
-                sounds[i].currentVolume = sounds[i].volume;
-                sounds[i].source.pitch = sounds[i].pitch;
-                sounds[i].source.loop = sounds[i].loop;
-            }
-
-            length = musics.Length;
-            for (int i = 0; i < length; i++)
-            {
-                musics[i].source = gameObject.AddComponent<AudioSource>();
-                musics[i].source.clip = musics[i].clip;
-                musics[i].source.volume = musics[i].volume;
-                musics[i].currentVolume = musics[i].volume;
-                musics[i].source.pitch = musics[i].pitch;
-                musics[i].source.loop = musics[i].loop;
             }
         }
     }

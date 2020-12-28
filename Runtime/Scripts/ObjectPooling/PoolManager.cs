@@ -1,15 +1,14 @@
 ﻿// Copyright (c) 2020 Matteo Beltrame
 
+using GibFrame.Patterns;
 using System;
 using UnityEngine;
 
 namespace GibFrame.ObjectPooling
 {
-    public class PoolManager : MonoBehaviour
+    public class PoolManager : MonoSingleton<PoolManager>
     {
         [SerializeField] private PoolCategory[] poolsCategory = null;
-
-        public static PoolManager Instance { get; private set; } = null;
 
         /// <summary>
         ///   Spawn from the specified category and pool
@@ -81,18 +80,9 @@ namespace GibFrame.ObjectPooling
             return pool?.prefab;
         }
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
-
+            base.Awake();
             int length = poolsCategory.Length;
             for (int i = 0; i < length; i++)
             {
