@@ -1,0 +1,26 @@
+{
+    "name": "com.tratteo.gibframe",
+    "version": "3.1.3",
+    "displayName": "GibFrame Package",
+    "description": "A Unity framework containing some useful utitlities",
+    "keywords": [
+      "plugin",
+      "utils"
+    ],
+    "author": {
+      "name": "Tratteo",
+      "url": "https://github.com/tratteo/"
+    },
+	 "samples": [
+    {
+      "displayName": "Save System",
+      "description": "Scene demostrating the save system and the serializable classes",
+      "path": "Samples/Demo/SaveSystem"
+    },
+	{
+	  "displayName": "Object Pooling",
+      "description": "Scene showing the object pooling paradigm and how to setup a basic pooling framework",
+      "path": "Samples/Demo/ObjectPooling"
+	}
+	]
+  }

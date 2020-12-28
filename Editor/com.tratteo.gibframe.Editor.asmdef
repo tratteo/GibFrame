@@ -1,0 +1,18 @@
+{
+    "name": "com.tratteo.gibframe.Editor",
+    "rootNamespace": "com.tratteo.gibframe.Editor",
+    "references": [
+        "GUID:aca4f4cfb37fb8f44ac2c3086652ae75"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

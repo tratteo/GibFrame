@@ -1,0 +1,14 @@
+{
+    "name": "com.tratteo.gibframe",
+    "rootNamespace": "com.tratteo.gibframe",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
