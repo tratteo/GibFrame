@@ -17,12 +17,12 @@
     {
       "displayName": "Save System",
       "description": "Scene demostrating the save system and the serializable classes",
-      "path": "Samples/Demo/SaveSystem"
+      "path": "Samples~/Demo/SaveSystem"
     },
     {
       "displayName": "Object Pooling",
       "description": "Scene showing the object pooling paradigm and how to setup a basic pooling framework",
-      "path": "Samples/Demo/ObjectPooling"
+      "path": "Samples~/Demo/ObjectPooling"
     }
   ]
 }
