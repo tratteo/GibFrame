@@ -49,7 +49,7 @@ namespace GibFrame.PathBuilder
             {
                 return null;
             }
-            return Utils.Utils.SelectWithProbability(options).Point;
+            return Utils.General.SelectWithProbability(options).Point;
         }
 
         private void OnDestroy()
@@ -58,7 +58,7 @@ namespace GibFrame.PathBuilder
 
         private void Awake()
         {
-            Utils.Utils.NormalizeProbabilities(options, o => o.ProvideSelectProbability());
+            Utils.General.NormalizeProbabilities(options, o => o.ProvideSelectProbability());
         }
 
         private void OnDrawGizmos()

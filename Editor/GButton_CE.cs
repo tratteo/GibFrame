@@ -15,6 +15,8 @@ public class GButton_CE : Editor
     {
         EditorGUILayout.PropertyField(pointerDownProp);
         EditorGUILayout.PropertyField(pointerUpProp);
+        EditorGUILayout.LabelField("Pressed sprite");
+        script.pressedSprite = EditorGUILayout.ObjectField(script.pressedSprite, typeof(Sprite), true) as Sprite;
         script.colorPressEffect = EditorGUILayout.Toggle("Pressed color effect", script.colorPressEffect);
         if (script.colorPressEffect)
         {

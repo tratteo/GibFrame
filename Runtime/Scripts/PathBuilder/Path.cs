@@ -15,7 +15,7 @@ namespace GibFrame.PathBuilder
 
         public Waypoint GetRandomStartPoint()
         {
-            return Utils.Utils.SelectWithProbability(startPoints).Point;
+            return Utils.General.SelectWithProbability(startPoints).Point;
         }
 
         public void CreateWaypoint(Vector3 position)
@@ -131,12 +131,12 @@ namespace GibFrame.PathBuilder
 
         public Waypoint GetClosestWaypoint(Vector3 position)
         {
-            return Utils.Utils.GetPredicateMinObject(path.ToArray(), w => Vector3.Distance(position, w.Position));
+            return Utils.General.GetPredicateMinObject(path.ToArray(), w => Vector3.Distance(position, w.Position));
         }
 
         private void Awake()
         {
-            Utils.Utils.NormalizeProbabilities(startPoints, s => s.ProvideSelectProbability());
+            Utils.General.NormalizeProbabilities(startPoints, s => s.ProvideSelectProbability());
             UnityUtils.ReadGameObject(out waypointPrefab, "TUtils/PathBuilder/Waypoint");
         }
     }

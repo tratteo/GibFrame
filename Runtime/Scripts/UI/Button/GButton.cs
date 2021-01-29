@@ -15,16 +15,16 @@ namespace GibFrame.UI
     /// </summary>
     public class GButton : MonoBehaviour
     {
+        public Sprite pressedSprite;
         public bool colorPressEffect;
         public Color32 pressedColor;
         public bool resizeOnPress;
         public Vector2 pressedScaleMultiplier;
-
         public Color32 defaultColor;
-        public Image sprite;
-
+        public Image image;
         public UnityEvent onPressed;
         public UnityEvent onReleased;
+        private Sprite unpressedSprite;
         private List<AbstractCallback> OnReleaseCallbacks;
         private List<AbstractCallback> OnPressedCallbacks;
         private EventTrigger.Entry pointerDown;
@@ -44,9 +44,10 @@ namespace GibFrame.UI
         {
             OnReleaseCallbacks = new List<AbstractCallback>();
             OnPressedCallbacks = new List<AbstractCallback>();
-            sprite = GetComponentInChildren<Image>();
+            image = GetComponentInChildren<Image>();
+            unpressedSprite = image.sprite;
 
-            defaultColor = sprite.color;
+            defaultColor = image.color;
 
             EventTrigger trigger = gameObject.AddComponent<EventTrigger>();
 
@@ -66,17 +67,21 @@ namespace GibFrame.UI
         {
             if (colorPressEffect)
             {
-                sprite.color = pressedColor;
+                image.color = pressedColor;
             }
             if (resizeOnPress)
             {
-                Vector2 newScale = new Vector2(sprite.rectTransform.localScale.x * pressedScaleMultiplier.x, sprite.rectTransform.localScale.y * pressedScaleMultiplier.y);
-                sprite.rectTransform.localScale = newScale;
+                Vector2 newScale = new Vector2(image.rectTransform.localScale.x * pressedScaleMultiplier.x, image.rectTransform.localScale.y * pressedScaleMultiplier.y);
+                image.rectTransform.localScale = newScale;
             }
             onPressed.Invoke();
             foreach (AbstractCallback callback in OnPressedCallbacks)
             {
                 callback.Invoke();
+            }
+            if (pressedSprite != null)
+            {
+                image.sprite = pressedSprite;
             }
         }
 
@@ -84,17 +89,18 @@ namespace GibFrame.UI
         {
             if (colorPressEffect)
             {
-                sprite.color = defaultColor;
+                image.color = defaultColor;
             }
             if (resizeOnPress)
             {
-                sprite.rectTransform.localScale = Vector2.one;
+                image.rectTransform.localScale = Vector2.one;
             }
             onReleased.Invoke();
             foreach (AbstractCallback callback in OnReleaseCallbacks)
             {
                 callback.Invoke();
             }
+            image.sprite = unpressedSprite;
         }
     }
 }

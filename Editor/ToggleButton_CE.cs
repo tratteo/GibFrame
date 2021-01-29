@@ -25,7 +25,9 @@ public class ToggleButton_CE : GButton_CE
         script.spriteChange = EditorGUILayout.Toggle("Sprite toggle", script.spriteChange);
         if (script.spriteChange)
         {
+            EditorGUILayout.LabelField("Enabled");
             script.enabledSprite = EditorGUILayout.ObjectField(script.enabledSprite, typeof(Sprite), true) as Sprite;
+            EditorGUILayout.LabelField("Disabled");
             script.disabledSprite = EditorGUILayout.ObjectField(script.disabledSprite, typeof(Sprite), true) as Sprite;
         }
     }

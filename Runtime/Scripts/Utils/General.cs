@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GibFrame.Utils
 {
-    public class Utils
+    public class General
     {
         /// <summary>
         ///   Copy an array to another array ignoring the elements at indexes: <paramref name="indexesExcepts"/>

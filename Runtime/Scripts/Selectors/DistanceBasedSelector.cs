@@ -23,17 +23,17 @@ namespace GibFrame.Selectors
                 {
                     Collider selected = null;
                     Collider[] colliders = Physics.OverlapSphere(transform.position, senseRadius);
-                    List<Collider> selectables = Utils.Utils.GetPredicatesMatchingObjects(colliders, (c) => c.CompareTag(selectableTag));
+                    List<Collider> selectables = Utils.General.GetPredicatesMatchingObjects(colliders, (c) => c.CompareTag(selectableTag));
                     if (selectables != null && selectables.Count > 0)
                     {
                         switch (paradigm)
                         {
                             case Paradigm.CLOSEST:
-                                selected = Utils.Utils.GetPredicateMinObject(selectables, c => Vector3.Distance(transform.position, c.transform.position));
+                                selected = Utils.General.GetPredicateMinObject(selectables, c => Vector3.Distance(transform.position, c.transform.position));
                                 break;
 
                             case Paradigm.FARTHEST:
-                                selected = Utils.Utils.GetPredicateMaxObject(selectables, c => Vector3.Distance(transform.position, c.transform.position));
+                                selected = Utils.General.GetPredicateMaxObject(selectables, c => Vector3.Distance(transform.position, c.transform.position));
                                 break;
                         }
                         if (ColliderSatisfiesPredicates(selected))
