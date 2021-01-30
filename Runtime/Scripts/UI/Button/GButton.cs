@@ -28,6 +28,8 @@ namespace GibFrame.UI
         private Sprite unpressedSprite;
         private List<AbstractCallback> OnReleaseCallbacks;
         private List<AbstractCallback> OnPressedCallbacks;
+        private List<AbstractCallback> OnPointerEnterCallbacks;
+        private List<AbstractCallback> OnPointerExitCallbacks;
         private EventTrigger.Entry pointerDown;
         private EventTrigger.Entry pointerUp;
         private bool canReleaseExecute = false;
@@ -43,8 +45,23 @@ namespace GibFrame.UI
             OnReleaseCallbacks.Add(Callback);
         }
 
+        public void AddOnPointerEnterCallback(AbstractCallback callback)
+        {
+            OnPointerEnterCallbacks.Add(callback);
+        }
+
+        public void AddOnPointerExitCallback(AbstractCallback callback)
+        {
+            OnPointerExitCallbacks.Add(callback);
+        }
+
         public void OnPointerEnter(PointerEventData eventData)
         {
+            foreach (AbstractCallback callback in OnPointerEnterCallbacks)
+            {
+                callback.Invoke();
+            }
+
             if (pressOnlyOnPointerInside)
             {
                 canReleaseExecute = true;
@@ -57,6 +74,10 @@ namespace GibFrame.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            foreach (AbstractCallback callback in OnPointerExitCallbacks)
+            {
+                callback.Invoke();
+            }
             if (pressOnlyOnPointerInside)
             {
                 canReleaseExecute = false;
@@ -68,6 +89,8 @@ namespace GibFrame.UI
         {
             OnReleaseCallbacks = new List<AbstractCallback>();
             OnPressedCallbacks = new List<AbstractCallback>();
+            OnPointerExitCallbacks = new List<AbstractCallback>();
+            OnPointerEnterCallbacks = new List<AbstractCallback>();
             image = GetComponentInChildren<Image>();
             unpressedSprite = image.sprite;
 
