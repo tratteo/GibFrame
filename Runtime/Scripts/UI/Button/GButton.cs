@@ -13,7 +13,7 @@ namespace GibFrame.UI
     /// <summary>
     ///   Button press utility. Attach this component to a UI image.
     /// </summary>
-    public class GButton : MonoBehaviour
+    public class GButton : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
         public Sprite pressedSprite;
         public bool colorPressEffect;
@@ -29,6 +29,8 @@ namespace GibFrame.UI
         private List<AbstractCallback> OnPressedCallbacks;
         private EventTrigger.Entry pointerDown;
         private EventTrigger.Entry pointerUp;
+        private bool canReleaseExecute = false;
+        private bool clicked = false;
 
         public void AddOnPressedCallback(AbstractCallback Callback)
         {
@@ -38,6 +40,21 @@ namespace GibFrame.UI
         public void AddOnReleasedCallback(AbstractCallback Callback)
         {
             OnReleaseCallbacks.Add(Callback);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            canReleaseExecute = true;
+            if (clicked)
+            {
+                PressUI();
+            }
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            canReleaseExecute = false;
+            ResetUI();
         }
 
         protected virtual void Awake()
@@ -65,27 +82,30 @@ namespace GibFrame.UI
 
         private void Pressed()
         {
-            if (colorPressEffect)
-            {
-                image.color = pressedColor;
-            }
-            if (resizeOnPress)
-            {
-                Vector2 newScale = new Vector2(image.rectTransform.localScale.x * pressedScaleMultiplier.x, image.rectTransform.localScale.y * pressedScaleMultiplier.y);
-                image.rectTransform.localScale = newScale;
-            }
+            clicked = true;
+            PressUI();
             onPressed.Invoke();
             foreach (AbstractCallback callback in OnPressedCallbacks)
             {
                 callback.Invoke();
             }
-            if (pressedSprite != null)
-            {
-                image.sprite = pressedSprite;
-            }
         }
 
         private void Released()
+        {
+            ResetUI();
+            clicked = false;
+            foreach (AbstractCallback callback in OnReleaseCallbacks)
+            {
+                callback.Invoke();
+            }
+            if (canReleaseExecute)
+            {
+                onReleased.Invoke();
+            }
+        }
+
+        private void ResetUI()
         {
             if (colorPressEffect)
             {
@@ -95,12 +115,24 @@ namespace GibFrame.UI
             {
                 image.rectTransform.localScale = Vector2.one;
             }
-            onReleased.Invoke();
-            foreach (AbstractCallback callback in OnReleaseCallbacks)
-            {
-                callback.Invoke();
-            }
             image.sprite = unpressedSprite;
+        }
+
+        private void PressUI()
+        {
+            if (colorPressEffect)
+            {
+                image.color = pressedColor;
+            }
+            if (resizeOnPress)
+            {
+                Vector2 newScale = new Vector2(image.rectTransform.localScale.x * pressedScaleMultiplier.x, image.rectTransform.localScale.y * pressedScaleMultiplier.y);
+                image.rectTransform.localScale = newScale;
+            }
+            if (pressedSprite != null)
+            {
+                image.sprite = pressedSprite;
+            }
         }
     }
 }
