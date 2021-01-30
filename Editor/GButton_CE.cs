@@ -15,6 +15,7 @@ public class GButton_CE : Editor
     {
         EditorGUILayout.PropertyField(pointerDownProp);
         EditorGUILayout.PropertyField(pointerUpProp);
+        script.pressOnlyOnPointerInside = EditorGUILayout.Toggle("Pressed only on pointer inside", script.pressOnlyOnPointerInside);
         EditorGUILayout.LabelField("Pressed sprite");
         script.pressedSprite = EditorGUILayout.ObjectField(script.pressedSprite, typeof(Sprite), true) as Sprite;
         script.colorPressEffect = EditorGUILayout.Toggle("Pressed color effect", script.colorPressEffect);

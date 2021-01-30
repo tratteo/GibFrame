@@ -15,6 +15,7 @@ namespace GibFrame.UI
     /// </summary>
     public class GButton : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
+        public bool pressOnlyOnPointerInside = true;
         public Sprite pressedSprite;
         public bool colorPressEffect;
         public Color32 pressedColor;
@@ -44,17 +45,23 @@ namespace GibFrame.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            canReleaseExecute = true;
-            if (clicked)
+            if (pressOnlyOnPointerInside)
             {
-                PressUI();
+                canReleaseExecute = true;
+                if (clicked)
+                {
+                    PressUI();
+                }
             }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            canReleaseExecute = false;
-            ResetUI();
+            if (pressOnlyOnPointerInside)
+            {
+                canReleaseExecute = false;
+                ResetUI();
+            }
         }
 
         protected virtual void Awake()
@@ -99,7 +106,7 @@ namespace GibFrame.UI
             {
                 callback.Invoke();
             }
-            if (canReleaseExecute)
+            if (canReleaseExecute || !pressOnlyOnPointerInside)
             {
                 onReleased.Invoke();
             }
