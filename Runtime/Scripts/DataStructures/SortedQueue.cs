@@ -72,6 +72,16 @@ namespace GibFrame.DataStructures
             }
         }
 
+        public bool Remove(T elem)
+        {
+            return objects.Remove(elem);
+        }
+
+        public T Find(Predicate<T> predicate)
+        {
+            return objects.Find(predicate);
+        }
+
         public void Clear() => objects.Clear();
     }
 }
