@@ -26,10 +26,12 @@ namespace GibFrame.UI
         public UnityEvent onPressed;
         public UnityEvent onReleased;
         private Sprite unpressedSprite;
+
         private List<AbstractCallback> OnReleaseCallbacks;
         private List<AbstractCallback> OnPressedCallbacks;
         private List<AbstractCallback> OnPointerEnterCallbacks;
         private List<AbstractCallback> OnPointerExitCallbacks;
+
         private EventTrigger.Entry pointerDown;
         private EventTrigger.Entry pointerUp;
         private bool canReleaseExecute = false;
