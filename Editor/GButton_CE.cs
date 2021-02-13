@@ -10,12 +10,20 @@ public class GButton_CE : Editor
 {
     private GButton script;
     private SerializedProperty pointerDownProp, pointerUpProp;
+    private GUIStyle labelStyle;
 
     public override void OnInspectorGUI()
     {
         EditorGUILayout.PropertyField(pointerDownProp);
         EditorGUILayout.PropertyField(pointerUpProp);
-        script.pressOnlyOnPointerInside = EditorGUILayout.Toggle("Pressed only on pointer inside", script.pressOnlyOnPointerInside);
+        EditorGUILayout.Space(10);
+        EditorGUILayout.LabelField("Behaviour", labelStyle);
+        EditorGUILayout.Space(4);
+        script.callbackOnlyOnPointerInside = EditorGUILayout.Toggle("Events only on pointer inside", script.callbackOnlyOnPointerInside);
+        script.inheritCallbackEvents = EditorGUILayout.Toggle("Inherit callbacks activation", script.inheritCallbackEvents);
+        EditorGUILayout.Space(10);
+        EditorGUILayout.LabelField("Graphics", labelStyle);
+        EditorGUILayout.Space(4);
         EditorGUILayout.LabelField("Pressed sprite");
         script.pressedSprite = EditorGUILayout.ObjectField(script.pressedSprite, typeof(Sprite), true) as Sprite;
         script.colorPressEffect = EditorGUILayout.Toggle("Pressed color effect", script.colorPressEffect);
@@ -43,5 +51,8 @@ public class GButton_CE : Editor
 
         pointerDownProp = serializedObject.FindProperty("onPressed");
         pointerUpProp = serializedObject.FindProperty("onReleased");
+        labelStyle = new GUIStyle();
+        labelStyle.fontSize = 16;
+        labelStyle.normal.textColor = Color.white;
     }
 }

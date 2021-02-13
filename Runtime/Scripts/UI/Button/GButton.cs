@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using GibFrame.Utils;
 using GibFrame.Utils.Callbacks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,7 +16,7 @@ namespace GibFrame.UI
     /// </summary>
     public class GButton : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
-        public bool pressOnlyOnPointerInside = true;
+        public bool callbackOnlyOnPointerInside = false;
         public Sprite pressedSprite;
         public bool colorPressEffect;
         public Color32 pressedColor;
@@ -25,6 +26,7 @@ namespace GibFrame.UI
         public Image image;
         public UnityEvent onPressed;
         public UnityEvent onReleased;
+        public bool inheritCallbackEvents = false;
         private Sprite unpressedSprite;
 
         private List<AbstractCallback> OnReleaseCallbacks;
@@ -36,6 +38,7 @@ namespace GibFrame.UI
         private EventTrigger.Entry pointerUp;
         private bool canReleaseExecute = false;
         private bool clicked = false;
+        private GButton[] childButtons;
 
         public void AddOnPressedCallback(AbstractCallback Callback)
         {
@@ -64,7 +67,7 @@ namespace GibFrame.UI
                 callback.Invoke();
             }
 
-            if (pressOnlyOnPointerInside)
+            if (callbackOnlyOnPointerInside)
             {
                 canReleaseExecute = true;
                 if (clicked)
@@ -80,7 +83,7 @@ namespace GibFrame.UI
             {
                 callback.Invoke();
             }
-            if (pressOnlyOnPointerInside)
+            if (callbackOnlyOnPointerInside)
             {
                 canReleaseExecute = false;
                 ResetUI();
@@ -93,6 +96,8 @@ namespace GibFrame.UI
             OnPressedCallbacks = new List<AbstractCallback>();
             OnPointerExitCallbacks = new List<AbstractCallback>();
             OnPointerEnterCallbacks = new List<AbstractCallback>();
+            childButtons = GetComponentsInChildren<GButton>(true);
+            childButtons = General.GetPredicatesMatchingObjects(childButtons, (b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject)).ToArray();
             image = GetComponentInChildren<Image>();
             unpressedSprite = image.sprite;
 
@@ -121,6 +126,10 @@ namespace GibFrame.UI
             {
                 callback.Invoke();
             }
+            foreach (GButton child in childButtons)
+            {
+                child.onPressed?.Invoke();
+            }
         }
 
         private void Released()
@@ -131,9 +140,13 @@ namespace GibFrame.UI
             {
                 callback.Invoke();
             }
-            if (canReleaseExecute || !pressOnlyOnPointerInside)
+            if (canReleaseExecute || !callbackOnlyOnPointerInside)
             {
                 onReleased.Invoke();
+                foreach (GButton child in childButtons)
+                {
+                    child.onReleased?.Invoke();
+                }
             }
         }
 
@@ -148,6 +161,10 @@ namespace GibFrame.UI
                 image.rectTransform.localScale = Vector2.one;
             }
             image.sprite = unpressedSprite;
+            foreach (GButton child in childButtons)
+            {
+                child.ResetUI();
+            }
         }
 
         private void PressUI()
@@ -164,6 +181,10 @@ namespace GibFrame.UI
             if (pressedSprite != null)
             {
                 image.sprite = pressedSprite;
+            }
+            foreach (GButton child in childButtons)
+            {
+                child.PressUI();
             }
         }
     }
