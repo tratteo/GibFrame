@@ -6,7 +6,8 @@ namespace GibFrame.Patterns
     {
         [Tooltip("Whether the gameObject should persist throughout scenes")]
         [Header("Singleton")]
-        [SerializeField] private bool persistent = false;
+        [SerializeField] protected bool persistent = false;
+        [SerializeField] protected HideFlags flags;
 
         public static T Instance { get; private set; }
 
@@ -25,6 +26,7 @@ namespace GibFrame.Patterns
             {
                 DontDestroyOnLoad(gameObject);
             }
+            gameObject.hideFlags = flags;
         }
     }
 }

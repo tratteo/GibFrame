@@ -50,6 +50,20 @@ namespace GibFrame.Utils
             return default(T);
         }
 
+        public static GameObject GetFirstChildWithName(GameObject parent, string name, bool inactive)
+        {
+            Transform[] transforms = parent.GetComponentsInChildren<Transform>(inactive);
+
+            foreach (Transform transform in parent.transform)
+            {
+                if (transform.name.Equals(name))
+                {
+                    return transform.gameObject;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// </summary>
         /// <typeparam name="T"> </typeparam>

@@ -30,5 +30,10 @@ namespace GibFrame.SceneManagement
                 SceneManager.LoadScene(asyncSceneIndex);
             }
         }
+
+        public static void LoadSceneAsynchronously(int sceneIndex)
+        {
+            LoadSceneAsynchronously(SceneUtility.GetScenePathByBuildIndex(sceneIndex));
+        }
     }
 }
