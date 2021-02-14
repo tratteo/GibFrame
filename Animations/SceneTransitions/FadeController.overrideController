@@ -8,4 +8,8 @@ AnimatorOverrideController:
   m_PrefabAsset: {fileID: 0}
   m_Name: FadeController
   m_Controller: {fileID: 9100000, guid: 47d5281ac1945a34fad24cce4a88d489, type: 2}
-  m_Clips: []
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: ec55eb012593e2a40bb51d86d30c1b2d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ec55eb012593e2a40bb51d86d30c1b2d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 93fa5338061e5d545af05740a89c79b8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 93fa5338061e5d545af05740a89c79b8, type: 2}
