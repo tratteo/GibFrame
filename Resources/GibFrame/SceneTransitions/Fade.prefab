@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 2479668020285345543}
   - component: {fileID: 8285544401586325594}
   m_Layer: 0
-  m_Name: Transition
+  m_Name: Fade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -200,7 +200,7 @@ Animator:
   m_GameObject: {fileID: 2479668020285345542}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 47d5281ac1945a34fad24cce4a88d489, type: 2}
+  m_Controller: {fileID: 22100000, guid: 4731c870875e0644a811a5f779c34d1d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -14,25 +14,17 @@ namespace GibFrame.SceneManagement
         private Transition fade;
         private bool custom = false;
 
-        public void AnimateTransition(TransitionType transition, int sceneIndex, bool async)
+        public void AnimateTransition(TransitionType transition, int sceneIndex, bool async = false, float speed = 1F)
         {
-            StartCoroutine(Animate_C(GetAnimByType(transition), sceneIndex, async));
+            StartCoroutine(Animate_C(GetAnimByType(transition), sceneIndex, async, speed));
         }
 
-        public void AnimateTransition(TransitionType transition, string sceneName, bool async)
+        public void AnimateTransition(TransitionType transition, string sceneName, bool async = false, float speed = 1F)
         {
-            StartCoroutine(Animate_C(GetAnimByType(transition), SceneUtility.GetBuildIndexByScenePath(sceneName), async));
+            StartCoroutine(Animate_C(GetAnimByType(transition), SceneUtility.GetBuildIndexByScenePath(sceneName), async, speed));
         }
 
-        public void AnimateTransition(AnimationClip inAnim, AnimationClip outAnim, string sceneName, bool async)
-        {
-            custom = true;
-            Transition obj = Transition.Create(inAnim, outAnim);
-            obj.transform.SetParent(transform);
-            StartCoroutine(Animate_C(obj, SceneUtility.GetBuildIndexByScenePath(sceneName), async));
-        }
-
-        public void AnimateTransition(string prefabName, string sceneName, bool async)
+        public void AnimateTransition(string prefabName, string sceneName, bool async = false, float speed = 1F)
         {
             custom = true;
             GameObject obj = UnityUtils.GetFirstChildWithName(gameObject, prefabName, true);
@@ -49,7 +41,7 @@ namespace GibFrame.SceneManagement
                 }
                 else
                 {
-                    StartCoroutine(Animate_C(transition, SceneUtility.GetBuildIndexByScenePath(sceneName), async));
+                    StartCoroutine(Animate_C(transition, SceneUtility.GetBuildIndexByScenePath(sceneName), async, speed));
                 }
             }
         }
@@ -58,21 +50,18 @@ namespace GibFrame.SceneManagement
         {
             persistent = true;
             base.Awake();
-            UnityUtils.ReadGameObject(out GameObject obj, "GibFrame/SceneTransitions/Transition");
-            Transition prefab = obj.GetComponent<Transition>();
-            fade = Transition.Create(prefab.InAnim, prefab.OutAnim);
-            fade.gameObject.name = "Fade";
-            fade.transform.SetParent(transform);
+            fade = UnityUtils.GetFirstChildWithName(gameObject, "Fade", true).GetComponent<Transition>();
         }
 
-        private IEnumerator Animate_C(Transition transition, int sceneIndex, bool async)
+        private IEnumerator Animate_C(Transition transition, int sceneIndex, bool async, float speed)
         {
             GameObject anim = transition.gameObject;
             if (anim != null)
             {
                 Animator animator = anim.GetComponent<Animator>();
                 anim.SetActive(true);
-                yield return new WaitForSeconds(transition.InDuration);
+                animator.SetFloat("Speed", speed);
+                yield return new WaitForSeconds(transition.InDuration / speed);
                 if (async)
                 {
                     SceneUtil.LoadSceneAsynchronously(sceneIndex);
@@ -87,7 +76,7 @@ namespace GibFrame.SceneManagement
                 }
 
                 animator.SetTrigger("Trigger");
-                yield return new WaitForSeconds(transition.OutDuration);
+                yield return new WaitForSeconds(transition.OutDuration / speed);
                 anim.SetActive(false);
                 if (custom)
                 {
