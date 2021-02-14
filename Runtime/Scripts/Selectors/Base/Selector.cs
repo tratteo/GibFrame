@@ -33,6 +33,13 @@ namespace GibFrame.Selectors
             Active = state;
         }
 
+        public void ResetSelection()
+        {
+            currentSelected?.OnDeselect();
+            currentSelected = null;
+            currentCollider = null;
+        }
+
         protected void Select(Collider newCollider)
         {
             if (newCollider != null)
@@ -61,13 +68,6 @@ namespace GibFrame.Selectors
                 }
             }
             return true;
-        }
-
-        protected void ResetSelection()
-        {
-            currentSelected?.OnDeselect();
-            currentSelected = null;
-            currentCollider = null;
         }
     }
 }

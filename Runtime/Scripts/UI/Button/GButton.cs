@@ -1,9 +1,8 @@
 ﻿// Copyright (c) 2020 Matteo Beltrame
 
-using System;
-using System.Collections.Generic;
 using GibFrame.Utils;
 using GibFrame.Utils.Callbacks;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
