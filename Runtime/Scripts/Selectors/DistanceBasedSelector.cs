@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.Selectors : DistanceBasedSelector.cs
+//
+// All Rights Reserved
 
 using System.Collections;
 using System.Collections.Generic;

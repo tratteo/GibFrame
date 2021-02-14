@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.SceneManagement : SceneUtil.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 using UnityEngine.SceneManagement;

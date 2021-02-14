@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.UI : TabButton.cs
+//
+// All Rights Reserved
+
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 

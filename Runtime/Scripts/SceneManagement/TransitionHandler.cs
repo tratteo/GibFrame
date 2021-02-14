@@ -1,3 +1,9 @@
+// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.SceneManagement : TransitionHandler.cs
+//
+// All Rights Reserved
+
 using GibFrame.Patterns;
 using GibFrame.SceneManagement.Transitions;
 using GibFrame.Utils;

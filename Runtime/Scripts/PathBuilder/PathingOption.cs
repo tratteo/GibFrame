@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.PathBuilder : PathingOption.cs
+//
+// All Rights Reserved
 
 using System;
 using GibFrame.Utils;

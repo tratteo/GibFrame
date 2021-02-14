@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.Patterns : MonoSingleton.cs
+//
+// All Rights Reserved
+
+using UnityEngine;
 
 namespace GibFrame.Patterns
 {

@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.SaveSystem : SaveManager.cs
+//
+// All Rights Reserved
 
 using System;
 using System.Collections.Generic;

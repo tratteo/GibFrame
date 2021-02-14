@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.ObjectPooling : Pool.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

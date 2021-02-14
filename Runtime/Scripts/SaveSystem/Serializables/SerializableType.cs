@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.SaveSystem.Serializables : SerializableType.cs
+//
+// All Rights Reserved
 
 using System;
 

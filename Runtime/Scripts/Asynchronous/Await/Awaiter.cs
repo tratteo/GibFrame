@@ -1,4 +1,10 @@
-﻿using System.Threading;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.Asynchronous.Await : Awaiter.cs
+//
+// All Rights Reserved
+
+using System.Threading;
 using UnityEngine;
 
 namespace GibFrame.Asynchronous.Await

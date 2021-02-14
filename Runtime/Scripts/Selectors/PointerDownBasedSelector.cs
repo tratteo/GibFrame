@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.Selectors : PointerDownBasedSelector.cs
+//
+// All Rights Reserved
 
 using GibFrame.Utils;
 using UnityEngine;

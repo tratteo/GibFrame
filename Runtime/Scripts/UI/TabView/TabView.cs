@@ -1,4 +1,10 @@
-﻿using GibFrame.Utils;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.UI : TabView.cs
+//
+// All Rights Reserved
+
+using GibFrame.Utils;
 using UnityEngine;
 
 namespace GibFrame.UI

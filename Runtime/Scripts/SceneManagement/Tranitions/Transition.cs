@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.SceneManagement.Transitions : Transition.cs
+//
+// All Rights Reserved
+
+using UnityEngine;
 
 namespace GibFrame.SceneManagement.Transitions
 {

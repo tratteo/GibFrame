@@ -1,4 +1,8 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.PathBuilder : Waypoint.cs
+//
+// All Rights Reserved
 
 using System;
 using System.Collections.Generic;

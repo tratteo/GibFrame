@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.Selectors : RaycastBasedSelector.cs
+//
+// All Rights Reserved
+
+using System.Collections;
 using UnityEngine;
 
 namespace GibFrame.Selectors

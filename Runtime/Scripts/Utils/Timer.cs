@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.Utils : Timer.cs
+//
+// All Rights Reserved
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GibFrame.Utils.Callbacks;

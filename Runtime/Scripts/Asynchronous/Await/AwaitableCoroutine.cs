@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.Asynchronous.Await : AwaitableCoroutine.cs
+//
+// All Rights Reserved
+
+using System;
 using System.Collections;
 using System.Threading;
 using System.Runtime.CompilerServices;

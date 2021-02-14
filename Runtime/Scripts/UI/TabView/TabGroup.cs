@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright (c) Matteo Beltrame
+//
+// Package com.tratteo.gibframe : GibFrame.UI : TabGroup.cs
+//
+// All Rights Reserved
+
+using System;
 using System.Collections.Generic;
 using GibFrame.Utils;
 using UnityEngine;
