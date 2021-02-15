@@ -4,18 +4,30 @@
 //
 // All Rights Reserved
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using GibFrame.Utils.Callbacks;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
 namespace GibFrame.Utils
 {
     public class UnityUtils
     {
+        public static List<T> GetInterfacesOfType<T>()
+        {
+            List<T> interfaces = new List<T>();
+            MonoBehaviour[] monoBehaviours = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>();
+            foreach (MonoBehaviour item in monoBehaviours)
+            {
+                if (item is T)
+                {
+                    interfaces.Add(item.GetComponent<T>());
+                }
+            }
+            return interfaces;
+        }
+
         public static T GetFirstInterfaceOfType<T>()
         {
             MonoBehaviour[] monoBehaviours = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>();
