@@ -27,7 +27,7 @@ namespace GibFrame.Selectors
                 {
                     Collider selected = null;
                     Collider[] colliders = Physics.OverlapSphere(transform.position, senseRadius);
-                    List<Collider> selectables = Utils.General.GetPredicatesMatchingObjects(colliders, (c) => c.CompareTag(selectableTag));
+                    List<Collider> selectables = Utils.General.GetPredicatesMatchingObjects(colliders, (c) => c.CompareTag(selectableTag) && ColliderSatisfiesPredicates(c));
                     if (selectables != null && selectables.Count > 0)
                     {
                         switch (paradigm)
@@ -40,10 +40,7 @@ namespace GibFrame.Selectors
                                 selected = Utils.General.GetPredicateMaxObject(selectables, c => Vector3.Distance(transform.position, c.transform.position));
                                 break;
                         }
-                        if (ColliderSatisfiesPredicates(selected))
-                        {
-                            Select(selected);
-                        }
+                        Select(selected);
                     }
                     else
                     {
