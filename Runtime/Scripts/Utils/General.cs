@@ -244,7 +244,7 @@ namespace GibFrame.Utils
             return GetPredicateMinObject(set.ToArray(), predicate);
         }
 
-        public static List<T> GetPredicatesMatchingObjects<T>(T[] set, params Predicate<T>[] predicates)
+        public static T[] GetPredicatesMatchingObjects<T>(T[] set, params Predicate<T>[] predicates)
         {
             List<T> matching = new List<T>();
             foreach (T elem in set)
@@ -263,12 +263,12 @@ namespace GibFrame.Utils
                     matching.Add(elem);
                 }
             }
-            return matching;
+            return matching.ToArray();
         }
 
         public static List<T> GetPredicatesMatchingObjects<T>(List<T> set, params Predicate<T>[] predicates)
         {
-            return GetPredicatesMatchingObjects(set.ToArray(), predicates);
+            return GetPredicatesMatchingObjects(set.ToArray(), predicates).ToList();
         }
 
         public static List<T> ConvertAllTo<T, E>(List<E> source, Func<E, T> converter)
