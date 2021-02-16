@@ -22,7 +22,11 @@ namespace GibFrame.Utils
             {
                 if (item is T)
                 {
-                    interfaces.Add(item.GetComponent<T>());
+                    T[] elems = item.GetComponents<T>();
+                    foreach (T e in elems)
+                    {
+                        interfaces.Add(e);
+                    }
                 }
             }
             return interfaces;
