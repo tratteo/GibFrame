@@ -244,13 +244,13 @@ namespace GibFrame.Utils
             return GetPredicateMinObject(set.ToArray(), predicate);
         }
 
-        public static List<T> GetPredicatesMatchingObjects<T>(T[] set, params Func<T, bool>[] predicates)
+        public static List<T> GetPredicatesMatchingObjects<T>(T[] set, params Predicate<T>[] predicates)
         {
             List<T> matching = new List<T>();
             foreach (T elem in set)
             {
                 bool accept = true;
-                foreach (Func<T, bool> current in predicates)
+                foreach (Predicate<T> current in predicates)
                 {
                     if (!current(elem))
                     {
@@ -266,7 +266,7 @@ namespace GibFrame.Utils
             return matching;
         }
 
-        public static List<T> GetPredicatesMatchingObjects<T>(List<T> set, params Func<T, bool>[] predicates)
+        public static List<T> GetPredicatesMatchingObjects<T>(List<T> set, params Predicate<T>[] predicates)
         {
             return GetPredicatesMatchingObjects(set.ToArray(), predicates);
         }

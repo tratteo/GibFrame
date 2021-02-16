@@ -101,10 +101,10 @@ namespace GibFrame.SpawnerSystem
         /// <param name="startNow"> </param>
         /// <param name="functionToSub"> </param>
         /// <returns> The Spawn Clock instance </returns>
-        public Clock CreateSpawnTimer(int fixedSpawnRate, bool startNow, Action functionToSub = null)
+        public Clock CreateSpawnTimer(int fixedSpawnRate, bool startNow, AbstractCallback callback = null)
         {
             spawnTimer = new Clock(context, fixedSpawnRate, startNow);
-            SubscribeToSpawnEvent(functionToSub);
+            AddSpawnEventCallback(callback);
             return spawnTimer;
         }
 
@@ -115,10 +115,10 @@ namespace GibFrame.SpawnerSystem
         /// <param name="startNow"> </param>
         /// <param name="functionToSub"> </param>
         /// <returns> The Spawn Clock instance </returns>
-        public Clock CreateSpawnTimer(Vector2 spawnRateRange, bool startNow, Action functionToSub = null)
+        public Clock CreateSpawnTimer(Vector2 spawnRateRange, bool startNow, AbstractCallback callback = null)
         {
             spawnTimer = new Clock(context, spawnRateRange, startNow);
-            SubscribeToSpawnEvent(functionToSub);
+            AddSpawnEventCallback(callback);
             return spawnTimer;
         }
 
@@ -129,10 +129,10 @@ namespace GibFrame.SpawnerSystem
         /// <param name="startNow"> </param>
         /// <param name="functionToSub"> </param>
         /// <returns> The Spawn Clock instance </returns>
-        public Clock CreateSpawnTimer(Func<int, float> scaleOverTimeFunc, bool startNow, Action functionToSub = null)
+        public Clock CreateSpawnTimer(Func<int, float> scaleOverTimeFunc, bool startNow, AbstractCallback callback = null)
         {
             spawnTimer = new Clock(context, scaleOverTimeFunc, startNow);
-            SubscribeToSpawnEvent(functionToSub);
+            AddSpawnEventCallback(callback);
             return spawnTimer;
         }
 
@@ -222,11 +222,11 @@ namespace GibFrame.SpawnerSystem
         ///   Subscribe a function to be called whenever the spawnTimer fires
         /// </summary>
         /// <param name="functionToSub"> </param>
-        public void SubscribeToSpawnEvent(Action functionToSub)
+        public void AddSpawnEventCallback(AbstractCallback callback)
         {
-            if (functionToSub != null)
+            if (callback != null)
             {
-                spawnTimer.AddCallback(new Callback(functionToSub));
+                spawnTimer.AddCallback(callback);
             }
         }
 
@@ -234,9 +234,9 @@ namespace GibFrame.SpawnerSystem
         ///   Unsubscribe a function from the spawnTimer
         /// </summary>
         /// <param name="functionToUnsub"> </param>
-        public void UnsubscribeToSpawnEvent(Action functionToUnsub)
+        public void UnsubscribeToSpawnEvent(AbstractCallback callback)
         {
-            spawnTimer.RemoveCallback(new Callback(functionToUnsub));
+            spawnTimer.RemoveCallback(callback);
         }
     }
 }

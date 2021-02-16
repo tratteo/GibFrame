@@ -16,7 +16,7 @@ namespace GibFrame.Selectors
         protected ISelectable currentSelected = null;
         protected Collider currentCollider;
 
-        private List<Func<Collider, bool>> predicates = new List<Func<Collider, bool>>();
+        private List<Predicate<Collider>> predicates = new List<Predicate<Collider>>();
 
         public GameObject CurrentSelected { get => currentCollider != null ? currentCollider.gameObject : null; }
 
@@ -24,9 +24,9 @@ namespace GibFrame.Selectors
 
         public T CurrentAs<T>() where T : class => currentSelected as T;
 
-        public void InjectPredicates(params Func<Collider, bool>[] pred)
+        public void InjectPredicates(params Predicate<Collider>[] pred)
         {
-            foreach (Func<Collider, bool> p in pred)
+            foreach (Predicate<Collider> p in pred)
             {
                 predicates.Add(p);
             }
@@ -64,7 +64,7 @@ namespace GibFrame.Selectors
 
         protected bool ColliderSatisfiesPredicates(Collider collider)
         {
-            foreach (Func<Collider, bool> func in predicates)
+            foreach (Predicate<Collider> func in predicates)
             {
                 if (!func(collider))
                 {
