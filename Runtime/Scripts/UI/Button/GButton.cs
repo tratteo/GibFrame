@@ -100,7 +100,7 @@ namespace GibFrame.UI
             OnPointerExitCallbacks = new List<AbstractCallback>();
             OnPointerEnterCallbacks = new List<AbstractCallback>();
             childButtons = GetComponentsInChildren<GButton>(true);
-            childButtons = General.GetPredicatesMatchingObjects(childButtons, (b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject)).ToArray();
+            childButtons = General.GetPredicatesMatchingObjects(childButtons, (b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject));
             image = GetComponentInChildren<Image>();
             unpressedSprite = image.sprite;
 

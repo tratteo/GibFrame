@@ -344,7 +344,7 @@ namespace GibFrame.Utils
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.MatchingRaycastAll(eventDataCurrentPosition, results);
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
             return results.Count > 0;
         }
 
