@@ -39,10 +39,11 @@ namespace GibFrame.Utils
         }
 
         /// <summary>
+        ///   Use {0} to refer the hours, {1} minutes and {2} seconds in the format string
         /// </summary>
         /// <param name="seconds"> </param>
-        /// <returns> The formatted string in the form: <b> H:M:S </b> </returns>
-        public static string GetTimeStringFromSeconds(float seconds)
+        /// <returns> The formatted string </returns>
+        public static string GetTimeStringFromSeconds(float seconds, string format = "{0} h : {1} m : {2} s ")
         {
             int hours = 0;
             int minutes = 0;
@@ -56,12 +57,7 @@ namespace GibFrame.Utils
                 minutes++;
                 seconds -= 60;
             }
-            return new StringBuilder().Append(hours.ToString())
-                                      .Append("h : ")
-                                      .Append(minutes.ToString())
-                                      .Append("m : ")
-                                      .Append(seconds.ToString("0.0"))
-                                      .Append("s").ToString();
+            return string.Format(format, hours, minutes, seconds);
         }
 
         private static IEnumerator FillImage_C(Image image, float duration, float targetFillAmount, bool realtime, AbstractCallback Callback)
