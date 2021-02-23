@@ -225,13 +225,13 @@ namespace GibFrame.Utils
             return elems;
         }
 
-        public static List<T> GetPredicateMaxObjects<T>(T[] set, Func<T, double> predicate)
+        public static List<T> GetPredicateMaxObjects<T>(T[] set, Func<T, double> Predicate)
         {
-            T obj = GetPredicateMaxObject(set, predicate);
+            T obj = GetPredicateMaxObject(set, Predicate);
             List<T> elems = new List<T>();
             foreach (T elem in set)
             {
-                if (predicate(elem) == predicate(obj))
+                if (Predicate(elem) == Predicate(obj))
                 {
                     elems.Add(elem);
                 }
@@ -268,7 +268,24 @@ namespace GibFrame.Utils
 
         public static List<T> GetPredicatesMatchingObjects<T>(List<T> set, params Predicate<T>[] predicates)
         {
-            return GetPredicatesMatchingObjects(set.ToArray(), predicates).ToList();
+            List<T> matching = new List<T>();
+            foreach (T elem in set)
+            {
+                bool accept = true;
+                foreach (Predicate<T> current in predicates)
+                {
+                    if (!current(elem))
+                    {
+                        accept = false;
+                        break;
+                    }
+                }
+                if (accept)
+                {
+                    matching.Add(elem);
+                }
+            }
+            return matching;
         }
 
         public static List<T> ConvertAllTo<T, E>(List<E> source, Func<E, T> converter)

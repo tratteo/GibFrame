@@ -17,6 +17,7 @@ namespace GibFrame.Selectors
         [SerializeField] private InputType input;
 
         [SerializeField] private UnityEvent OnMissed;
+        private Camera mainCamera;
 
         protected void Update()
         {
@@ -25,7 +26,7 @@ namespace GibFrame.Selectors
                 if (Input.touchCount > 0)
                 {
                     Touch touch = Input.GetTouch(0);
-                    Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                    Ray ray = mainCamera.ScreenPointToRay(touch.position);
                     if (UnityUtils.IsAnyPointerOverGameObject()) return;
                     if (touch.phase == TouchPhase.Ended)
                     {
@@ -52,7 +53,7 @@ namespace GibFrame.Selectors
             {
                 if (Input.GetMouseButtonUp(0))
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                     if (UnityUtils.IsAnyPointerOverGameObject()) return;
                     if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
                     {
@@ -68,6 +69,11 @@ namespace GibFrame.Selectors
                     }
                 }
             }
+        }
+
+        private void Start()
+        {
+            mainCamera = Camera.main;
         }
     }
 }

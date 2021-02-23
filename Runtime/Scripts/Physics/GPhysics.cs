@@ -13,9 +13,9 @@ namespace GibFrame.Physic
 {
     public static class GPhysics
     {
-        public static Collider[] MatchingOverlapSphere(Vector3 position, float radius, int layerMask, QueryTriggerInteraction queryTriggerInteraction, params Predicate<Collider>[] predicates)
+        public static Collider[] MatchingOverlapSphere(Vector3 position, float radius, Collider[] colliders, int layerMask, QueryTriggerInteraction queryTriggerInteraction, params Predicate<Collider>[] predicates)
         {
-            Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask, queryTriggerInteraction);
+            Physics.OverlapSphereNonAlloc(position, radius, colliders, layerMask, queryTriggerInteraction);
             colliders = General.GetPredicatesMatchingObjects(colliders, predicates);
             return colliders;
         }

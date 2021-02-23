@@ -33,13 +33,13 @@ namespace GibFrame.Selectors
 
         protected override IEnumerator SelectCoroutine()
         {
-            yield return new WaitForSecondsRealtime(updateInterval);
+            WaitForSecondsRealtime Delay = new WaitForSecondsRealtime(updateInterval);
+            yield return Delay;
             while (true)
             {
                 if (Active)
                 {
                     Vector3 dir = directionOverride ? direction : transform.forward;
-                    //Debug.DrawRay(start, dir * 1000F, Color.red, 0.25F);
                     if (Physics.Raycast(transform.position + offset, dir, out RaycastHit hit, float.MaxValue))
                     {
                         if (hit.collider.CompareTag(selectableTag))
@@ -56,7 +56,7 @@ namespace GibFrame.Selectors
                     }
                 }
 
-                yield return new WaitForSecondsRealtime(updateInterval);
+                yield return Delay;
             }
         }
     }

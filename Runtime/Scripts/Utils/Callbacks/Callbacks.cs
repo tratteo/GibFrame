@@ -5,10 +5,6 @@
 // All Rights Reserved
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GibFrame.Utils.Callbacks
 {
@@ -21,13 +17,13 @@ namespace GibFrame.Utils.Callbacks
     {
         private T args;
 
+        private event Action<T> Event;
+
         public Callback(Action<T> action, T args)
         {
             this.Event = action;
             this.args = args;
         }
-
-        private event Action<T> Event;
 
         public override void Invoke()
         {
@@ -40,14 +36,14 @@ namespace GibFrame.Utils.Callbacks
         private T args0;
         private E args1;
 
+        private event Action<T, E> Event;
+
         public Callback(Action<T, E> action, T args0, E args1)
         {
             this.Event = action;
             this.args0 = args0;
             this.args1 = args1;
         }
-
-        private event Action<T, E> Event;
 
         public override void Invoke()
         {
@@ -57,12 +53,12 @@ namespace GibFrame.Utils.Callbacks
 
     public class Callback : AbstractCallback
     {
+        private event Action Event;
+
         public Callback(Action action)
         {
             this.Event = action;
         }
-
-        private event Action Event;
 
         public override void Invoke()
         {

@@ -64,9 +64,9 @@ namespace GibFrame.Selectors
 
         protected bool ColliderSatisfiesPredicates(Collider collider)
         {
-            foreach (Predicate<Collider> func in predicates)
+            foreach (Predicate<Collider> Predicate in predicates)
             {
-                if (!func(collider))
+                if (!Predicate(collider))
                 {
                     return false;
                 }
