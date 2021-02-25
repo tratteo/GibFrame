@@ -139,16 +139,17 @@ namespace GibFrame.UI
         {
             ResetUI();
             clicked = false;
-            foreach (AbstractCallback callback in OnReleaseCallbacks)
-            {
-                callback.Invoke();
-            }
+
             if (canReleaseExecute || !callbackOnlyOnPointerInside)
             {
                 onReleased.Invoke();
                 foreach (GButton child in childButtons)
                 {
                     child.onReleased?.Invoke();
+                }
+                foreach (AbstractCallback callback in OnReleaseCallbacks)
+                {
+                    callback.Invoke();
                 }
             }
         }
