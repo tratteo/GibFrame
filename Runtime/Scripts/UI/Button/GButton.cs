@@ -36,12 +36,18 @@ namespace GibFrame.UI
         private List<AbstractCallback> OnPressedCallbacks;
         private List<AbstractCallback> OnPointerEnterCallbacks;
         private List<AbstractCallback> OnPointerExitCallbacks;
+        private List<AbstractCallback> OnCancelCallbacks;
 
         private EventTrigger.Entry pointerDown;
         private EventTrigger.Entry pointerUp;
         private bool canReleaseExecute = false;
         private bool clicked = false;
         private GButton[] childButtons;
+
+        public void AddOnCancelCallback(AbstractCallback Callback)
+        {
+            OnCancelCallbacks.Add(Callback);
+        }
 
         public void AddOnPressedCallback(AbstractCallback Callback)
         {
@@ -99,6 +105,7 @@ namespace GibFrame.UI
             OnPressedCallbacks = new List<AbstractCallback>();
             OnPointerExitCallbacks = new List<AbstractCallback>();
             OnPointerEnterCallbacks = new List<AbstractCallback>();
+            OnCancelCallbacks = new List<AbstractCallback>();
             childButtons = GetComponentsInChildren<GButton>(true);
             childButtons = General.GetPredicatesMatchingObjects(childButtons, (b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject));
             image = GetComponentInChildren<Image>();
@@ -148,6 +155,13 @@ namespace GibFrame.UI
                     child.onReleased?.Invoke();
                 }
                 foreach (AbstractCallback callback in OnReleaseCallbacks)
+                {
+                    callback.Invoke();
+                }
+            }
+            else
+            {
+                foreach (AbstractCallback callback in OnCancelCallbacks)
                 {
                     callback.Invoke();
                 }
