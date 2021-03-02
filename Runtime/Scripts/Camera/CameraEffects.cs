@@ -26,6 +26,7 @@ namespace GibFrame.CameraUtils
 
         private IEnumerator ZoomEffect_C(Camera camera, Vector3 target, Vector3 offsetFromTarget, EffectParameters parameters, Action OnZoomedIn = null, Action OnWaitFinished = null, Action OnZoomedOut = null)
         {
+            WaitForSecondsRealtime wait = new WaitForSecondsRealtime(Time.fixedDeltaTime);
             Quaternion initialCameraRot = camera.transform.rotation;
             Quaternion targetRotation = Quaternion.LookRotation(target - camera.transform.position);
 
@@ -54,7 +55,7 @@ namespace GibFrame.CameraUtils
                 {
                     camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, targetRotation, parameters.InterpolationStrenght * Time.fixedDeltaTime);
                 }
-                yield return new WaitForFixedUpdate();
+                yield return wait;
             }
 
             camera.transform.position = effectiveTarget;
@@ -79,7 +80,7 @@ namespace GibFrame.CameraUtils
                 {
                     camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, initialCameraRot, parameters.InterpolationStrenght * Time.fixedDeltaTime);
                 }
-                yield return new WaitForFixedUpdate();
+                yield return wait;
             }
 
             OnZoomedOut?.Invoke();

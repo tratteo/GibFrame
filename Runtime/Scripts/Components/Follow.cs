@@ -17,6 +17,13 @@ namespace GibFrame.Components
         public Transform target;
         public Vector3 offset;
 
+        public bool Active { get; private set; }
+
+        public void SetActive(bool active)
+        {
+            Active = active;
+        }
+
         private void Start()
         {
             transform.position = target.position + offset;
@@ -24,7 +31,10 @@ namespace GibFrame.Components
 
         private void Update()
         {
-            transform.position = target.position + offset;
+            if (Active)
+            {
+                transform.position = target.position + offset;
+            }
         }
     }
 }

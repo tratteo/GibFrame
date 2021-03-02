@@ -17,9 +17,16 @@ namespace GibFrame.Components
         public Vector3 offset;
         public float hardness = 5f;
 
+        public bool Active { get; private set; }
+
+        public void SetActive(bool active)
+        {
+            Active = active;
+        }
+
         private void FixedUpdate()
         {
-            if (target != null)
+            if (target != null && Active)
             {
                 Vector3 expectedPosition = target.position + offset;
                 Vector3 smoothedPosition = Vector3.Lerp(transform.position, expectedPosition, hardness * Time.deltaTime);
