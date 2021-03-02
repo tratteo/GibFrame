@@ -17,7 +17,7 @@ namespace GibFrame.Components
         public Transform target;
         public Vector3 offset;
 
-        public bool Active { get; private set; }
+        public bool Active { get; private set; } = true;
 
         public void SetActive(bool active)
         {

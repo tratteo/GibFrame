@@ -17,7 +17,7 @@ namespace GibFrame.Components
         public Vector3 offset;
         public float hardness = 5f;
 
-        public bool Active { get; private set; }
+        public bool Active { get; private set; } = true;
 
         public void SetActive(bool active)
         {
