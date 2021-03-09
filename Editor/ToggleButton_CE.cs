@@ -2,6 +2,7 @@
 
 using GibFrame.UI;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [CustomEditor(typeof(ToggleButton))]
@@ -29,6 +30,12 @@ public class ToggleButton_CE : GButton_CE
             script.enabledSprite = EditorGUILayout.ObjectField(script.enabledSprite, typeof(Sprite), true) as Sprite;
             EditorGUILayout.LabelField("Disabled");
             script.disabledSprite = EditorGUILayout.ObjectField(script.disabledSprite, typeof(Sprite), true) as Sprite;
+        }
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(script);
+            EditorSceneManager.MarkSceneDirty(script.gameObject.scene);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 

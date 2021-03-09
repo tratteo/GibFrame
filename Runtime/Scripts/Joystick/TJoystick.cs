@@ -52,5 +52,11 @@ namespace GibFrame.Joystick
                     break;
             }
         }
+
+        private void OnEnable()
+        {
+            input = Vector2.zero;
+            handle.anchoredPosition = Vector2.zero;
+        }
     }
 }
