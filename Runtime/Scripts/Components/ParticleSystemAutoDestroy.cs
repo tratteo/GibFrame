@@ -13,7 +13,12 @@ namespace GibFrame.Components
     /// </summary>
     public class ParticleSystemAutoDestroy : MonoBehaviour
     {
+        public enum Action { DISABLE, DESTROY }
+
         private new ParticleSystem particleSystem;
+
+        [SerializeField]
+        private Action onSimulationEnded;
 
         public void Start()
         {
@@ -22,11 +27,20 @@ namespace GibFrame.Components
 
         public void Update()
         {
-            if (particleSystem)
+            if (particleSystem != null)
             {
                 if (!particleSystem.IsAlive())
                 {
-                    Destroy(gameObject);
+                    switch (onSimulationEnded)
+                    {
+                        case Action.DESTROY:
+                            Destroy(gameObject);
+                            break;
+
+                        case Action.DISABLE:
+                            gameObject.SetActive(false);
+                            break;
+                    }
                 }
             }
         }
