@@ -4,7 +4,7 @@
 using System.Reflection;
 using UnityEngine;
 
-namespace GibFrame.Patterns
+namespace GibFrame.Performance
 {
     internal class TickedAgent
     {

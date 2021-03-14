@@ -4,10 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using GibFrame.Patterns;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace GibFrame.Patterns
+namespace GibFrame.Performance
 {
     public class TickManager : MonoSingleton<TickManager>
     {
@@ -62,6 +63,11 @@ namespace GibFrame.Patterns
 
         public float GetDefaultDeltaTime() => defaultTickDelta;
 
+        public void NotifyAgent(MonoBehaviour mono)
+        {
+            AnalyzeMono(mono);
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -93,7 +99,7 @@ namespace GibFrame.Patterns
         private void ScanTicked()
         {
             agents.Clear();
-            MonoBehaviour[] behaviours = FindObjectsOfType<MonoBehaviour>();
+            MonoBehaviour[] behaviours = FindObjectsOfType<MonoBehaviour>(true);
             foreach (MonoBehaviour mono in behaviours)
             {
                 AnalyzeMono(mono);

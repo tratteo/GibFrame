@@ -3,7 +3,7 @@
 
 using System;
 
-namespace GibFrame.Patterns
+namespace GibFrame.Performance
 {
     public class TickedAttribute : Attribute
     {
