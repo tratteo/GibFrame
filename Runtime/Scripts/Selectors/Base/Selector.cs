@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Selectors : Selector.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Selector.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections.Generic;

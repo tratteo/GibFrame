@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Components : ParticleSystemAutoDestroy.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//ParticleSystemAutoDestroy.cs - com.tratteo.gibframe
 
 using UnityEngine;
 

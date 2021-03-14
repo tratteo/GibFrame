@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Audio : AudioManager.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//AudioManager.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections;

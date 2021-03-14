@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.UI : TabGroup.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//TabGroup.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections.Generic;

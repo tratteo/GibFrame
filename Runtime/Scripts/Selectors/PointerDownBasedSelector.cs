@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Selectors : PointerDownBasedSelector.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//PointerDownBasedSelector.cs - com.tratteo.gibframe
 
 using GibFrame.Utils;
 using UnityEngine;

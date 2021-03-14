@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Selectors : ISelectable.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//ISelectable.cs - com.tratteo.gibframe
 
 namespace GibFrame.Selectors
 {

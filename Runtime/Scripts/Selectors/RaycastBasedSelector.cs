@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Selectors : RaycastBasedSelector.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//RaycastBasedSelector.cs - com.tratteo.gibframe
 
 using System.Collections;
 using UnityEngine;

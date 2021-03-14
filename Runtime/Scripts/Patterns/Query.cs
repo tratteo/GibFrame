@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : com.tratteo.gibframe.Packages.com.tratteo.gibframe.Runtime.Scripts.Patterns : Query.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Query.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections.Generic;

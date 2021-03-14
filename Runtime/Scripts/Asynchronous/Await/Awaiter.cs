@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Asynchronous.Await : Awaiter.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Awaiter.cs - com.tratteo.gibframe
 
 using System.Threading;
 using UnityEngine;

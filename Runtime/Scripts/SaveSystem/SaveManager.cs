@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.SaveSystem : SaveManager.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//SaveManager.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections.Generic;

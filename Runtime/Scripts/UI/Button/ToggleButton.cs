@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.UI : ToggleButton.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//ToggleButton.cs - com.tratteo.gibframe
 
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.SaveSystem : EncryptedData.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//EncryptedData.cs - com.tratteo.gibframe
 
 using UnityEngine;
 

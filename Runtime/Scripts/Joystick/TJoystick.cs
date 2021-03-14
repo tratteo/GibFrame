@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Joystick : TJoystick.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//TJoystick.cs - com.tratteo.gibframe
 
 using UnityEngine;
 using UnityEngine.EventSystems;

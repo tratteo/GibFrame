@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Audio : Sound.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Sound.cs - com.tratteo.gibframe
 
 using UnityEngine;
 

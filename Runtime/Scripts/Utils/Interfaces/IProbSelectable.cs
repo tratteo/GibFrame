@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Utils : IProbSelectable.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//IProbSelectable.cs - com.tratteo.gibframe
 
 namespace GibFrame.Utils
 {

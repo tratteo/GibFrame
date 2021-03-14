@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.UI : TabView.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//TabView.cs - com.tratteo.gibframe
 
 using GibFrame.Utils;
 using UnityEngine;

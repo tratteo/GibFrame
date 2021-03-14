@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.SceneManagement : SceneUtil.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//SceneUtil.cs - com.tratteo.gibframe
 
 using UnityEngine;
 using UnityEngine.SceneManagement;

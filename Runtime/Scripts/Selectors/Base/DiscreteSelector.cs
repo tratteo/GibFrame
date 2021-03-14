@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Selectors : DiscreteSelector.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//DiscreteSelector.cs - com.tratteo.gibframe
 
 using System.Collections;
 using UnityEngine;

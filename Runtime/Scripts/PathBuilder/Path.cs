@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.PathBuilder : Path.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Path.cs - com.tratteo.gibframe
 
 using System.Collections.Generic;
 using GibFrame.Utils;

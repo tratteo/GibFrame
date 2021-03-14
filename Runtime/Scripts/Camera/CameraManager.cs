@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.CameraUtils : CameraManager.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//CameraManager.cs - com.tratteo.gibframe
 
 using GibFrame.Patterns;
 using System;

@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : com.tratteo.gibframe.Packages.com.tratteo.gibframe.Runtime.Scripts.UI : AnimatedUI.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//OnDisableAnimPerformer.cs - com.tratteo.gibframe
 
 using System.Collections;
 using UnityEngine;
@@ -31,7 +28,7 @@ namespace GibFrame.Patterns
             }
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             animator = GetComponent<Animator>();
             for (int i = 0; i < animator.runtimeAnimatorController.animationClips.Length; i++)

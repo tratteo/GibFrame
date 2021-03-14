@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Patterns : MonoSingleton.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//MonoSingleton.cs - com.tratteo.gibframe
 
 using UnityEngine;
 
@@ -17,6 +14,7 @@ namespace GibFrame.Patterns
 
         public static T Instance { get; private set; }
 
+        [ExecuteAlways]
         protected virtual void Awake()
         {
             if (Instance == null)

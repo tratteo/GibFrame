@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.PathBuilder : Waypoint.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Waypoint.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections.Generic;

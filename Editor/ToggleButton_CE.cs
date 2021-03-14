@@ -1,4 +1,5 @@
-﻿// Copyright (c) 2020 Matteo Beltrame
+﻿//Copyright (c) matteo
+//ToggleButton_CE.cs - com.tratteo.gibframe.Editor
 
 using GibFrame.UI;
 using UnityEditor;

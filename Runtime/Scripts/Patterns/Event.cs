@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : com.tratteo.gibframe.Packages.com.tratteo.gibframe.Runtime.Scripts.Patterns : Event.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Event.cs - com.tratteo.gibframe
 
 using System;
 

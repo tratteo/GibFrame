@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Utils : Timer.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Timer.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections;

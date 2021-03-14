@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.CameraUtils : CameraEffects.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//CameraEffects.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections;

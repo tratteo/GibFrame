@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Utils : UIUtils.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//UIUtils.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections;

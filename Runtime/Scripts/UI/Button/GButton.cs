@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.UI : GButton.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//GButton.cs - com.tratteo.gibframe
 
 using GibFrame.Utils;
 using GibFrame.Utils.Callbacks;

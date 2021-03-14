@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.DataStructures : SortedQueue.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//SortedQueue.cs - com.tratteo.gibframe
 
 using System;
 using System.Collections.Generic;

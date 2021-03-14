@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Utils.Callbacks : Callbacks.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//Callbacks.cs - com.tratteo.gibframe
 
 using System;
 

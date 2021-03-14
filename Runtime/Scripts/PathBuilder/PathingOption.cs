@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.PathBuilder : PathingOption.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//PathingOption.cs - com.tratteo.gibframe
 
 using System;
 using GibFrame.Utils;

@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : com.tratteo.gibframe.Packages.com.tratteo.gibframe.Runtime.Scripts.Physics : GPhysics.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//GPhysics.cs - com.tratteo.gibframe
 
 using System;
 using GibFrame.Utils;

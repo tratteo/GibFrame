@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.ObjectPooling : IPooledObject.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//IPooledObject.cs - com.tratteo.gibframe
 
 namespace GibFrame.ObjectPooling
 {

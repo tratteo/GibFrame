@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.UI : ToastScript.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//ToastScript.cs - com.tratteo.gibframe
 
 using System.Collections;
 using System.Collections.Generic;

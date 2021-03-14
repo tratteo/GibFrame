@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.SceneManagement : AsyncLoadIndexSaver.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//AsyncLoadIndexSaver.cs - com.tratteo.gibframe
 
 namespace GibFrame.SceneManagement
 {

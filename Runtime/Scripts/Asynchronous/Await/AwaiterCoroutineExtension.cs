@@ -1,8 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// Package com.tratteo.gibframe : GibFrame.Asynchronous.Await : AwaiterCoroutineExtension.cs
-//
-// All Rights Reserved
+﻿//Copyright (c) matteo
+//AwaiterCoroutineExtension.cs - com.tratteo.gibframe
 
 using System.Collections;
 using UnityEngine;
