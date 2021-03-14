@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GibFrame.Utils.Callbacks;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace GibFrame.Performance
 {
     public class BatchedJob : MonoBehaviour
     {
-        private Queue<AbstractCallback> Operations = new Queue<AbstractCallback>();
+        private List<AbstractCallback> Operations = new List<AbstractCallback>();
         private int batch;
         private YieldInstruction yieldInstruction;
 
@@ -15,16 +16,23 @@ namespace GibFrame.Performance
 
         public static BatchedJob Compose(int batch, YieldInstruction yieldInstruction)
         {
-            GameObject obj = new GameObject();
-            obj.hideFlags = HideFlags.HideInHierarchy;
+            GameObject obj = new GameObject
+            {
+                hideFlags = HideFlags.HideInHierarchy
+            };
             BatchedJob job = obj.AddComponent<BatchedJob>();
             job.Setup(batch, yieldInstruction);
             return job;
         }
 
+        public bool RemoveJob(AbstractCallback Op)
+        {
+            return Operations.Remove(Op);
+        }
+
         public void AddJob(AbstractCallback Op)
         {
-            Operations.Enqueue(Op);
+            Operations.Add(Op);
             if (!Dispatching)
             {
                 StartCoroutine(Dispatcher_C());
@@ -42,14 +50,21 @@ namespace GibFrame.Performance
             this.yieldInstruction = yieldInstruction;
         }
 
+        private AbstractCallback Cycle()
+        {
+            AbstractCallback op = Operations.ElementAt(0);
+            Operations.RemoveAt(0);
+            Operations.Add(op);
+            return op;
+        }
+
         private IEnumerator Dispatcher_C()
         {
             int counter = 0;
             Dispatching = true;
             while (Operations.Count > 0)
             {
-                AbstractCallback Op = Operations.Dequeue();
-                Operations.Enqueue(Op);
+                AbstractCallback Op = Cycle();
                 Op?.Invoke();
                 counter++;
                 if (counter % batch == 0)
