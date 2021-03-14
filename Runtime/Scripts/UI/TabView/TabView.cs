@@ -1,6 +1,7 @@
 ﻿//Copyright (c) matteo
 //TabView.cs - com.tratteo.gibframe
 
+using GibFrame.Extensions;
 using GibFrame.Utils;
 using UnityEngine;
 
@@ -37,7 +38,7 @@ namespace GibFrame.UI
 
         private void Awake()
         {
-            viewsParent = UnityUtils.GetFirstComponentInChildrenWithName<Transform>(gameObject, "Views", true);
+            viewsParent = transform.GetFirstComponentInChildrenWithName<Transform>("Views", true);
             tabGroup = GetComponentInChildren<TabGroup>();
         }
     }

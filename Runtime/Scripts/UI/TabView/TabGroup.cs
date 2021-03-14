@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using GibFrame.Extensions;
 using GibFrame.Utils;
 using UnityEngine;
 
@@ -66,7 +67,7 @@ namespace GibFrame.UI
 
         private void Start()
         {
-            Transform temp = UnityUtils.GetFirstComponentInChildrenWithName<Transform>(transform.parent.gameObject, "Views", true);
+            Transform temp = transform.parent.GetFirstComponentInChildrenWithName<Transform>("Views", true);
             if (temp == null)
             {
                 throw new System.Exception("Unable to fin the views parent");

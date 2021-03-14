@@ -2,6 +2,7 @@
 //Path.cs - com.tratteo.gibframe
 
 using System.Collections.Generic;
+using GibFrame.Extensions;
 using GibFrame.Utils;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace GibFrame.PathBuilder
 
         public Waypoint GetRandomStartPoint()
         {
-            return Utils.General.SelectWithProbability(startPoints).Point;
+            return startPoints.SelectWithProbability().Point;
         }
 
         public void CreateWaypoint(Vector3 position)
@@ -132,13 +133,13 @@ namespace GibFrame.PathBuilder
 
         public Waypoint GetClosestWaypoint(Vector3 position)
         {
-            return Utils.General.GetPredicateMinObject(path.ToArray(), w => Vector3.Distance(position, w.Position));
+            return path.GetPredicateMinObject(w => Vector3.Distance(position, w.Position));
         }
 
         private void Awake()
         {
-            Utils.General.NormalizeProbabilities(startPoints, s => s.ProvideSelectProbability());
-            UnityUtils.ReadGameObject(out waypointPrefab, "TUtils/PathBuilder/Waypoint");
+            startPoints.NormalizeProbabilities(s => s.ProvideSelectProbability());
+            waypointPrefab = Resources.Load<GameObject>("TUtils/PathBuilder/Waypoint");
         }
     }
 }

@@ -3,9 +3,8 @@
 
 using System;
 using System.Collections;
-using System.Threading;
 using System.Runtime.CompilerServices;
-using UnityEngine;
+using System.Threading;
 
 namespace GibFrame.Asynchronous.Await
 {

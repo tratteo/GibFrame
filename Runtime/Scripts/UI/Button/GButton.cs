@@ -1,9 +1,9 @@
 ﻿//Copyright (c) matteo
 //GButton.cs - com.tratteo.gibframe
 
-using GibFrame.Utils;
-using GibFrame.Utils.Callbacks;
 using System.Collections.Generic;
+using GibFrame.Extensions;
+using GibFrame.Utils.Callbacks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -104,7 +104,7 @@ namespace GibFrame.UI
             OnPointerEnterCallbacks = new List<AbstractCallback>();
             OnCancelCallbacks = new List<AbstractCallback>();
             childButtons = GetComponentsInChildren<GButton>(true);
-            childButtons = General.GetPredicatesMatchingObjects(childButtons, (b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject));
+            childButtons = childButtons.GetPredicatesMatchingObjects((b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject));
             image = GetComponentInChildren<Image>();
             unpressedSprite = image.sprite;
 

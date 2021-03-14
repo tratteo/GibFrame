@@ -1,6 +1,7 @@
-//Copyright (c) matteo
+﻿//Copyright (c) matteo
 //TransitionHandler.cs - com.tratteo.gibframe
 
+using GibFrame.Extensions;
 using GibFrame.Patterns;
 using GibFrame.SceneManagement.Transitions;
 using GibFrame.Utils;
@@ -30,7 +31,7 @@ namespace GibFrame.SceneManagement
         public void AnimateTransition(string prefabName, string sceneName, bool async = false, float speed = 1F)
         {
             custom = true;
-            GameObject obj = UnityUtils.GetFirstChildWithName(gameObject, prefabName, true);
+            Transform obj = transform.GetFirstChildWithName(prefabName, true);
             if (obj == null)
             {
                 throw new System.Exception("Unable to find the scene transition with the name: " + prefabName);
@@ -53,7 +54,7 @@ namespace GibFrame.SceneManagement
         {
             persistent = true;
             base.Awake();
-            fade = UnityUtils.GetFirstChildWithName(gameObject, "Fade", true).GetComponent<Transition>();
+            fade = transform.GetFirstChildWithName("Fade", true).GetComponent<Transition>();
         }
 
         private IEnumerator Animate_C(Transition transition, int sceneIndex, bool async, float speed)
