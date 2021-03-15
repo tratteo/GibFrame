@@ -1,9 +1,9 @@
 ﻿//Copyright (c) matteo
 //CameraManager.cs - com.tratteo.gibframe
 
-using GibFrame.Patterns;
 using System;
 using System.Collections;
+using GibFrame.Patterns;
 using UnityEngine;
 
 namespace GibFrame.CameraUtils

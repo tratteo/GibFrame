@@ -2,7 +2,6 @@
 //TabView.cs - com.tratteo.gibframe
 
 using GibFrame.Extensions;
-using GibFrame.Utils;
 using UnityEngine;
 
 namespace GibFrame.UI

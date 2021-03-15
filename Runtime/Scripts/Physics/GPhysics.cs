@@ -3,7 +3,6 @@
 
 using System;
 using GibFrame.Extensions;
-using GibFrame.Utils;
 using GibFrame.Utils.Mathematics;
 using UnityEngine;
 

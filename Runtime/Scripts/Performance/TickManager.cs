@@ -1,10 +1,10 @@
 ﻿//Copyright (c) matteo
 //TickManager.cs - com.tratteo.gibframe
 
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 using GibFrame.Patterns;
+using GibFrame.Utils;
+using GibFrame.Utils.Callbacks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,9 +14,11 @@ namespace GibFrame.Performance
     {
         [Header("TickManager")]
         [SerializeField] private float defaultTickDelta;
-
-        private List<TickedAgent> agents;
-        private List<TickedAgent> next;
+        [Tooltip("Set the maximum amount of tickable objects per frame. Set to -1 to allow all objects to tick in the same frame")]
+        [SerializeField] private int batchCount = -1;
+        private List<TickedAgent> agents = new List<TickedAgent>();
+        private List<TickedAgent> destroyed = new List<TickedAgent>();
+        private BatchedJob tickBatchJob;
 
         public static GameObject Instantiate<T>(GameObject original) where T : Component
         {
@@ -53,9 +55,9 @@ namespace GibFrame.Performance
             {
                 foreach (TickedAgent agent in agents)
                 {
-                    if (!agent.CustomDelta)
+                    if (!agent.Parameters.CustomDelta)
                     {
-                        agent.TickDelta = defaultTickDelta;
+                        agent.Parameters.TickDelta = defaultTickDelta;
                     }
                 }
             }
@@ -63,26 +65,30 @@ namespace GibFrame.Performance
 
         public float GetDefaultDeltaTime() => defaultTickDelta;
 
-        public void NotifyAgent(MonoBehaviour mono)
+        public bool IsBatched() => batchCount > 0;
+
+        public void SetBatchCount(int batch)
         {
-            AnalyzeMono(mono);
+            batchCount = batch;
+            tickBatchJob.SetBatch(batch);
         }
 
         protected override void Awake()
         {
             base.Awake();
-            agents = new List<TickedAgent>();
-            next = new List<TickedAgent>();
+            destroyed = new List<TickedAgent>();
             SceneManager.sceneLoaded += OnSceneLoaded;
+            tickBatchJob = BatchedJob.Compose(batchCount, new WaitForEndOfFrame(), true);
+            tickBatchJob.Dispatch();
         }
 
-        private static void CheckTickedAttribute(GameObject obj)
+        private static void CheckTickedAttribute(GameObject res)
         {
-            TickManager manager = FindObjectOfType<TickManager>();
-            MonoBehaviour mono = obj.GetComponent<MonoBehaviour>();
-            if (manager != null && mono != null)
+            if (Instance == null) return;
+            ITickable tickable;
+            if ((tickable = res.GetComponent<ITickable>()) != null)
             {
-                manager.AnalyzeMono(mono);
+                Instance.agents.Add(new TickedAgent(tickable, Instance.GetDefaultDeltaTime()));
             }
         }
 
@@ -93,52 +99,73 @@ namespace GibFrame.Performance
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            ScanTicked();
+            Rescan();
         }
 
-        private void ScanTicked()
+        private void Rescan()
         {
             agents.Clear();
-            MonoBehaviour[] behaviours = FindObjectsOfType<MonoBehaviour>(true);
-            foreach (MonoBehaviour mono in behaviours)
-            {
-                AnalyzeMono(mono);
-            }
-        }
-
-        private void AnalyzeMono(MonoBehaviour mono)
-        {
-            Type type = mono.GetType();
-            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
-            {
-                var attributes = method.GetCustomAttributes(typeof(TickedAttribute), true);
-                foreach (object attr in attributes)
-                {
-                    TickedAttribute ticked = (TickedAttribute)attr;
-                    bool customDelta = ticked.TickDelta >= 0 ? true : false;
-                    TickedAgent agent = new TickedAgent(mono, method, customDelta ? ticked.TickDelta : defaultTickDelta, ticked.TickDisabled, customDelta);
-                    agents.Add(agent);
-                }
-            }
+            agents.AddRange(UnityUtils.GetInterfacesOfType<ITickable>().ConvertAll((t) => new TickedAgent(t, GetDefaultDeltaTime())));
         }
 
         private void Start()
         {
-            ScanTicked();
+            Rescan();
+        }
+
+        private void TickOp(TickedAgent agent)
+        {
+            if (agent.Parent != null)
+            {
+                agent.Tick();
+            }
         }
 
         private void Update()
         {
-            next.Clear();
-            foreach (TickedAgent agent in agents)
+            destroyed.Clear();
+            if (IsBatched())
             {
-                if (agent.Parent != null)
+                foreach (TickedAgent agent in agents)
                 {
-                    next.Add(agent);
-                    agent.Tick(Time.deltaTime);
+                    if (agent.Parent != null)
+                    {
+                        agent.Step(Time.deltaTime);
+                        if (agent.CanTick())
+                        {
+                            tickBatchJob.AddJob(new Callback<TickedAgent>(TickOp, agent));
+                            agent.Reset();
+                        }
+                    }
+                    else
+                    {
+                        destroyed.Add(agent);
+                    }
                 }
             }
-            agents = new List<TickedAgent>(next);
+            else
+            {
+                foreach (TickedAgent agent in agents)
+                {
+                    if (agent.Parent != null)
+                    {
+                        agent.Step(Time.deltaTime);
+                        if (agent.CanTick())
+                        {
+                            TickOp(agent);
+                        }
+                    }
+                    else
+                    {
+                        destroyed.Add(agent);
+                    }
+                }
+            }
+
+            foreach (TickedAgent agent in destroyed)
+            {
+                agents.Remove(agent);
+            }
         }
     }
 }

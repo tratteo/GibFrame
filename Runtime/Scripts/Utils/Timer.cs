@@ -1,7 +1,6 @@
 ﻿//Copyright (c) matteo
 //Timer.cs - com.tratteo.gibframe
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using GibFrame.Utils.Callbacks;

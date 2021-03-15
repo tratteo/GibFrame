@@ -1,8 +1,8 @@
 ﻿//Copyright (c) matteo
 //PoolManager.cs - com.tratteo.gibframe
 
-using GibFrame.Patterns;
 using System;
+using GibFrame.Patterns;
 using UnityEngine;
 
 namespace GibFrame.ObjectPooling

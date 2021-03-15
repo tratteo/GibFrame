@@ -1,7 +1,6 @@
 ﻿//Copyright (c) matteo
 //TickedAgent.cs - com.tratteo.gibframe
 
-using System.Reflection;
 using UnityEngine;
 
 namespace GibFrame.Performance
@@ -10,31 +9,39 @@ namespace GibFrame.Performance
     {
         private float currentTick;
 
-        public bool CustomDelta { get; private set; }
+        private ITickable agent;
 
-        public MethodInfo Method { get; private set; }
-
-        public float TickDelta { get; set; }
-
-        public bool TickDisabled { get; private set; }
+        public TickableParameters Parameters { get; private set; }
 
         public MonoBehaviour Parent { get; private set; }
 
-        public TickedAgent(MonoBehaviour parent, MethodInfo method, float tickDelta, bool tickDisabled, bool customDelta)
+        public TickedAgent(ITickable tickable, float defalutTickDelta)
         {
-            Method = method;
-            Parent = parent;
-            TickDelta = tickDelta;
-            CustomDelta = customDelta;
-            TickDisabled = tickDisabled;
+            agent = tickable;
+            Parameters = tickable.GetParameters();
+            Parent = tickable as MonoBehaviour;
+            if (!Parameters.CustomDelta)
+            {
+                Parameters.TickDelta = defalutTickDelta;
+            }
+        }
+
+        public void Reset()
+        {
             currentTick = 0;
         }
 
-        public void Tick(float delta)
+        public bool CanTick() => currentTick >= Parameters.TickDelta;
+
+        public void Step(float increment)
         {
-            currentTick += delta;
+            currentTick += increment;
+        }
+
+        public void Tick()
+        {
             bool shouldTick;
-            if (TickDisabled || (Parent.enabled && Parent.gameObject.activeSelf))
+            if (Parameters.TickDisabled || (Parent.enabled && Parent.gameObject.activeSelf))
             {
                 shouldTick = true;
             }
@@ -46,11 +53,8 @@ namespace GibFrame.Performance
 
             if (shouldTick)
             {
-                if (currentTick >= TickDelta)
-                {
-                    Method?.Invoke(Parent, new object[] { TickDelta });
-                    currentTick = 0;
-                }
+                agent.Tick(Parameters.TickDelta);
+                currentTick = 0;
             }
         }
     }

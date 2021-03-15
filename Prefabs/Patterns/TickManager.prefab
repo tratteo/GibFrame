@@ -46,3 +46,4 @@ MonoBehaviour:
   persistent: 1
   flags: 1
   defaultTickDelta: 0.1
+  batchCount: -1

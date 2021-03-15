@@ -1,9 +1,7 @@
 ﻿//Copyright (c) matteo
 //UIUtils.cs - com.tratteo.gibframe
 
-using System;
 using System.Collections;
-using System.Text;
 using GibFrame.Utils.Callbacks;
 using GibFrame.Utils.Mathematics;
 using UnityEngine;

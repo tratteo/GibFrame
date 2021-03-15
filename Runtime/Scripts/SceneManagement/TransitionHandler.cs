@@ -1,11 +1,10 @@
 ﻿//Copyright (c) matteo
 //TransitionHandler.cs - com.tratteo.gibframe
 
+using System.Collections;
 using GibFrame.Extensions;
 using GibFrame.Patterns;
 using GibFrame.SceneManagement.Transitions;
-using GibFrame.Utils;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
