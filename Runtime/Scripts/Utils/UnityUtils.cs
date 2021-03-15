@@ -10,10 +10,10 @@ namespace GibFrame.Utils
 {
     public class UnityUtils
     {
-        public static List<T> GetInterfacesOfType<T>()
+        public static List<T> GetInterfacesOfType<T>(bool inactive = false)
         {
             List<T> interfaces = new List<T>();
-            MonoBehaviour[] monoBehaviours = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>();
+            MonoBehaviour[] monoBehaviours = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>(inactive);
             foreach (MonoBehaviour item in monoBehaviours)
             {
                 if (item is T)

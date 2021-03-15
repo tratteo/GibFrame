@@ -105,7 +105,7 @@ namespace GibFrame.Performance
         private void Rescan()
         {
             agents.Clear();
-            agents.AddRange(UnityUtils.GetInterfacesOfType<ITickable>().ConvertAll((t) => new TickedAgent(t, GetDefaultDeltaTime())));
+            agents.AddRange(UnityUtils.GetInterfacesOfType<ITickable>(true).ConvertAll((t) => new TickedAgent(t, GetDefaultDeltaTime())));
         }
 
         private void Start()
