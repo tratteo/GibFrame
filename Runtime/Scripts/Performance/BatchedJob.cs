@@ -86,10 +86,11 @@ namespace GibFrame.Performance
                 if (Operations.Count > 0)
                 {
                     AbstractCallback current = Operations.ElementAt(0);
+                    Operations.RemoveAt(0);
                     operationsBatch.Add(current);
-                    if (oneTimeOps)
+                    if (!oneTimeOps)
                     {
-                        Operations.RemoveAt(0);
+                        Operations.Add(current);
                     }
                 }
                 else
