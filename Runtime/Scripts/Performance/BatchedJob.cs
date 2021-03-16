@@ -18,7 +18,8 @@ namespace GibFrame.Performance
         {
             GameObject obj = new GameObject
             {
-                //hideFlags = HideFlags.HideInHierarchy
+                hideFlags = HideFlags.HideInHierarchy,
+                name = "BatchedJob"
             };
             BatchedJob job = obj.AddComponent<BatchedJob>();
             job.Setup(batch, yieldInstruction);

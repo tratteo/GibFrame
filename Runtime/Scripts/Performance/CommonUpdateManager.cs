@@ -121,7 +121,7 @@ namespace GibFrame.Performance
             foreach (ICommonUpdate update in commonUpdates)
             {
                 MonoBehaviour mono = update as MonoBehaviour;
-                if (update != null && mono.enabled && mono.gameObject.activeSelf)
+                if (mono != null && mono.enabled && mono.gameObject.activeSelf)
                 {
                     update.CommonUpdate();
                 }
@@ -139,7 +139,7 @@ namespace GibFrame.Performance
             foreach (ICommonLateUpdate update in commonLateUpdates)
             {
                 MonoBehaviour mono = update as MonoBehaviour;
-                if (update != null && mono.enabled && mono.gameObject.activeSelf)
+                if (mono != null && mono.enabled && mono.gameObject.activeSelf)
                 {
                     update.CommonLateUpdate();
                 }
@@ -156,7 +156,7 @@ namespace GibFrame.Performance
             foreach (ICommonFixedUpdate update in commonFixedUpdates)
             {
                 MonoBehaviour mono = update as MonoBehaviour;
-                if (update != null && mono.enabled && mono.gameObject.activeSelf)
+                if (mono != null && mono.enabled && mono.gameObject.activeSelf)
                 {
                     update.CommonFixedUpdate();
                 }
