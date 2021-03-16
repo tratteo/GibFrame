@@ -8,24 +8,20 @@ namespace GibFrame.Performance
 {
     public class BatchedJob : MonoBehaviour
     {
-        private List<AbstractCallback> Operations = new List<AbstractCallback>();
+        private List<AbstractCallback> operations = new List<AbstractCallback>();
         private int batch;
         private YieldInstruction yieldInstruction;
-        private bool oneTimeOps = false;
-        private List<AbstractCallback> operationsBatch = new List<AbstractCallback>();
-
-        private bool shouldRun = true;
 
         public bool Dispatching { get; private set; } = false;
 
-        public static BatchedJob Compose(int batch, YieldInstruction yieldInstruction, bool oneTimeOps)
+        public static BatchedJob Compose(int batch, YieldInstruction yieldInstruction)
         {
             GameObject obj = new GameObject
             {
-                hideFlags = HideFlags.HideInHierarchy
+                //hideFlags = HideFlags.HideInHierarchy
             };
             BatchedJob job = obj.AddComponent<BatchedJob>();
-            job.Setup(batch, yieldInstruction, oneTimeOps);
+            job.Setup(batch, yieldInstruction);
 
             return job;
         }
@@ -39,17 +35,21 @@ namespace GibFrame.Performance
 
         public bool RemoveJob(AbstractCallback Op)
         {
-            return Operations.Remove(Op);
+            return operations.Remove(Op);
         }
 
-        public void AddJob(AbstractCallback Op)
+        public void AddJob(params AbstractCallback[] Op)
         {
-            Operations.Add(Op);
+            operations.AddRange(Op);
+            if (!Dispatching)
+            {
+                StartCoroutine(Dispatcher_C());
+            }
         }
 
         public void ClearJobs()
         {
-            Operations.Clear();
+            operations.Clear();
         }
 
         public void Dispose()
@@ -57,60 +57,28 @@ namespace GibFrame.Performance
             DestroyImmediate(gameObject);
         }
 
-        public void Suspend()
+        private void Setup(int batch, YieldInstruction yieldInstruction)
         {
-            shouldRun = false;
-        }
-
-        public void Dispatch()
-        {
-            shouldRun = true;
-            if (!Dispatching)
-            {
-                StartCoroutine(Dispatcher_C());
-            }
-        }
-
-        private void Setup(int batch, YieldInstruction yieldInstruction, bool oneTimeOps)
-        {
-            this.oneTimeOps = oneTimeOps;
             this.batch = batch;
             this.yieldInstruction = yieldInstruction;
         }
 
-        private void PrepareBatch()
-        {
-            operationsBatch.Clear();
-            for (int i = 0; i < batch; i++)
-            {
-                if (Operations.Count > 0)
-                {
-                    AbstractCallback current = Operations.ElementAt(0);
-                    Operations.RemoveAt(0);
-                    operationsBatch.Add(current);
-                    if (!oneTimeOps)
-                    {
-                        Operations.Add(current);
-                    }
-                }
-                else
-                {
-                    return;
-                }
-            }
-        }
-
         private IEnumerator Dispatcher_C()
         {
+            int counter = 0;
             Dispatching = true;
-            while (shouldRun)
+            while (operations.Count > 0)
             {
-                PrepareBatch();
-                foreach (AbstractCallback callback in operationsBatch)
+                AbstractCallback callback = operations.ElementAt(0);
+                operations.RemoveAt(0);
+                callback?.Invoke();
+                counter++;
+                operations.Add(callback);
+                if (counter % batch == 0)
                 {
-                    callback?.Invoke();
+                    counter = 0;
+                    yield return yieldInstruction;
                 }
-                yield return yieldInstruction;
             }
             Dispatching = false;
         }
