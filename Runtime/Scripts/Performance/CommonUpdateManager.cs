@@ -7,6 +7,8 @@ namespace GibFrame.Performance
 {
     public class CommonUpdateManager : MonoSingleton<CommonUpdateManager>
     {
+        [Header("Preferences")]
+        [SerializeField] private bool autoScanOnStartup = false;
         private List<ICommonUpdate> commonUpdates = new List<ICommonUpdate>();
         private List<ICommonFixedUpdate> commonFixedUpdates = new List<ICommonFixedUpdate>();
         private List<ICommonLateUpdate> commonLateUpdates = new List<ICommonLateUpdate>();
@@ -20,37 +22,82 @@ namespace GibFrame.Performance
             int lenght = monos.Length;
             for (int i = 0; i < lenght; i++)
             {
-                ICommonUpdate update;
-                ICommonFixedUpdate fixedUpdate;
-                ICommonLateUpdate lateUpdate;
-                if ((update = monos[i].GetComponent<ICommonUpdate>()) != null)
-                {
-                    commonUpdates.Add(update);
-                }
-                if ((fixedUpdate = monos[i].GetComponent<ICommonFixedUpdate>()) != null)
-                {
-                    commonFixedUpdates.Add(fixedUpdate);
-                }
-                if ((lateUpdate = monos[i].GetComponent<ICommonLateUpdate>()) != null)
-                {
-                    commonLateUpdates.Add(lateUpdate);
-                }
+                Register(monos[i]);
             }
         }
 
-        public void NotifyCommonUpdate(ICommonUpdate update)
+        public void Register(MonoBehaviour mono)
         {
-            commonUpdates.Add(update);
+            ICommonUpdate update;
+            ICommonFixedUpdate fixedUpdate;
+            ICommonLateUpdate lateUpdate;
+            if ((update = mono.GetComponent<ICommonUpdate>()) != null)
+            {
+                Register(update);
+            }
+            if ((fixedUpdate = mono.GetComponent<ICommonFixedUpdate>()) != null)
+            {
+                Register(fixedUpdate);
+            }
+            if ((lateUpdate = mono.GetComponent<ICommonLateUpdate>()) != null)
+            {
+                Register(lateUpdate);
+            }
         }
 
-        public void NotifyCommonLateUpdate(ICommonLateUpdate update)
+        public void Register(ICommonUpdate update)
         {
-            commonLateUpdates.Add(update);
+            if (!commonUpdates.Contains(update))
+            {
+                commonUpdates.Add(update);
+            }
         }
 
-        public void NotifyCommonFixedUpdate(ICommonFixedUpdate update)
+        public void Register(ICommonLateUpdate update)
         {
-            commonFixedUpdates.Add(update);
+            if (!commonLateUpdates.Contains(update))
+            {
+                commonLateUpdates.Add(update);
+            }
+        }
+
+        public void Register(ICommonFixedUpdate update)
+        {
+            if (!commonFixedUpdates.Contains(update))
+            {
+                commonFixedUpdates.Add(update);
+            }
+        }
+
+        public void Unregister(MonoBehaviour mono)
+        {
+            if (mono is ICommonUpdate)
+            {
+                Unregister(mono as ICommonUpdate);
+            }
+            if (mono is ICommonLateUpdate)
+            {
+                Unregister(mono as ICommonLateUpdate);
+            }
+            if (mono is ICommonFixedUpdate)
+            {
+                Unregister(mono as ICommonFixedUpdate);
+            }
+        }
+
+        public bool Unregister(ICommonUpdate update)
+        {
+            return commonUpdates.Remove(update);
+        }
+
+        public bool Unregister(ICommonLateUpdate update)
+        {
+            return commonLateUpdates.Remove(update);
+        }
+
+        public bool Unregister(ICommonFixedUpdate update)
+        {
+            return commonFixedUpdates.Remove(update);
         }
 
         protected override void Awake()
@@ -61,16 +108,20 @@ namespace GibFrame.Performance
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            Rescan();
+            if (autoScanOnStartup)
+            {
+                Rescan();
+            }
         }
 
-#if !INHIBIT_UPDATE
+#if !GIB_NO_COMMUPDATE
 
         private void Update()
         {
             foreach (ICommonUpdate update in commonUpdates)
             {
-                if (update != null)
+                MonoBehaviour mono = update as MonoBehaviour;
+                if (update != null && mono.enabled && mono.gameObject.activeSelf)
                 {
                     update.CommonUpdate();
                 }
@@ -81,13 +132,14 @@ namespace GibFrame.Performance
 
 #endif
 
-#if !INHIBIT_LATE_UPDATE
+#if !GIB_NO_COMMLATEUPDATE
 
         private void LateUpdate()
         {
             foreach (ICommonLateUpdate update in commonLateUpdates)
             {
-                if (update != null)
+                MonoBehaviour mono = update as MonoBehaviour;
+                if (update != null && mono.enabled && mono.gameObject.activeSelf)
                 {
                     update.CommonLateUpdate();
                 }
@@ -97,13 +149,14 @@ namespace GibFrame.Performance
 
 #endif
 
-#if !INHIBIT_FIXED_UPDATE
+#if !GIB_NO_COMMFIXEDUPDATE
 
         private void FixedUpdate()
         {
             foreach (ICommonFixedUpdate update in commonFixedUpdates)
             {
-                if (update != null)
+                MonoBehaviour mono = update as MonoBehaviour;
+                if (update != null && mono.enabled && mono.gameObject.activeSelf)
                 {
                     update.CommonFixedUpdate();
                 }
