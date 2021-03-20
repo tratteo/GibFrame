@@ -10,7 +10,7 @@ namespace GibFrame.Selectors
     public abstract class Selector : MonoBehaviour
     {
         public event Action<ISelectable> SelectedEvent;
-        [SerializeField] protected LayerMask mask;
+        [SerializeField] protected LayerMask mask = ~0;
         [SerializeField] protected string selectableTag;
 
         protected ISelectable currentSelected = null;
@@ -47,6 +47,11 @@ namespace GibFrame.Selectors
             currentCollider = null;
         }
 
+        protected bool IsColliderValid(Collider collider)
+        {
+            return ColliderSatisfiesPredicates(collider) && (selectableTag.Equals("") || collider.CompareTag(selectableTag));
+        }
+
         protected void Select(Collider newCollider)
         {
             if (newCollider != null)
@@ -67,7 +72,7 @@ namespace GibFrame.Selectors
             }
         }
 
-        protected bool ColliderSatisfiesPredicates(Collider collider)
+        private bool ColliderSatisfiesPredicates(Collider collider)
         {
             foreach (Predicate<Collider> Predicate in predicates)
             {

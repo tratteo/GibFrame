@@ -29,12 +29,9 @@ namespace GibFrame.Selectors
                     {
                         if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mask))
                         {
-                            if (hit.collider.CompareTag(selectableTag))
+                            if (IsColliderValid(hit.collider))
                             {
-                                if (ColliderSatisfiesPredicates(hit.collider))
-                                {
-                                    Select(hit.collider);
-                                }
+                                Select(hit.collider);
                             }
                         }
                         else
@@ -54,7 +51,7 @@ namespace GibFrame.Selectors
                     if (UnityUtils.IsAnyPointerOverGameObject()) return;
                     if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mask))
                     {
-                        if (ColliderSatisfiesPredicates(hit.collider))
+                        if (IsColliderValid(hit.collider))
                         {
                             Select(hit.collider);
                         }

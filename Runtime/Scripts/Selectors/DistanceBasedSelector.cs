@@ -25,7 +25,7 @@ namespace GibFrame.Selectors
                 if (Active)
                 {
                     Collider selected = null;
-                    colliders = GPhysics.MatchingOverlapSphere(transform.position, senseRadius, mask, (c) => c.CompareTag(selectableTag) && ColliderSatisfiesPredicates(c));
+                    colliders = GPhysics.MatchingOverlapSphere(transform.position, senseRadius, mask, (c) => IsColliderValid(c));
                     if (colliders != null && colliders.Length > 0)
                     {
                         switch (paradigm)
