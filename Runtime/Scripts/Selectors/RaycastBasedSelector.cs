@@ -37,7 +37,7 @@ namespace GibFrame.Selectors
                 if (Active)
                 {
                     Vector3 dir = directionOverride ? direction : transform.forward;
-                    if (Physics.Raycast(transform.position + offset, dir, out RaycastHit hit, float.MaxValue))
+                    if (Physics.Raycast(transform.position + offset, dir, out RaycastHit hit, float.MaxValue, mask))
                     {
                         if (hit.collider.CompareTag(selectableTag))
                         {

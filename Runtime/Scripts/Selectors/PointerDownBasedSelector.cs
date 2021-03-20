@@ -27,7 +27,7 @@ namespace GibFrame.Selectors
                     if (UnityUtils.IsAnyPointerOverGameObject()) return;
                     if (touch.phase == TouchPhase.Ended)
                     {
-                        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
+                        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mask))
                         {
                             if (hit.collider.CompareTag(selectableTag))
                             {
@@ -52,7 +52,7 @@ namespace GibFrame.Selectors
                 {
                     Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                     if (UnityUtils.IsAnyPointerOverGameObject()) return;
-                    if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue))
+                    if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mask))
                     {
                         if (ColliderSatisfiesPredicates(hit.collider))
                         {

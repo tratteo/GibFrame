@@ -9,11 +9,17 @@ namespace GibFrame.Selectors
 {
     public abstract class Selector : MonoBehaviour
     {
+        public event Action<ISelectable> SelectedEvent;
+        [SerializeField] protected LayerMask mask;
         [SerializeField] protected string selectableTag;
+
         protected ISelectable currentSelected = null;
+
         protected Collider currentCollider;
 
-        private List<Predicate<Collider>> predicates = new List<Predicate<Collider>>();
+        private readonly List<Predicate<Collider>> predicates = new List<Predicate<Collider>>();
+
+        public event Action<ISelectable> DeselectedEvent;
 
         public GameObject CurrentSelected { get => currentCollider != null ? currentCollider.gameObject : null; }
 
@@ -51,10 +57,12 @@ namespace GibFrame.Selectors
                 {
                     if (currentSelected != null)
                     {
-                        currentSelected?.OnDeselect();
+                        currentSelected.OnDeselect();
+                        DeselectedEvent?.Invoke(currentSelected);
                     }
                     currentSelected = newSelectable;
                     currentSelected.OnSelect();
+                    SelectedEvent?.Invoke(currentSelected);
                 }
             }
         }

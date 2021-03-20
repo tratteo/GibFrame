@@ -104,6 +104,7 @@ namespace GibFrame.Utils.Clocks
 
         private IEnumerator Rate_C()
         {
+            WaitForFixedUpdate wait = new WaitForFixedUpdate();
             while (routineActive)
             {
                 if (isPaused)
@@ -128,11 +129,11 @@ namespace GibFrame.Utils.Clocks
                             rate = scaleFunc((int)Time.timeSinceLevelLoad);
                             break;
                     }
-                    time = 1 / rate;
+                    time = 1F / rate;
                     currentTime = 0;
                 }
                 currentTime += Time.fixedDeltaTime;
-                yield return new WaitForFixedUpdate();
+                yield return wait;
             }
         }
     }
