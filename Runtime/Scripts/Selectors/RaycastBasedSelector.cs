@@ -8,14 +8,9 @@ namespace GibFrame.Selectors
 {
     public class RaycastBasedSelector : DiscreteSelector
     {
+        private Vector3 direction;
         private bool directionOverride = false;
         private Vector3 offset;
-        private Vector3 direction;
-
-        public void StartPointOffset(Vector3 offset)
-        {
-            this.offset = offset;
-        }
 
         public void OverrideDirection(Vector3 direction)
         {
@@ -26,6 +21,11 @@ namespace GibFrame.Selectors
         public void ResetDirection()
         {
             directionOverride = false;
+        }
+
+        public void StartPointOffset(Vector3 offset)
+        {
+            this.offset = offset;
         }
 
         protected override IEnumerator SelectCoroutine()

@@ -9,21 +9,20 @@ namespace GibFrame.Selectors
 {
     public abstract class Selector : MonoBehaviour
     {
-        public event Action<ISelectable> SelectedEvent;
         [SerializeField] protected LayerMask mask = ~0;
         [SerializeField] protected string selectableTag;
-
-        protected ISelectable currentSelected = null;
-
-        protected Collider currentCollider;
-
+        [SerializeField] protected bool delegateActionOnInterface = true;
         private readonly List<Predicate<Collider>> predicates = new List<Predicate<Collider>>();
+        private Collider currentCollider;
+        private ISelectable currentSelected = null;
 
-        public event Action<ISelectable> DeselectedEvent;
+        public bool Active { get; private set; } = true;
 
         public GameObject CurrentSelected { get => currentCollider != null ? currentCollider.gameObject : null; }
 
-        public bool Active { get; private set; } = true;
+        public event Action<ISelectable> OnDeselected;
+
+        public event Action<ISelectable> OnSelected;
 
         public T CurrentAs<T>() where T : class => currentSelected as T;
 
@@ -35,16 +34,23 @@ namespace GibFrame.Selectors
             }
         }
 
+        public void ResetSelection()
+        {
+            if (currentSelected != null)
+            {
+                if (delegateActionOnInterface)
+                {
+                    currentSelected.OnDeselect();
+                }
+                OnDeselected?.Invoke(currentSelected);
+            }
+            currentSelected = null;
+            currentCollider = null;
+        }
+
         public void SetActive(bool state)
         {
             Active = state;
-        }
-
-        public void ResetSelection()
-        {
-            currentSelected?.OnDeselect();
-            currentSelected = null;
-            currentCollider = null;
         }
 
         protected bool IsColliderValid(Collider collider)
@@ -56,18 +62,24 @@ namespace GibFrame.Selectors
         {
             if (newCollider != null)
             {
-                currentCollider = newCollider;
-                ISelectable newSelectable = currentCollider.gameObject.GetComponent<ISelectable>();
+                ISelectable newSelectable = newCollider.gameObject.GetComponent<ISelectable>();
                 if (newSelectable != null && currentSelected != newSelectable)
                 {
+                    currentCollider = newCollider;
                     if (currentSelected != null)
                     {
-                        currentSelected.OnDeselect();
-                        DeselectedEvent?.Invoke(currentSelected);
+                        if (delegateActionOnInterface)
+                        {
+                            currentSelected.OnDeselect();
+                        }
+                        OnDeselected?.Invoke(currentSelected);
                     }
                     currentSelected = newSelectable;
-                    currentSelected.OnSelect();
-                    SelectedEvent?.Invoke(currentSelected);
+                    if (delegateActionOnInterface)
+                    {
+                        currentSelected.OnSelect();
+                    }
+                    OnSelected?.Invoke(currentSelected);
                 }
             }
         }
@@ -76,7 +88,7 @@ namespace GibFrame.Selectors
         {
             foreach (Predicate<Collider> Predicate in predicates)
             {
-                if (!Predicate(collider))
+                if (Predicate != null && !Predicate(collider))
                 {
                     return false;
                 }

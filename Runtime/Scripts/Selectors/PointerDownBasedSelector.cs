@@ -12,9 +12,8 @@ namespace GibFrame.Selectors
         public enum InputType { MOUSE, TOUCH, BOTH }
 
         [SerializeField] private InputType input;
-
-        [SerializeField] private UnityEvent OnMissed;
         private Camera mainCamera;
+        [SerializeField] private UnityEvent OnMissed;
 
         protected void Update()
         {

@@ -2,6 +2,6 @@
 {
     public interface ICommonUpdate
     {
-        void CommonUpdate();
+        void CommonUpdate(float deltaTime);
     }
 }

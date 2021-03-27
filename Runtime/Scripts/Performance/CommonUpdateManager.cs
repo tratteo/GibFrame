@@ -123,7 +123,7 @@ namespace GibFrame.Performance
                 MonoBehaviour mono = update as MonoBehaviour;
                 if (mono != null && mono.enabled && mono.gameObject.activeSelf)
                 {
-                    update.CommonUpdate();
+                    update.CommonUpdate(Time.deltaTime);
                 }
             }
 
@@ -158,7 +158,7 @@ namespace GibFrame.Performance
                 MonoBehaviour mono = update as MonoBehaviour;
                 if (mono != null && mono.enabled && mono.gameObject.activeSelf)
                 {
-                    update.CommonFixedUpdate();
+                    update.CommonFixedUpdate(Time.fixedDeltaTime);
                 }
             }
             commonFixedUpdates.RemoveAll((u) => u == null);

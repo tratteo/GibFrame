@@ -2,6 +2,6 @@
 {
     public interface ICommonFixedUpdate
     {
-        void CommonFixedUpdate();
+        void CommonFixedUpdate(float fixedDeltaTime);
     }
 }

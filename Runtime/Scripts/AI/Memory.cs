@@ -10,7 +10,7 @@ namespace GibFrame.AI
 {
     public class Memory
     {
-        private List<MemoryModule> memories;
+        private readonly List<MemoryModule> memories;
         private bool inhibit = false;
 
         public Memory()
