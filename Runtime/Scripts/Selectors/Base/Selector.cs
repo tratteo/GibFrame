@@ -55,7 +55,7 @@ namespace GibFrame.Selectors
 
         protected bool IsColliderValid(Collider collider)
         {
-            return ColliderSatisfiesPredicates(collider) && (selectableTag.Equals("") || collider.CompareTag(selectableTag));
+            return ColliderSatisfiesPredicates(collider) && (selectableTag.Equals(string.Empty) || collider.CompareTag(selectableTag)) && collider.GetComponent<ISelectable>() != null;
         }
 
         protected void Select(Collider newCollider)

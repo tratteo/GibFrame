@@ -64,14 +64,15 @@ namespace GibFrame.UI
             ToggleDelegate = action;
         }
 
-        private void Start()
+        private void Awake()
         {
+            views = new List<GameObject>();
             Transform temp = transform.parent.GetFirstComponentInChildrenWithName<Transform>("Views", true);
             if (temp == null)
             {
-                throw new System.Exception("Unable to fin the views parent");
+                throw new System.Exception("Unable to find the views parent");
             }
-            views = new List<GameObject>();
+
             foreach (Transform t in temp)
             {
                 views.Add(t.gameObject);

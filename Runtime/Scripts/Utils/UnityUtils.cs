@@ -1,6 +1,7 @@
 ﻿//Copyright (c) matteo
 //UnityUtils.cs - com.tratteo.gibframe
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,6 +10,12 @@ namespace GibFrame.Utils
 {
     public class UnityUtils
     {
+        public static T FindObjectOfTypeWithName<T>(string name, bool inactive = false) where T : Component
+        {
+            T[] transforms = UnityEngine.Object.FindObjectsOfType<T>(inactive);
+            return Array.Find(transforms, (elem) => elem.name.Equals(name));
+        }
+
         public static List<T> GetInterfacesOfType<T>(bool inactive = false)
         {
             List<T> interfaces = new List<T>();
