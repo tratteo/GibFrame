@@ -9,22 +9,9 @@ namespace GibFrame.Performance
     {
         [Header("Preferences")]
         [SerializeField] private bool autoScanOnStartup = false;
-        private List<ICommonUpdate> commonUpdates = new List<ICommonUpdate>();
         private List<ICommonFixedUpdate> commonFixedUpdates = new List<ICommonFixedUpdate>();
         private List<ICommonLateUpdate> commonLateUpdates = new List<ICommonLateUpdate>();
-
-        public void Rescan()
-        {
-            commonUpdates.Clear();
-            commonFixedUpdates.Clear();
-            commonLateUpdates.Clear();
-            MonoBehaviour[] monos = FindObjectsOfType<MonoBehaviour>();
-            int lenght = monos.Length;
-            for (int i = 0; i < lenght; i++)
-            {
-                Register(monos[i]);
-            }
-        }
+        private List<ICommonUpdate> commonUpdates = new List<ICommonUpdate>();
 
         public void Register(MonoBehaviour mono)
         {
@@ -69,6 +56,19 @@ namespace GibFrame.Performance
             }
         }
 
+        public void Rescan()
+        {
+            commonUpdates.Clear();
+            commonFixedUpdates.Clear();
+            commonLateUpdates.Clear();
+            MonoBehaviour[] monos = FindObjectsOfType<MonoBehaviour>();
+            int lenght = monos.Length;
+            for (int i = 0; i < lenght; i++)
+            {
+                Register(monos[i]);
+            }
+        }
+
         public void Unregister(MonoBehaviour mono)
         {
             if (mono is ICommonUpdate)
@@ -106,6 +106,32 @@ namespace GibFrame.Performance
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
+        private void FixedUpdate()
+        {
+            foreach (ICommonFixedUpdate update in commonFixedUpdates)
+            {
+                MonoBehaviour mono = update as MonoBehaviour;
+                if (mono == null || (mono != null && mono.enabled && mono.gameObject.activeSelf))
+                {
+                    update.CommonFixedUpdate(Time.fixedDeltaTime);
+                }
+            }
+            commonFixedUpdates.RemoveAll((u) => u == null);
+        }
+
+        private void LateUpdate()
+        {
+            foreach (ICommonLateUpdate update in commonLateUpdates)
+            {
+                MonoBehaviour mono = update as MonoBehaviour;
+                if (mono == null || (mono != null && mono.enabled && mono.gameObject.activeSelf))
+                {
+                    update.CommonLateUpdate();
+                }
+            }
+            commonLateUpdates.RemoveAll((u) => u == null);
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (autoScanOnStartup)
@@ -133,36 +159,9 @@ namespace GibFrame.Performance
 #endif
 
 #if !GIB_NO_COMMLATEUPDATE
-
-        private void LateUpdate()
-        {
-            foreach (ICommonLateUpdate update in commonLateUpdates)
-            {
-                MonoBehaviour mono = update as MonoBehaviour;
-                if (mono == null || (mono != null && mono.enabled && mono.gameObject.activeSelf))
-                {
-                    update.CommonLateUpdate();
-                }
-            }
-            commonLateUpdates.RemoveAll((u) => u == null);
-        }
-
 #endif
 
 #if !GIB_NO_COMMFIXEDUPDATE
-
-        private void FixedUpdate()
-        {
-            foreach (ICommonFixedUpdate update in commonFixedUpdates)
-            {
-                MonoBehaviour mono = update as MonoBehaviour;
-                if (mono == null || (mono != null && mono.enabled && mono.gameObject.activeSelf))
-                {
-                    update.CommonFixedUpdate(Time.fixedDeltaTime);
-                }
-            }
-            commonFixedUpdates.RemoveAll((u) => u == null);
-        }
     }
 
 #endif

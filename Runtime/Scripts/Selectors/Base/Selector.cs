@@ -36,7 +36,7 @@ namespace GibFrame.Selectors
 
         public void ResetSelection()
         {
-            if (currentSelected != null)
+            if (currentSelected != null && currentCollider != null)
             {
                 if (delegateActionOnInterface)
                 {

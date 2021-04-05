@@ -7,28 +7,30 @@ namespace GibFrame.Patterns
     {
         private float currentHealth;
         private Image healthBar;
+        private Text healthText;
 
         public float MaxHealth { get; private set; }
 
-        public event Action<HealthSystem> OnDamage;
+        public event Action<float> OnDamage;
 
-        public event Action<HealthSystem> OnDeath;
+        public event Action OnDeath;
 
-        public event Action<HealthSystem> OnHeal;
+        public event Action<float> OnHeal;
 
-        public HealthSystem(float maxHealth, Image healthBar = null)
+        public HealthSystem(float maxHealth, Image healthBar = null, Text healthText = null)
         {
             MaxHealth = maxHealth;
             currentHealth = 0F;
             this.healthBar = healthBar;
+            this.healthText = healthText;
         }
 
         public void Damage(float amount)
         {
             currentHealth -= amount;
             if (currentHealth < 0F) currentHealth = 0F;
-            OnDamage?.Invoke(this);
-            if (currentHealth == 0F) OnDeath?.Invoke(this);
+            OnDamage?.Invoke(amount);
+            if (currentHealth == 0F) OnDeath?.Invoke();
 
             AdjustHealthBar();
         }
@@ -44,7 +46,7 @@ namespace GibFrame.Patterns
         {
             currentHealth += amount;
             if (currentHealth > amount) currentHealth = amount;
-            OnHeal?.Invoke(this);
+            OnHeal?.Invoke(amount);
 
             AdjustHealthBar();
         }
@@ -64,6 +66,10 @@ namespace GibFrame.Patterns
             if (healthBar != null)
             {
                 healthBar.fillAmount = GetPercentage();
+            }
+            if (healthText != null)
+            {
+                healthText.text = currentHealth.ToString();
             }
         }
     }

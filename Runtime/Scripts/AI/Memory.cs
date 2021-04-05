@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using GibFrame.Extensions;
+using UnityEngine;
 
 namespace GibFrame.AI
 {
@@ -36,6 +37,7 @@ namespace GibFrame.AI
                 }
                 else
                 {
+                    Debug.Log("ADD");
                     memories.Add(module);
                 }
             }
@@ -48,12 +50,12 @@ namespace GibFrame.AI
 
         public List<T> GetAllMemories<T>(Predicate<MemoryModule> predicate, Converter<MemoryModule, T> mapper)
         {
-            return memories.GetPredicatesMatchingObjects(predicate).ConvertAll<T>(mapper);
+            return memories.GetPredicatesMatchingObjects((m) => IsValidMemory(m) && predicate(m)).ConvertAll(mapper);
         }
 
         public MemoryModule Get(object value)
         {
-            return memories.Find((m) => m.Memory.Equals(value));
+            return memories.Find((m) => m.Memory.Equals(value) && IsValidMemory(m));
         }
 
         public bool Forget(object memory)
@@ -76,6 +78,15 @@ namespace GibFrame.AI
             memories.Clear();
         }
 
+        public bool IsValidMemory(MemoryModule module)
+        {
+            if (module.Memory is UnityEngine.Object)
+            {
+                return module.Memory as UnityEngine.Object;
+            }
+            return module.Memory != null;
+        }
+
         private void Forget_T()
         {
             while (!inhibit)
@@ -87,7 +98,7 @@ namespace GibFrame.AI
                         module.TimeStep(0.05F);
                     }
                 }
-                ForgetAll((m) => m.RemembranceTime <= 0);
+                ForgetAll((m) => m.RemembranceTime <= 0 && !IsValidMemory(m));
                 Thread.Sleep(50);
             }
         }

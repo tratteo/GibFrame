@@ -104,6 +104,7 @@ namespace GibFrame.Physic
 
         public static Vector3 CalculateThrowVelocity(Vector3 origin, Vector3 target, float angle, float gravityMagnitude)
         {
+            angle *= Mathf.Deg2Rad;
             float tan = Mathf.Tan(angle);
             float Dx = Vector3.Distance(origin, new Vector3(target.x, origin.y, target.z));
             float Dy = GMath.Abs(target.y - origin.y);
