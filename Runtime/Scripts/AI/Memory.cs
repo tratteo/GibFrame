@@ -37,7 +37,6 @@ namespace GibFrame.AI
                 }
                 else
                 {
-                    Debug.Log("ADD");
                     memories.Add(module);
                 }
             }

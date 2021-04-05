@@ -59,7 +59,7 @@ namespace GibFrame.SaveSystem
                 {
                     if ((data as EncryptedData).GetDeviceID() != SystemInfo.deviceUniqueIdentifier)
                     {
-                        Debug.LogError("Unauthorized to open encrypted file, identifiers not matching, aborting");
+                        UnityEngine.Debug.LogError("Unauthorized to open encrypted file, identifiers not matching, aborting");
                         stream.Close();
                         return null;
                     }

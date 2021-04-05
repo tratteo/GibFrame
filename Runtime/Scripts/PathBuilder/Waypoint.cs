@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using GibFrame.Debug;
 using GibFrame.Extensions;
 using GibFrame.Utils;
 using UnityEngine;
@@ -67,7 +68,7 @@ namespace GibFrame.PathBuilder
         {
             foreach (PathingOption w in options)
             {
-                UIUtils.DrawArrow.ForGizmo(transform.position, w.Point.transform.position - transform.position, Color.green, 0.5F, 25F);
+                GDebug.DrawArrow(transform.position, w.Point.transform.position - transform.position, Color.green, 0.5F, 25F);
                 //Gizmos.DrawLine(transform.position, w.transform.position);
             }
         }
