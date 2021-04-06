@@ -46,7 +46,6 @@ namespace GibFrame.Debug
         }
 
         /// <summary>
-        ///   Draw a wire sphere
         /// </summary>
         /// <param name="center"> </param>
         /// <param name="radius"> </param>
@@ -67,13 +66,13 @@ namespace GibFrame.Debug
             Vector3 next;
             for (int i = 0; i < segments; i++)
             {
-                first = (center + (Vector3.forward * radius));
+                first = (Vector3.forward * radius);
                 first = Quaternion.AngleAxis(segmentStride * (i - halfSegments), Vector3.right) * first;
 
                 for (int j = 0; j < subdivisions; j++)
                 {
                     next = Quaternion.AngleAxis(strideAngle, Vector3.up) * first;
-                    UnityEngine.Debug.DrawLine(first, next, color, duration);
+                    UnityEngine.Debug.DrawLine(first + center, next + center, color, duration);
                     first = next;
                 }
             }
@@ -81,14 +80,14 @@ namespace GibFrame.Debug
             Vector3 axis;
             for (int i = 0; i < segments; i++)
             {
-                first = (center + (Vector3.forward * radius));
+                first = (Vector3.forward * radius);
                 first = Quaternion.AngleAxis(segmentStride * (i - halfSegments), Vector3.up) * first;
                 axis = Quaternion.AngleAxis(90F, Vector3.up) * first;
 
                 for (int j = 0; j < subdivisions; j++)
                 {
                     next = Quaternion.AngleAxis(strideAngle, axis) * first;
-                    UnityEngine.Debug.DrawLine(first, next, color, duration);
+                    UnityEngine.Debug.DrawLine(first + center, next + center, color, duration);
                     first = next;
                 }
             }
@@ -106,7 +105,7 @@ namespace GibFrame.Debug
 
         public static void DrawWireSphere(Vector3 center, float radius, float duration)
         {
-            DrawWireSphere(center, radius, duration);
+            DrawWireSphere(center, radius, Color.cyan, duration);
         }
 
         public static void DrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
