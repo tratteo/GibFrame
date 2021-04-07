@@ -8,6 +8,7 @@ namespace GibFrame.Patterns
         private float currentHealth;
         private Image healthBar;
         private Text healthText;
+        private string healthTextFormat;
 
         public float MaxHealth { get; private set; }
 
@@ -17,12 +18,29 @@ namespace GibFrame.Patterns
 
         public event Action<float> OnHeal;
 
-        public HealthSystem(float maxHealth, Image healthBar = null, Text healthText = null)
+        public HealthSystem(float maxHealth, Image healthBar, Text healthText, string healthTextFormat)
         {
             MaxHealth = maxHealth;
             currentHealth = 0F;
             this.healthBar = healthBar;
             this.healthText = healthText;
+            this.healthTextFormat = healthTextFormat;
+        }
+
+        public HealthSystem(float maxHealth) : this(maxHealth, null, null, "")
+        {
+        }
+
+        public HealthSystem(float maxHealth, Image healthBar) : this(maxHealth, healthBar, null, "")
+        {
+        }
+
+        public HealthSystem(float maxHealth, Image healthBar, Text healthText) : this(maxHealth, healthBar, healthText, "")
+        {
+        }
+
+        public HealthSystem(float maxHealth, Text healthText, string healthTextFormat) : this(maxHealth, null, healthText, healthTextFormat)
+        {
         }
 
         public void Damage(float amount)
@@ -45,7 +63,7 @@ namespace GibFrame.Patterns
         public void Heal(float amount)
         {
             currentHealth += amount;
-            if (currentHealth > amount) currentHealth = amount;
+            if (currentHealth > MaxHealth) currentHealth = MaxHealth;
             OnHeal?.Invoke(amount);
 
             AdjustHealthBar();
@@ -69,7 +87,14 @@ namespace GibFrame.Patterns
             }
             if (healthText != null)
             {
-                healthText.text = currentHealth.ToString();
+                if (healthTextFormat != "")
+                {
+                    healthText.text = string.Format(healthTextFormat, currentHealth);
+                }
+                else
+                {
+                    healthText.text = currentHealth.ToString();
+                }
             }
         }
     }
