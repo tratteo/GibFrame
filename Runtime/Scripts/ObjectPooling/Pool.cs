@@ -1,18 +1,48 @@
 ﻿//Copyright (c) matteo
 //Pool.cs - com.tratteo.gibframe
 
+using System;
+using GibFrame.Utils;
 using UnityEngine;
 
 namespace GibFrame.ObjectPooling
 {
-    [System.Serializable]
-    internal class Pool
+    [Serializable]
+    public class Pool : IProbSelectable, IEquatable<Pool>
     {
-        public string tag;
-        public GameObject prefab;
-        public int poolSize;
+        [SerializeField] private string tag;
+        [SerializeField] private GameObject prefab;
+        [SerializeField] private int size;
         [Tooltip("The probability will be normalized based on other pools probability")]
-        [Range(0f, 1f)]
-        public float spawnProbability;
+        [Range(0F, 1F)]
+        [SerializeField] private float influence;
+
+        public string Tag => tag;
+
+        public GameObject Prefab => prefab;
+
+        public int Size => size;
+
+        public float Influence => influence;
+
+        public Pool(string tag, GameObject prefab, int size, float influence = 1F)
+        {
+            this.tag = tag;
+            this.prefab = prefab;
+            this.size = size;
+            this.influence = influence;
+        }
+
+        public float ProvideSelectProbability() => influence;
+
+        public void SetSelectProbability(float prob)
+        {
+            influence = prob;
+        }
+
+        public bool Equals(Pool other)
+        {
+            return other.Tag.Equals(Tag);
+        }
     }
 }

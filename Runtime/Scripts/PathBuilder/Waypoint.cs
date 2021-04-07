@@ -68,7 +68,7 @@ namespace GibFrame.PathBuilder
         {
             foreach (PathingOption w in options)
             {
-                GDebug.DrawArrow(transform.position, w.Point.transform.position - transform.position, Color.green, 0.5F, 25F);
+                GDebug.DrawArrow(transform.position, w.Point.transform.position - transform.position, Color.green);
                 //Gizmos.DrawLine(transform.position, w.transform.position);
             }
         }

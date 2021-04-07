@@ -108,7 +108,7 @@ namespace GibFrame.Debug
             DrawWireSphere(center, radius, Color.cyan, duration);
         }
 
-        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float duration, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float duration, float arrowHeadLength, float arrowHeadAngle)
         {
             UnityEngine.Debug.DrawRay(pos, direction, color, duration);
 
@@ -118,19 +118,24 @@ namespace GibFrame.Debug
             UnityEngine.Debug.DrawRay(pos + direction, left * arrowHeadLength, color, duration);
         }
 
-        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float duration)
         {
-            DrawArrow(pos, direction, color, 0F, arrowHeadLength, arrowHeadAngle);
+            DrawArrow(pos, direction, color, duration, 0.25F, 25F);
         }
 
-        public static void DrawArrow(Vector3 pos, Vector3 direction, float duration, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color)
         {
-            DrawArrow(pos, direction, Color.cyan, duration, arrowHeadLength, arrowHeadAngle);
+            DrawArrow(pos, direction, color, 0F, 0.25F, 25F);
         }
 
-        public static void DrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        public static void DrawArrow(Vector3 pos, Vector3 direction, float duration)
         {
-            DrawArrow(pos, direction, Color.cyan, 0F, arrowHeadLength, arrowHeadAngle);
+            DrawArrow(pos, direction, Color.cyan, duration, 0.25F, 25F);
+        }
+
+        public static void DrawArrow(Vector3 pos, Vector3 direction)
+        {
+            DrawArrow(pos, direction, Color.cyan, 0F, 0.25F, 25F);
         }
     }
 }

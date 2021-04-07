@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using GibFrame.Extensions;
+using GibFrame.Utils;
 using UnityEngine;
 
 namespace GibFrame.PathBuilder

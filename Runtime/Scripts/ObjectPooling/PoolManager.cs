@@ -1,7 +1,7 @@
 ﻿//Copyright (c) matteo
 //PoolManager.cs - com.tratteo.gibframe
 
-using System;
+using System.Collections.Generic;
 using GibFrame.Patterns;
 using UnityEngine;
 
@@ -9,19 +9,11 @@ namespace GibFrame.ObjectPooling
 {
     public class PoolManager : MonoSingleton<PoolManager>
     {
-        [SerializeField] private PoolCategory[] poolsCategory = null;
+        [SerializeField] private List<PoolCategory> poolsCategory = null;
 
-        /// <summary>
-        ///   Spawn from the specified category and pool
-        /// </summary>
-        /// <param name="categoryName"> </param>
-        /// <param name="poolTag"> </param>
-        /// <param name="position"> </param>
-        /// <param name="rotation"> </param>
-        /// <returns> The spawned instance </returns>
         public GameObject Spawn(string categoryName, string poolTag, Vector3 position, Quaternion rotation)
         {
-            PoolCategory poolCategory = Array.Find(poolsCategory, category => category.name == categoryName);
+            PoolCategory poolCategory = GetCategory(categoryName);
             if (poolCategory != null)
             {
                 return poolCategory.SpawnFromPool(poolTag, position, rotation);
@@ -29,30 +21,69 @@ namespace GibFrame.ObjectPooling
             return null;
         }
 
-        /// <summary>
-        ///   Spawn from a category from a random pool selected based on its probability
-        /// </summary>
-        /// <param name="categoryName"> </param>
-        /// <param name="position"> </param>
-        /// <param name="rotation"> </param>
-        /// <returns> The spawned instance </returns>
         public GameObject Spawn(string categoryName, Vector3 position, Quaternion rotation)
         {
-            PoolCategory poolCategory = Array.Find(poolsCategory, category => category.name == categoryName);
-            if (poolCategory != null)
-            {
-                return poolCategory.SpawnFromPool(null, position, rotation);
-            }
-            return null;
+            return Spawn(categoryName, "", position, rotation);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="categoryName"> </param>
-        /// <returns> A random pool tag inside a specified category </returns>
-        public string GetRandomCategoryPoolTag(string categoryName)
+        public int AddCategory(params PoolCategory[] categories)
         {
-            PoolCategory poolCategory = Array.Find(poolsCategory, category => category.name == categoryName);
+            int count = 0;
+            foreach (PoolCategory category in categories)
+            {
+                if (!ContainsCategory(category))
+                {
+                    poolsCategory.Add(category);
+                    category.Instantiate(transform.position);
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public bool AddCategory(string categoryName, params Pool[] pools)
+        {
+            return AddCategory(new PoolCategory(categoryName, pools)) > 0;
+        }
+
+        public int AddPool(string categoryName, params Pool[] pools)
+        {
+            int count = 0;
+            PoolCategory category = GetCategory(categoryName);
+            if (category == null)
+            {
+                category = new PoolCategory(categoryName, pools);
+            }
+            foreach (Pool pool in pools)
+            {
+                if (!category.ContainsPool(pool.Tag))
+                {
+                    category.AddPool(pools);
+                    count++;
+                }
+                AddCategory(category);
+            }
+            return count;
+        }
+
+        public bool ContainsCategory(string name)
+        {
+            return poolsCategory.FindAll((c) => c.Name.Equals(name)).Count > 0;
+        }
+
+        public bool ContainsCategory(PoolCategory category)
+        {
+            return ContainsCategory(category.Name);
+        }
+
+        public PoolCategory GetCategory(string name)
+        {
+            return poolsCategory.Find((c) => c.Name.Equals(name));
+        }
+
+        public string GetRandomPoolTag(string categoryName)
+        {
+            PoolCategory poolCategory = GetCategory(categoryName);
             if (poolCategory != null)
             {
                 return poolCategory.GetRandomPoolTag();
@@ -60,34 +91,36 @@ namespace GibFrame.ObjectPooling
             return null;
         }
 
-        /// <summary>
-        ///   Deactivate a game object
-        /// </summary>
-        /// <param name="objectToDeactivate"> </param>
         public void DeactivateObject(GameObject objectToDeactivate)
         {
             objectToDeactivate.SetActive(false);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="categoryName"> </param>
-        /// <param name="poolTag"> </param>
-        /// <returns> The prefab instance </returns>
         public GameObject GetPrefab(string categoryName, string poolTag)
         {
-            PoolCategory poolCategory = Array.Find(poolsCategory, category => category.name == categoryName);
-            Pool pool = Array.Find(poolCategory.pools, p => p.tag == poolTag);
-            return pool?.prefab;
+            PoolCategory poolCategory = GetCategory(categoryName);
+            if (poolCategory != null)
+            {
+                Pool pool = poolCategory.GetPool(poolTag);
+                if (pool != null)
+                {
+                    return pool.Prefab;
+                }
+            }
+            return null;
         }
 
         protected override void Awake()
         {
             base.Awake();
-            int length = poolsCategory.Length;
+            if (poolsCategory == null)
+            {
+                poolsCategory = new List<PoolCategory>();
+            }
+            int length = poolsCategory.Count;
             for (int i = 0; i < length; i++)
             {
-                poolsCategory[i].InitializePools(transform.position);
+                poolsCategory[i].Instantiate(transform.position);
             }
         }
     }

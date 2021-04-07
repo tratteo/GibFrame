@@ -1,51 +1,94 @@
 ﻿//Copyright (c) matteo
 //PoolCategory.cs - com.tratteo.gibframe
 
+using System;
 using System.Collections.Generic;
+using GibFrame.Utils;
 using UnityEngine;
 
 namespace GibFrame.ObjectPooling
 {
-    [System.Serializable]
-    internal class PoolCategory
+    [Serializable]
+    public class PoolCategory : IEquatable<PoolCategory>
     {
-        public string name;
-        public Pool[] pools;
-        public Dictionary<string, Queue<GameObject>> poolsDictionary;
+        [SerializeField] private string name;
+        [SerializeField] private List<Pool> pools;
+        private Dictionary<string, Queue<GameObject>> poolsDictionary;
+        private Vector3 startPosition;
 
-        /// <summary>
-        ///   Initialize the pools
-        /// </summary>
-        /// <param name="position"> </param>
-        public void InitializePools(Vector3 position)
+        public string Name => name;
+
+        public PoolCategory(string name, params Pool[] pools)
         {
-            poolsDictionary = new Dictionary<string, Queue<GameObject>>();
-            int length = pools.Length;
-            for (int i = 0; i < length; i++)
-            {
-                Queue<GameObject> objectPool = new Queue<GameObject>();
-                int poolDim = pools[i].poolSize;
-                for (int j = 0; j < poolDim; j++)
-                {
-                    GameObject obj = GameObject.Instantiate(pools[i].prefab, position, Quaternion.identity);
-                    obj.SetActive(false);
-                    objectPool.Enqueue(obj);
-                }
-                poolsDictionary.Add(pools[i].tag, objectPool);
-            }
-            NormalizeSpawnProbabilities();
+            this.name = name;
+            this.pools = new List<Pool>();
+            this.pools.AddRange(pools);
         }
 
-        /// <summary>
-        ///   Spawn a GameObject from a specified pool, if poolTag is null the object will be selected based on the pool probability
-        /// </summary>
-        /// <param name="poolTag"> </param>
-        /// <param name="position"> </param>
-        /// <param name="rotation"> </param>
-        /// <returns> The spawned object reference </returns>
+        /// <summary> <summary> Initialize the pools </summary> <param name="position"> </param>
+        public void Instantiate(Vector3 position)
+        {
+            startPosition = position;
+            poolsDictionary = new Dictionary<string, Queue<GameObject>>();
+            int length = pools.Count;
+            for (int i = 0; i < length; i++)
+            {
+                InstantiatePool(pools[i]);
+            }
+            pools.NormalizeProbabilities();
+        }
+
+        public Pool GetPool(string tag)
+        {
+            return pools.Find((p) => p.Tag.Equals(tag));
+        }
+
+        public int AddPool(params Pool[] pools)
+        {
+            int count = 0;
+            foreach (Pool pool in pools)
+            {
+                if (!ContainsPool(pool))
+                {
+                    this.pools.Add(pool);
+                    InstantiatePool(pool);
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public void InstantiatePool(Pool pool)
+        {
+            Queue<GameObject> objectPool = new Queue<GameObject>();
+            int poolDim = pool.Size;
+            for (int j = 0; j < poolDim; j++)
+            {
+                GameObject obj = GameObject.Instantiate(pool.Prefab, startPosition, Quaternion.identity);
+                obj.SetActive(false);
+                objectPool.Enqueue(obj);
+            }
+            poolsDictionary.Add(pool.Tag, objectPool);
+        }
+
+        public bool ContainsPool(string name)
+        {
+            return pools.FindAll((c) => c.Tag.Equals(name)).Count > 0;
+        }
+
+        public bool ContainsPool(Pool pool)
+        {
+            return ContainsPool(pool.Tag);
+        }
+
+        public GameObject SpawnFromPool(Vector3 position, Quaternion rotation)
+        {
+            return SpawnFromPool("", position, rotation);
+        }
+
         public GameObject SpawnFromPool(string poolTag, Vector3 position, Quaternion rotation)
         {
-            if (poolTag == null)
+            if (poolTag.Equals(""))
             {
                 poolTag = GetRandomPoolTag();
             }
@@ -82,28 +125,13 @@ namespace GibFrame.ObjectPooling
         /// <returns> A random pool tag based on pools probabilities </returns>
         public string GetRandomPoolTag()
         {
-            int index = -1;
-            float radix = UnityEngine.Random.Range(0f, 1f);
-            int count = pools.Length;
-            while (radix > 0 && index < count)
-            {
-                radix -= pools[++index].spawnProbability;
-            }
-            return pools[index].tag;
+            pools.NormalizeProbabilities();
+            return pools.SelectWithProbability().Tag;
         }
 
-        private void NormalizeSpawnProbabilities()
+        public bool Equals(PoolCategory other)
         {
-            float total = 0f;
-            int length = pools.Length;
-            for (int i = 0; i < length; i++)
-            {
-                total += pools[i].spawnProbability;
-            }
-            for (int i = 0; i < length; i++)
-            {
-                pools[i].spawnProbability /= total;
-            }
+            return other.Name.Equals(Name);
         }
     }
 }
