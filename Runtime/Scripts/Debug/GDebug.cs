@@ -56,7 +56,7 @@ namespace GibFrame.Debug
         {
             quality = Mathf.Clamp(quality, 1, 10);
 
-            int segments = quality << 2;
+            int segments = quality << 1;
             int subdivisions = quality << 3;
             int halfSegments = segments >> 1;
             float strideAngle = 360F / subdivisions;
@@ -108,24 +108,29 @@ namespace GibFrame.Debug
             DrawWireSphere(center, radius, Color.cyan, duration);
         }
 
-        public static void DrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float duration, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
         {
-            UnityEngine.Debug.DrawRay(pos, direction);
+            UnityEngine.Debug.DrawRay(pos, direction, color, duration);
 
             Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
             Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            UnityEngine.Debug.DrawRay(pos + direction, right * arrowHeadLength);
-            UnityEngine.Debug.DrawRay(pos + direction, left * arrowHeadLength);
+            UnityEngine.Debug.DrawRay(pos + direction, right * arrowHeadLength, color, duration);
+            UnityEngine.Debug.DrawRay(pos + direction, left * arrowHeadLength, color, duration);
         }
 
         public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
         {
-            UnityEngine.Debug.DrawRay(pos, direction, color);
+            DrawArrow(pos, direction, color, 0F, arrowHeadLength, arrowHeadAngle);
+        }
 
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            UnityEngine.Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
-            UnityEngine.Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
+        public static void DrawArrow(Vector3 pos, Vector3 direction, float duration, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            DrawArrow(pos, direction, Color.cyan, duration, arrowHeadLength, arrowHeadAngle);
+        }
+
+        public static void DrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            DrawArrow(pos, direction, Color.cyan, 0F, arrowHeadLength, arrowHeadAngle);
         }
     }
 }
