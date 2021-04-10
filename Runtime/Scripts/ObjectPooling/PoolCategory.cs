@@ -13,7 +13,7 @@ namespace GibFrame.ObjectPooling
     {
         [SerializeField] private string name;
         [SerializeField] private List<Pool> pools;
-        private Dictionary<string, Queue<GameObject>> poolsDictionary;
+        private Dictionary<string, Queue<GameObject>> poolsDictionary = null;
         private Vector3 startPosition;
 
         public string Name => name;
@@ -29,7 +29,6 @@ namespace GibFrame.ObjectPooling
         public void Instantiate(Vector3 position)
         {
             startPosition = position;
-            poolsDictionary = new Dictionary<string, Queue<GameObject>>();
             int length = pools.Count;
             for (int i = 0; i < length; i++)
             {
@@ -60,11 +59,13 @@ namespace GibFrame.ObjectPooling
 
         public void InstantiatePool(Pool pool)
         {
+            poolsDictionary ??= new Dictionary<string, Queue<GameObject>>();
+            if (poolsDictionary.ContainsKey(pool.Tag)) return;
             Queue<GameObject> objectPool = new Queue<GameObject>();
             int poolDim = pool.Size;
             for (int j = 0; j < poolDim; j++)
             {
-                GameObject obj = GameObject.Instantiate(pool.Prefab, startPosition, Quaternion.identity);
+                GameObject obj = UnityEngine.Object.Instantiate(pool.Prefab, startPosition, Quaternion.identity);
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }

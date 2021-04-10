@@ -5,10 +5,11 @@ namespace GibFrame.Patterns
 {
     public class HealthSystem
     {
-        private float currentHealth;
-        private Image healthBar;
-        private Text healthText;
-        private string healthTextFormat;
+        private readonly Image healthBar;
+        private readonly Text healthText;
+        private readonly string healthTextFormat;
+
+        public float CurrentHealth { get; private set; }
 
         public float MaxHealth { get; private set; }
 
@@ -21,10 +22,11 @@ namespace GibFrame.Patterns
         public HealthSystem(float maxHealth, Image healthBar, Text healthText, string healthTextFormat)
         {
             MaxHealth = maxHealth;
-            currentHealth = 0F;
+            CurrentHealth = maxHealth;
             this.healthBar = healthBar;
             this.healthText = healthText;
             this.healthTextFormat = healthTextFormat;
+            AdjustHealthBar();
         }
 
         public HealthSystem(float maxHealth) : this(maxHealth, null, null, "")
@@ -45,10 +47,10 @@ namespace GibFrame.Patterns
 
         public void Damage(float amount)
         {
-            currentHealth -= amount;
-            if (currentHealth < 0F) currentHealth = 0F;
+            CurrentHealth -= amount;
+            if (CurrentHealth < 0F) CurrentHealth = 0F;
             OnDamage?.Invoke(amount);
-            if (currentHealth == 0F) OnDeath?.Invoke();
+            if (CurrentHealth == 0F) OnDeath?.Invoke();
 
             AdjustHealthBar();
         }
@@ -58,14 +60,13 @@ namespace GibFrame.Patterns
             Damage(MaxHealth);
         }
 
-        public float GetPercentage() => currentHealth / MaxHealth;
+        public float GetPercentage() => CurrentHealth / MaxHealth;
 
         public void Heal(float amount)
         {
-            currentHealth += amount;
-            if (currentHealth > MaxHealth) currentHealth = MaxHealth;
+            CurrentHealth += amount;
+            if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
             OnHeal?.Invoke(amount);
-
             AdjustHealthBar();
         }
 
@@ -89,11 +90,11 @@ namespace GibFrame.Patterns
             {
                 if (healthTextFormat != "")
                 {
-                    healthText.text = string.Format(healthTextFormat, currentHealth);
+                    healthText.text = string.Format(healthTextFormat, CurrentHealth);
                 }
                 else
                 {
-                    healthText.text = currentHealth.ToString();
+                    healthText.text = CurrentHealth.ToString();
                 }
             }
         }

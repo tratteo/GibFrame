@@ -8,11 +8,16 @@ namespace GibFrame.Utils
 {
     public static class UtilsExtensions
     {
-        /// <summary>
-        ///   Select an item based on its probability (interface)
-        /// </summary>
-        /// <param name="set"> </param>
-        /// <returns> The selecte item </returns>
+        public static T SelectWithProbability<T>(this T[] set) where T : IProbSelectable
+        {
+            return set.ToList().SelectWithProbability();
+        }
+
+        public static T SelectWithProbability<T>(this T[] set, System.Random random) where T : IProbSelectable
+        {
+            return set.ToList().SelectWithProbability(random);
+        }
+
         public static T SelectWithProbability<T>(this List<T> set) where T : IProbSelectable
         {
             int index = -1;
@@ -35,12 +40,33 @@ namespace GibFrame.Utils
             return (T)set.ElementAt(index);
         }
 
-        /// <summary>
-        ///   Normalize the select probabilities using the <b> float value(T:IProbSelectable) </b> function
-        /// </summary>
-        /// <param name="set"> </param>
-        /// <returns> </returns>
-        public static void NormalizeProbabilities<T>(this List<T> set, Func<T, float> value) where T : IProbSelectable
+        public static T SelectWithProbability<T>(this T[] set, Func<T, float> ProbabilityProvider)
+        {
+            return set.ToList().SelectWithProbability(ProbabilityProvider);
+        }
+
+        public static T SelectWithProbability<T>(this T[] set, System.Random random, Func<T, float> ProbabilityProvider)
+        {
+            return set.SelectWithProbability(random, ProbabilityProvider);
+        }
+
+        public static T SelectWithProbability<T>(this List<T> set, Func<T, float> ProbabilityProvider)
+        {
+            int index = -1;
+            float r = UnityEngine.Random.Range(0F, 1F);
+            while (r > 0)
+            {
+                r -= ProbabilityProvider(set.ElementAt(++index));
+            }
+            return (T)set.ElementAt(index);
+        }
+
+        public static T SelectWithProbability<T>(this List<T> set, System.Random random, Func<T, float> ProbabilityProvider)
+        {
+            return set.ToArray().SelectWithProbability(random, ProbabilityProvider);
+        }
+
+        public static void NormalizeProbabilities<T>(this List<T> set, Func<T, float> value, Action<T, float> SetProbability)
         {
             float sum = 0;
             foreach (T elem in set)
@@ -51,26 +77,31 @@ namespace GibFrame.Utils
             {
                 foreach (T elem1 in set)
                 {
-                    elem1.SetSelectProbability(1F / set.Count);
+                    SetProbability(elem1, 1F / set.Count);
                 }
             }
             else
             {
                 foreach (T elem1 in set)
                 {
-                    elem1.SetSelectProbability(value(elem1) / sum);
+                    SetProbability(elem1, value(elem1) / sum);
                 }
             }
         }
 
         public static void NormalizeProbabilities<T>(this List<T> selectables) where T : IProbSelectable
         {
-            NormalizeProbabilities(selectables, (s) => s.ProvideSelectProbability());
+            NormalizeProbabilities(selectables, (s) => s.ProvideSelectProbability(), (s, p) => s.SetSelectProbability(p));
         }
 
         public static void NormalizeProbabilities<T>(this T[] selectables) where T : IProbSelectable
         {
             NormalizeProbabilities(selectables.ToList());
+        }
+
+        public static void NormalizeProbabilities<T>(this T[] selectables, Func<T, float> GetProbability, Action<T, float> SetProbability)
+        {
+            NormalizeProbabilities(selectables.ToList(), GetProbability, SetProbability);
         }
     }
 }

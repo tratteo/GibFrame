@@ -1,5 +1,6 @@
 ﻿using System;
 using GibFrame.Utils.Mathematics;
+using UnityEngine;
 
 namespace GibFrame.DataStructures
 {
@@ -20,9 +21,13 @@ namespace GibFrame.DataStructures
     [Serializable]
     public class RandomizedFloat
     {
-        public float min, max;
-        private Random random;
+        [SerializeField] private float min, max;
+        private System.Random random;
         private Func<float> Provider = null;
+
+        public float Min { get => min; set => min = value; }
+
+        public float Max { get => max; set => max = value; }
 
         public RandomizedFloat(Func<float> provider)
         {
@@ -40,11 +45,16 @@ namespace GibFrame.DataStructures
         {
             this.min = min;
             this.max = max;
-            random = new Random(seed);
+            random = new System.Random(seed);
             Provider = () => GMath.Map((float)random.NextDouble(), (0F, 1F), (min, max));
         }
 
         public static implicit operator float(RandomizedFloat randomized) => randomized.GetNext();
+
+        public override string ToString()
+        {
+            return "Min: " + min + ", Max: " + max;
+        }
 
         public float GetNext()
         {
@@ -56,9 +66,13 @@ namespace GibFrame.DataStructures
     [Serializable]
     public class RandomizedInt
     {
-        public int min, max;
-        private Random random;
+        [SerializeField] private int min, max;
+        private System.Random random;
         private Func<int> Provider = null;
+
+        public int Min { get => min; set => min = value; }
+
+        public int Max { get => max; set => max = value; }
 
         public RandomizedInt(Func<int> provider)
         {
@@ -76,11 +90,16 @@ namespace GibFrame.DataStructures
         {
             this.min = min;
             this.max = max;
-            random = new Random(seed);
+            random = new System.Random(seed);
             Provider = () => (int)GMath.Map((float)random.NextDouble(), (0F, 1F), (min, max));
         }
 
         public static implicit operator int(RandomizedInt randomized) => randomized.GetNext();
+
+        public override string ToString()
+        {
+            return "Min: " + min + ", Max: " + max;
+        }
 
         public int GetNext()
         {

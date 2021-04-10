@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using GibFrame.Debug;
-using GibFrame.Extensions;
 using GibFrame.Utils;
 using UnityEngine;
 
@@ -61,7 +60,7 @@ namespace GibFrame.PathBuilder
 
         private void Awake()
         {
-            options.NormalizeProbabilities(o => o.ProvideSelectProbability());
+            options.NormalizeProbabilities();
         }
 
         private void OnDrawGizmos()

@@ -138,7 +138,7 @@ namespace GibFrame.PathBuilder
 
         private void Awake()
         {
-            startPoints.NormalizeProbabilities(s => s.ProvideSelectProbability());
+            startPoints.NormalizeProbabilities();
             waypointPrefab = Resources.Load<GameObject>("TUtils/PathBuilder/Waypoint");
         }
     }
