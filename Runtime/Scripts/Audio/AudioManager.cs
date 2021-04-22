@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using GibFrame.Patterns;
+
 using UnityEngine;
 
 namespace GibFrame.Audio

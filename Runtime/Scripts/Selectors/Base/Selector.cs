@@ -36,14 +36,7 @@ namespace GibFrame.Selectors
 
         public void ResetSelection()
         {
-            if (currentSelected != null && currentCollider != null)
-            {
-                if (delegateActionOnInterface)
-                {
-                    currentSelected.OnDeselect();
-                }
-                OnDeselected?.Invoke(currentSelected);
-            }
+            FireDeselect();
             currentSelected = null;
             currentCollider = null;
         }
@@ -66,14 +59,7 @@ namespace GibFrame.Selectors
                 if (newSelectable != null && currentSelected != newSelectable)
                 {
                     currentCollider = newCollider;
-                    if (currentSelected != null)
-                    {
-                        if (delegateActionOnInterface)
-                        {
-                            currentSelected.OnDeselect();
-                        }
-                        OnDeselected?.Invoke(currentSelected);
-                    }
+                    FireDeselect();
                     currentSelected = newSelectable;
                     if (delegateActionOnInterface)
                     {
@@ -81,6 +67,18 @@ namespace GibFrame.Selectors
                     }
                     OnSelected?.Invoke(currentSelected);
                 }
+            }
+        }
+
+        private void FireDeselect()
+        {
+            if (currentSelected != null)
+            {
+                if (currentCollider != null && delegateActionOnInterface && currentCollider.gameObject != null)
+                {
+                    currentSelected.OnDeselect();
+                }
+                OnDeselected?.Invoke(currentSelected);
             }
         }
 

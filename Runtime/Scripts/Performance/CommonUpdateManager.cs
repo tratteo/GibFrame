@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GibFrame.Extensions;
 using GibFrame.Patterns;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,26 +8,28 @@ namespace GibFrame.Performance
 {
     public class CommonUpdateManager : MonoSingleton<CommonUpdateManager>
     {
+        private readonly List<ICommonFixedUpdate> commonFixedUpdates = new List<ICommonFixedUpdate>();
+        private readonly List<ICommonLateUpdate> commonLateUpdates = new List<ICommonLateUpdate>();
+        private readonly List<ICommonUpdate> commonUpdates = new List<ICommonUpdate>();
         [Header("Preferences")]
-        [SerializeField] private bool autoScanOnStartup = false;
-        private List<ICommonFixedUpdate> commonFixedUpdates = new List<ICommonFixedUpdate>();
-        private List<ICommonLateUpdate> commonLateUpdates = new List<ICommonLateUpdate>();
-        private List<ICommonUpdate> commonUpdates = new List<ICommonUpdate>();
+        [Tooltip("Scan for all MonoBehaviours on scene loading")]
+        [SerializeField] private bool scanOnSceneLoading = false;
+        [Tooltip("Clear all the subscriptions when rescanning")]
+        [SerializeField] private bool clearOnRescan = false;
+        [Tooltip("Whether should disabled gameobjects be updated")]
+        [SerializeField] private bool updateDisabled = false;
 
         public void Register(MonoBehaviour mono)
         {
-            ICommonUpdate update;
-            ICommonFixedUpdate fixedUpdate;
-            ICommonLateUpdate lateUpdate;
-            if ((update = mono.GetComponent<ICommonUpdate>()) != null)
+            if (mono is ICommonUpdate update)
             {
                 Register(update);
             }
-            if ((fixedUpdate = mono.GetComponent<ICommonFixedUpdate>()) != null)
+            if (mono is ICommonFixedUpdate fixedUpdate)
             {
                 Register(fixedUpdate);
             }
-            if ((lateUpdate = mono.GetComponent<ICommonLateUpdate>()) != null)
+            if (mono is ICommonLateUpdate lateUpdate)
             {
                 Register(lateUpdate);
             }
@@ -58,15 +61,15 @@ namespace GibFrame.Performance
 
         public void Rescan()
         {
-            commonUpdates.Clear();
-            commonFixedUpdates.Clear();
-            commonLateUpdates.Clear();
-            MonoBehaviour[] monos = FindObjectsOfType<MonoBehaviour>();
-            int lenght = monos.Length;
-            for (int i = 0; i < lenght; i++)
+            if (clearOnRescan)
             {
-                Register(monos[i]);
+                commonUpdates.Clear();
+                commonFixedUpdates.Clear();
+                commonLateUpdates.Clear();
             }
+
+            MonoBehaviour[] monos = FindObjectsOfType<MonoBehaviour>();
+            monos.ForEach((m) => Register(m));
         }
 
         public void Unregister(MonoBehaviour mono)
@@ -106,63 +109,82 @@ namespace GibFrame.Performance
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        private void FixedUpdate()
+        private bool CanUpdate<T>(T update)
         {
-            foreach (ICommonFixedUpdate update in commonFixedUpdates)
+            if (update is MonoBehaviour mono)
             {
-                MonoBehaviour mono = update as MonoBehaviour;
-                if (mono == null || (mono != null && mono.enabled && mono.gameObject.activeSelf))
-                {
-                    update.CommonFixedUpdate(Time.fixedDeltaTime);
-                }
+                if (!mono) return false;
+                return mono.enabled && (updateDisabled || mono.gameObject.activeSelf);
             }
-            commonFixedUpdates.RemoveAll((u) => u == null);
+            return update != null;
         }
 
-        private void LateUpdate()
+        private bool IsValid<T>(T update)
         {
-            foreach (ICommonLateUpdate update in commonLateUpdates)
+            if (update is MonoBehaviour mono)
             {
-                MonoBehaviour mono = update as MonoBehaviour;
-                if (mono == null || (mono != null && mono.enabled && mono.gameObject.activeSelf))
-                {
-                    update.CommonLateUpdate();
-                }
+                return mono;
             }
-            commonLateUpdates.RemoveAll((u) => u == null);
+            return update != null;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (autoScanOnStartup)
+            if (scanOnSceneLoading)
             {
                 Rescan();
             }
         }
 
+#if !GIB_NO_COMMFIXEDUPDATE
+
+        private void FixedUpdate()
+        {
+            List<ICommonFixedUpdate> unmutable = new List<ICommonFixedUpdate>(commonFixedUpdates);
+            foreach (ICommonFixedUpdate update in unmutable)
+            {
+                if (CanUpdate(update))
+                {
+                    update.CommonFixedUpdate(Time.fixedDeltaTime);
+                }
+            }
+            commonFixedUpdates.RemoveAll((u) => !IsValid(u));
+        }
+
+#endif
+#if !GIB_NO_COMMLATEUPDATE
+
+        private void LateUpdate()
+        {
+            List<ICommonLateUpdate> unmutable = new List<ICommonLateUpdate>(commonLateUpdates);
+            foreach (ICommonLateUpdate update in unmutable)
+            {
+                if (CanUpdate(update))
+                {
+                    update.CommonLateUpdate();
+                }
+            }
+            commonLateUpdates.RemoveAll((u) => !IsValid(u));
+        }
+
+#endif
+
 #if !GIB_NO_COMMUPDATE
 
         private void Update()
         {
-            foreach (ICommonUpdate update in commonUpdates)
+            List<ICommonUpdate> unmutable = new List<ICommonUpdate>(commonUpdates);
+            foreach (ICommonUpdate update in unmutable)
             {
-                MonoBehaviour mono = update as MonoBehaviour;
-                if (mono == null || (mono != null && mono.enabled && mono.gameObject.activeSelf))
+                if (CanUpdate(update))
                 {
                     update.CommonUpdate(Time.deltaTime);
                 }
             }
 
-            commonUpdates.RemoveAll((u) => u == null);
+            commonUpdates.RemoveAll((u) => !IsValid(u));
         }
 
 #endif
-
-#if !GIB_NO_COMMLATEUPDATE
-#endif
-
-#if !GIB_NO_COMMFIXEDUPDATE
     }
-
-#endif
 }

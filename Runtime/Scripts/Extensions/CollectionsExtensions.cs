@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using GibFrame.Utils;
 
 namespace GibFrame.Extensions
 {
     public static class CollectionsExtensions
     {
+        public static void ForEach<T>(this T[] set, Action<T> Function)
+        {
+            foreach (T elem in set)
+            {
+                Function(elem);
+            }
+        }
+
         public static T GetPredicateMaxObject<T>(this T[] set, Func<T, double> predicate)
         {
             double value = double.MinValue;
@@ -134,15 +140,6 @@ namespace GibFrame.Extensions
             return arr;
         }
 
-        /// <summary>
-        ///   For each element of the first list, zips the first predicate matching element from the second list
-        /// </summary>
-        /// <typeparam name="T1"> </typeparam>
-        /// <typeparam name="T2"> </typeparam>
-        /// <param name="first"> </param>
-        /// <param name="second"> </param>
-        /// <param name="predicate"> </param>
-        /// <returns> The zipped list </returns>
         public static List<Tuple<T1, T2>> ZipWithFirstPredicateMatching<T1, T2>(this List<T1> first, List<T2> second, Func<T1, T2, bool> predicate)
         {
             List<Tuple<T1, T2>> res = new List<Tuple<T1, T2>>();

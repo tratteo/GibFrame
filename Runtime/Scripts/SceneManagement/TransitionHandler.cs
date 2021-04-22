@@ -4,6 +4,7 @@
 using System.Collections;
 using GibFrame.Extensions;
 using GibFrame.Patterns;
+
 using GibFrame.SceneManagement.Transitions;
 using UnityEngine;
 using UnityEngine.SceneManagement;

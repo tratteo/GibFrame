@@ -3,7 +3,7 @@
 
 using System;
 
-namespace GibFrame.Utils.Callbacks
+namespace GibFrame.Patterns
 {
     public abstract class AbstractCallback
     {
@@ -12,9 +12,8 @@ namespace GibFrame.Utils.Callbacks
 
     public class Callback<T> : AbstractCallback
     {
-        private T args;
-
-        private event Action<T> Event;
+        private readonly Action<T> Event;
+        private readonly T args;
 
         public Callback(Action<T> action, T args)
         {
@@ -30,10 +29,10 @@ namespace GibFrame.Utils.Callbacks
 
     public class Callback<T, E> : AbstractCallback
     {
-        private T args0;
-        private E args1;
+        private readonly T args0;
+        private readonly E args1;
 
-        private event Action<T, E> Event;
+        private Action<T, E> Event;
 
         public Callback(Action<T, E> action, T args0, E args1)
         {
@@ -50,7 +49,7 @@ namespace GibFrame.Utils.Callbacks
 
     public class Callback : AbstractCallback
     {
-        private event Action Event;
+        private readonly Action Event;
 
         public Callback(Action action)
         {

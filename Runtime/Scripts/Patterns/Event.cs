@@ -7,166 +7,116 @@ namespace GibFrame.Patterns
 {
     public class Event
     {
-        private event Action Delegate;
+        public event Action Invocation;
 
         public Event()
         { }
 
-        public void Subscribe(Action Callback)
-        {
-            Delegate += Callback;
-        }
-
-        public void Unsubscribe(Action Callback)
-        {
-            Delegate -= Callback;
-        }
-
         public void Broadcast()
         {
-            Delegate?.Invoke();
+            Invocation?.Invoke();
         }
 
         public void Purge()
         {
-            Delegate[] delegates = Delegate.GetInvocationList();
+            Delegate[] delegates = Invocation.GetInvocationList();
             foreach (Delegate del in delegates)
             {
-                Delegate -= (del as Action);
+                Invocation -= (del as Action);
             }
-            Delegate = null;
+            Invocation = null;
         }
     }
 
     public class Event<A>
     {
-        private event Action<A> Delegate;
+        public event Action<A> Invocation;
 
         public Event()
         { }
 
-        public void Subscribe(Action<A> Callback)
-        {
-            Delegate += Callback;
-        }
-
-        public void Unsubscribe(Action<A> Callback)
-        {
-            Delegate -= Callback;
-        }
-
         public void Broadcast(A arg)
         {
-            Delegate?.Invoke(arg);
+            Invocation?.Invoke(arg);
         }
 
         public void Purge()
         {
-            Delegate[] delegates = Delegate.GetInvocationList();
+            Delegate[] delegates = Invocation.GetInvocationList();
             foreach (Delegate del in delegates)
             {
-                Delegate -= (del as Action<A>);
+                Invocation -= (del as Action<A>);
             }
-            Delegate = null;
+            Invocation = null;
         }
     }
 
     public class Event<A1, A2>
     {
-        private event Action<A1, A2> Delegate;
+        public event Action<A1, A2> Invocation;
 
         public Event()
         { }
 
-        public void Subscribe(Action<A1, A2> Callback)
-        {
-            Delegate += Callback;
-        }
-
-        public void Unsubscribe(Action<A1, A2> Callback)
-        {
-            Delegate -= Callback;
-        }
-
         public void Broadcast(A1 arg1, A2 arg2)
         {
-            Delegate?.Invoke(arg1, arg2);
+            Invocation?.Invoke(arg1, arg2);
         }
 
         public void Purge()
         {
-            Delegate[] delegates = Delegate.GetInvocationList();
+            Delegate[] delegates = Invocation.GetInvocationList();
             foreach (Delegate del in delegates)
             {
-                Delegate -= (del as Action<A1, A2>);
+                Invocation -= (del as Action<A1, A2>);
             }
-            Delegate = null;
+            Invocation = null;
         }
     }
 
     public class Event<A1, A2, A3>
     {
-        private event Action<A1, A2, A3> Delegate;
+        public event Action<A1, A2, A3> Invocation;
 
         public Event()
         { }
 
-        public void Subscribe(Action<A1, A2, A3> Callback)
-        {
-            Delegate += Callback;
-        }
-
-        public void Unsubscribe(Action<A1, A2, A3> Callback)
-        {
-            Delegate -= Callback;
-        }
-
         public void Broadcast(A1 arg1, A2 arg2, A3 arg3)
         {
-            Delegate?.Invoke(arg1, arg2, arg3);
+            Invocation?.Invoke(arg1, arg2, arg3);
         }
 
         public void Purge()
         {
-            Delegate[] delegates = Delegate.GetInvocationList();
+            Delegate[] delegates = Invocation.GetInvocationList();
             foreach (Delegate del in delegates)
             {
-                Delegate -= (del as Action<A1, A2, A3>);
+                Invocation -= (del as Action<A1, A2, A3>);
             }
-            Delegate = null;
+            Invocation = null;
         }
     }
 
     public class Event<A1, A2, A3, A4>
     {
-        private event Action<A1, A2, A3, A4> Delegate;
+        public event Action<A1, A2, A3, A4> Invocation;
 
         public Event()
         { }
 
-        public void Subscribe(Action<A1, A2, A3, A4> Callback)
-        {
-            Delegate += Callback;
-        }
-
-        public void Unsubscribe(Action<A1, A2, A3, A4> Callback)
-        {
-            Delegate -= Callback;
-        }
-
         public void Broadcast(A1 arg1, A2 arg2, A3 arg3, A4 arg4)
         {
-            Delegate?.Invoke(arg1, arg2, arg3, arg4);
+            Invocation?.Invoke(arg1, arg2, arg3, arg4);
         }
 
         public void Purge()
         {
-            Delegate[] delegates = Delegate.GetInvocationList();
+            Delegate[] delegates = Invocation.GetInvocationList();
             foreach (Delegate del in delegates)
             {
-                Delegate -= (del as Action<A1, A2, A3, A4>);
+                Invocation -= (del as Action<A1, A2, A3, A4>);
             }
-            Delegate = null;
+            Invocation = null;
         }
     }
 }

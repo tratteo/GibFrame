@@ -2,7 +2,7 @@
 //UIUtils.cs - com.tratteo.gibframe
 
 using System.Collections;
-using GibFrame.Utils.Callbacks;
+using GibFrame.Patterns;
 using GibFrame.Utils.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;

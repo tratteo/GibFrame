@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 using GibFrame.Extensions;
-using GibFrame.Utils.Callbacks;
+using GibFrame.Patterns;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -11,12 +11,8 @@ using UnityEngine.UI;
 
 namespace GibFrame.UI
 {
-    /// <summary>
-    ///   Button press utility. Attach this component to a UI image.
-    /// </summary>
     public class GButton : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
-        public bool callbackOnlyOnPointerInside = false;
         public Sprite pressedSprite;
         public bool colorPressEffect;
         public Color32 pressedColor;
@@ -27,6 +23,7 @@ namespace GibFrame.UI
         public UnityEvent onPressed;
         public UnityEvent onReleased;
         public bool inheritCallbackEvents = false;
+        public bool callbackOnlyOnPointerInside = true;
         private Sprite unpressedSprite;
 
         private List<AbstractCallback> OnReleaseCallbacks;
@@ -112,12 +109,16 @@ namespace GibFrame.UI
 
             EventTrigger trigger = gameObject.AddComponent<EventTrigger>();
 
-            pointerDown = new EventTrigger.Entry();
-            pointerDown.eventID = EventTriggerType.PointerDown;
+            pointerDown = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerDown
+            };
             pointerDown.callback.AddListener((e) => Pressed());
 
-            pointerUp = new EventTrigger.Entry();
-            pointerUp.eventID = EventTriggerType.PointerUp;
+            pointerUp = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerUp
+            };
             pointerUp.callback.AddListener((e) => Released());
 
             trigger.triggers.Add(pointerDown);

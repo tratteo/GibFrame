@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GibFrame.Utils.Callbacks;
+using GibFrame.Patterns;
 using UnityEngine;
 
 namespace GibFrame.Performance
