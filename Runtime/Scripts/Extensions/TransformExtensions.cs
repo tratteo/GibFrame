@@ -26,8 +26,7 @@ namespace GibFrame.Extensions
         public static Transform GetFirstChildWithName(this Transform parent, string name, bool inactive)
         {
             Transform[] transforms = parent.GetComponentsInChildren<Transform>(inactive);
-
-            foreach (Transform transform in parent.transform)
+            foreach (Transform transform in transforms)
             {
                 if (transform.name.Equals(name))
                 {
