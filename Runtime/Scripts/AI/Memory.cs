@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using GibFrame.Extensions;
-using UnityEngine;
 
 namespace GibFrame.AI
 {
@@ -47,7 +46,9 @@ namespace GibFrame.AI
             return memories.FindAll((m) => m.Memory.Equals(obj)).Count > 0;
         }
 
-        public List<T> GetAllMemories<T>(Predicate<MemoryModule> predicate, Converter<MemoryModule, T> mapper)
+        public List<MemoryModule> GetAllMemories() => memories;
+
+        public T[] GetAllMemories<T>(Predicate<MemoryModule> predicate, Converter<MemoryModule, T> mapper)
         {
             return memories.GetPredicatesMatchingObjects((m) => IsValidMemory(m) && predicate(m)).ConvertAll(mapper);
         }

@@ -14,51 +14,64 @@ namespace GibFrame.Extensions
             }
         }
 
-        public static TOutput[] ConvertAll<TInput, TOutput>(this TInput[] set, Converter<TInput, TOutput> Converter)
+        public static void ForEach<T>(this IEnumerable<T> set, int end, Action<T> Function)
         {
-            return set.ToList().ConvertAll(Converter).ToArray();
+            set.ForEach(0, end, Function);
         }
 
-        public static T GetPredicateMaxObject<T>(this T[] set, Func<T, double> predicate)
+        public static void ForEach<T>(this IEnumerable<T> set, int start, int end, Action<T> Function)
+        {
+            for (int i = start; i < end; i++)
+            {
+                Function(set.ElementAt(i));
+            }
+        }
+
+        public static TOutput[] ConvertAll<TInput, TOutput>(this TInput[] set, Converter<TInput, TOutput> Converter)
+        {
+            TOutput[] res = new TOutput[set.Length];
+            for (int i = 0; i < set.Length; i++)
+            {
+                res[i] = Converter(set[i]);
+            }
+            return res;
+        }
+
+        public static T GetMax<T>(this IEnumerable<T> set, Func<T, double> predicate)
         {
             double value = double.MinValue;
             double p = 0;
             T current = default(T);
-            for (int i = 0; i < set.Length; i++)
+            for (int i = 0; i < set.Count(); i++)
             {
-                if ((p = predicate(set[i])) > value)
+                if ((p = predicate(set.ElementAt(i))) > value)
                 {
                     value = p;
-                    current = set[i];
+                    current = set.ElementAt(i);
                 }
             }
             return current;
         }
 
-        public static T GetPredicateMaxObject<T>(this List<T> set, Func<T, double> predicate)
-        {
-            return GetPredicateMaxObject(set.ToArray(), predicate);
-        }
-
-        public static T GetPredicateMinObject<T>(this T[] set, Func<T, double> predicate)
+        public static T GetMin<T>(this IEnumerable<T> set, Func<T, double> predicate)
         {
             double value = double.MaxValue;
             double p = 0;
             T current = default(T);
-            for (int i = 0; i < set.Length; i++)
+            for (int i = 0; i < set.Count(); i++)
             {
-                if ((p = predicate(set[i])) < value)
+                if ((p = predicate(set.ElementAt(i))) < value)
                 {
                     value = p;
-                    current = set[i];
+                    current = set.ElementAt(i);
                 }
             }
             return current;
         }
 
-        public static List<T> GetPredicateMinObjects<T>(this T[] set, Func<T, double> predicate)
+        public static List<T> GetMins<T>(this IEnumerable<T> set, Func<T, double> predicate)
         {
-            T obj = GetPredicateMinObject(set, predicate);
+            T obj = GetMin(set, predicate);
             List<T> elems = new List<T>();
             foreach (T elem in set)
             {
@@ -70,9 +83,9 @@ namespace GibFrame.Extensions
             return elems;
         }
 
-        public static List<T> GetPredicateMaxObjects<T>(this T[] set, Func<T, double> Predicate)
+        public static List<T> GetMaxs<T>(this IEnumerable<T> set, Func<T, double> Predicate)
         {
-            T obj = GetPredicateMaxObject(set, Predicate);
+            T obj = GetMax(set, Predicate);
             List<T> elems = new List<T>();
             foreach (T elem in set)
             {
@@ -84,12 +97,7 @@ namespace GibFrame.Extensions
             return elems;
         }
 
-        public static T GetPredicateMinObject<T>(this List<T> set, Func<T, double> predicate)
-        {
-            return GetPredicateMinObject(set.ToArray(), predicate);
-        }
-
-        public static T[] GetPredicatesMatchingObjects<T>(this T[] set, params Predicate<T>[] predicates)
+        public static T[] GetPredicatesMatchingObjects<T>(this IEnumerable<T> set, params Predicate<T>[] predicates)
         {
             List<T> matching = new List<T>();
             foreach (T elem in set)
@@ -111,26 +119,89 @@ namespace GibFrame.Extensions
             return matching.ToArray();
         }
 
-        public static List<T> GetPredicatesMatchingObjects<T>(this List<T> set, params Predicate<T>[] predicates)
+        /// <summary>
+        ///   Reorders the array with the matching elements in the first positions up to the index specified by the return value
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="set"> </param>
+        /// <param name="predicates"> </param>
+        /// <returns> The number of matching elements </returns>
+        public static int GetPredicatestMatchingObjectsNonAlloc<T>(this T[] set, params Predicate<T>[] predicates)
         {
-            List<T> matching = new List<T>();
-            foreach (T elem in set)
+            int res = 0;
+
+            int index = 0;
+            bool valid = true;
+            for (int i = 0; i < set.Count(); i++)
             {
-                bool accept = true;
-                foreach (Predicate<T> current in predicates)
+                foreach (Predicate<T> predicate in predicates)
                 {
-                    if (!current(elem))
+                    if (!predicate(set.ElementAt(i)))
                     {
-                        accept = false;
+                        valid = false;
                         break;
                     }
                 }
-                if (accept)
+                if (valid)
                 {
-                    matching.Add(elem);
+                    T temp = set[index];
+                    set[index] = set[i];
+                    set[i] = temp;
+                    index++;
+                    res++;
+                }
+                valid = true;
+            }
+            return res;
+        }
+
+        /// <summary>
+        ///   Reorders the array with the matching elements in the first positions up to the index specified by the return value
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="set"> </param>
+        /// <param name="predicates"> </param>
+        /// <returns> The number of matching elements </returns>
+        public static int GetPredicatestMatchingObjectsNonAlloc<T>(this List<T> set, params Predicate<T>[] predicates)
+        {
+            int res = 0;
+            int index = 0;
+            bool valid = true;
+            for (int i = 0; i < set.Count(); i++)
+            {
+                foreach (Predicate<T> predicate in predicates)
+                {
+                    if (!predicate(set.ElementAt(i)))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid)
+                {
+                    T temp = set[index];
+                    set[index] = set[i];
+                    set[i] = temp;
+                    index++;
+                    res++;
+                }
+                valid = true;
+            }
+            return res;
+        }
+
+        public static int ForEachMatching<T>(this IEnumerable<T> set, Predicate<T> Predicate, Action<T> Operation)
+        {
+            int count = 0;
+            foreach (T elem in set)
+            {
+                if (Predicate(elem))
+                {
+                    Operation(elem);
+                    count++;
                 }
             }
-            return matching;
+            return count;
         }
 
         public static T[] Shuffle<T>(this T[] arr, int seed)

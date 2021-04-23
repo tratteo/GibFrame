@@ -88,10 +88,10 @@ namespace GibFrame.Selectors
                 switch (paradigm)
                 {
                     case Paradigm.CLOSEST:
-                        return rawArr.GetPredicateMinObject(c => Vector3.SqrMagnitude(c.transform.position - transform.position));
+                        return rawArr.GetMin(c => Vector3.SqrMagnitude(c.transform.position - transform.position));
 
                     case Paradigm.FARTHEST:
-                        return rawArr.GetPredicateMaxObject(c => Vector3.SqrMagnitude(c.transform.position - transform.position));
+                        return rawArr.GetMax(c => Vector3.SqrMagnitude(c.transform.position - transform.position));
 
                     default:
                         return null;

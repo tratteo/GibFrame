@@ -133,7 +133,7 @@ namespace GibFrame.PathBuilder
 
         public Waypoint GetClosestWaypoint(Vector3 position)
         {
-            return path.GetPredicateMinObject(w => Vector3.Distance(position, w.Position));
+            return path.GetMin(w => Vector3.Distance(position, w.Position));
         }
 
         private void Awake()
