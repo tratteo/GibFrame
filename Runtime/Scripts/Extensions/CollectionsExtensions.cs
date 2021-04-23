@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GibFrame.Extensions
 {
@@ -11,6 +12,11 @@ namespace GibFrame.Extensions
             {
                 Function(elem);
             }
+        }
+
+        public static TOutput[] ConvertAll<TInput, TOutput>(this TInput[] set, Converter<TInput, TOutput> Converter)
+        {
+            return set.ToList().ConvertAll(Converter).ToArray();
         }
 
         public static T GetPredicateMaxObject<T>(this T[] set, Func<T, double> predicate)

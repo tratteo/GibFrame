@@ -9,22 +9,37 @@ namespace GibFrame.Selectors
 {
     public abstract class Selector : MonoBehaviour
     {
-        [SerializeField] protected LayerMask mask = ~0;
-        [SerializeField] protected string selectableTag;
-        [SerializeField] protected bool delegateActionOnInterface = true;
         private readonly List<Predicate<Collider>> predicates = new List<Predicate<Collider>>();
+        [SerializeField] private LayerMask mask = ~0;
+        [SerializeField] private string selectableTag;
+        [Tooltip("Call the function for ISelectable components")]
+        [SerializeField] private bool callInterfaceFunctions = true;
+        [Tooltip("Select only game objects that have a component that implements the ISelectable interface")]
+        [SerializeField] private bool selectOnlyInterfaces = false;
         private Collider currentCollider;
         private ISelectable currentSelected = null;
 
+        public int Mask { get => mask; set => mask = value; }
+
+        public string SelectableTag { get => selectableTag; set => selectableTag = value; }
+
+        public bool CallInterfaceFunctions { get => callInterfaceFunctions; set => callInterfaceFunctions = value; }
+
         public bool Active { get; private set; } = true;
 
-        public GameObject CurrentSelected { get => currentCollider != null ? currentCollider.gameObject : null; }
+        public bool SelectOnlyInterfaces { get => selectOnlyInterfaces; set => selectOnlyInterfaces = value; }
 
-        public event Action<ISelectable> OnDeselected;
+        public Collider ColliderSelection => currentCollider;
 
-        public event Action<ISelectable> OnSelected;
+        public ISelectable SelectableSelection => currentSelected;
 
-        public T CurrentAs<T>() where T : class => currentSelected as T;
+        public event Action<Collider> OnRawSelected = delegate { };
+
+        public event Action<Collider> OnRawDeselected = delegate { };
+
+        public event Action<ISelectable> OnDeselected = delegate { };
+
+        public event Action<ISelectable> OnSelected = delegate { };
 
         public void InjectPredicates(params Predicate<Collider>[] pred)
         {
@@ -36,7 +51,16 @@ namespace GibFrame.Selectors
 
         public void ResetSelection()
         {
-            FireDeselect();
+            if (currentCollider)
+            {
+                OnRawDeselected?.Invoke(currentCollider);
+                if (currentSelected != null && callInterfaceFunctions)
+                {
+                    OnDeselected?.Invoke(currentSelected);
+                    currentSelected.OnDeselect();
+                }
+            }
+
             currentSelected = null;
             currentCollider = null;
         }
@@ -46,39 +70,48 @@ namespace GibFrame.Selectors
             Active = state;
         }
 
+        protected virtual void Start()
+        {
+        }
+
+        protected virtual void Awake()
+        {
+        }
+
         protected bool IsColliderValid(Collider collider)
         {
-            return ColliderSatisfiesPredicates(collider) && (selectableTag.Equals(string.Empty) || collider.CompareTag(selectableTag)) && collider.GetComponent<ISelectable>() != null;
+            return ColliderSatisfiesPredicates(collider)
+                && (selectableTag.Equals(string.Empty) || collider.CompareTag(selectableTag))
+                && (!selectOnlyInterfaces || collider.GetComponent<ISelectable>() != null)
+                && collider.gameObject && !collider.gameObject.Equals(gameObject);
         }
 
         protected void Select(Collider newCollider)
         {
-            if (newCollider != null)
+            if (newCollider != null && !newCollider.Equals(currentCollider))
             {
-                ISelectable newSelectable = newCollider.gameObject.GetComponent<ISelectable>();
-                if (newSelectable != null && currentSelected != newSelectable)
+                if (currentCollider)
                 {
-                    currentCollider = newCollider;
-                    FireDeselect();
+                    OnRawDeselected?.Invoke(currentCollider);
+                }
+                OnRawSelected?.Invoke(newCollider);
+                currentCollider = newCollider;
+                ISelectable newSelectable = newCollider.gameObject.GetComponent<ISelectable>();
+                if (newSelectable != null && !newSelectable.Equals(currentSelected))
+                {
+                    if (currentSelected != null && callInterfaceFunctions && currentCollider.gameObject)
+                    {
+                        currentSelected.OnDeselect();
+                        OnDeselected?.Invoke(currentSelected);
+                    }
+
                     currentSelected = newSelectable;
-                    if (delegateActionOnInterface)
+                    if (callInterfaceFunctions)
                     {
                         currentSelected.OnSelect();
+                        OnSelected?.Invoke(currentSelected);
                     }
-                    OnSelected?.Invoke(currentSelected);
                 }
-            }
-        }
-
-        private void FireDeselect()
-        {
-            if (currentSelected != null)
-            {
-                if (currentCollider != null && delegateActionOnInterface && currentCollider.gameObject != null)
-                {
-                    currentSelected.OnDeselect();
-                }
-                OnDeselected?.Invoke(currentSelected);
             }
         }
 

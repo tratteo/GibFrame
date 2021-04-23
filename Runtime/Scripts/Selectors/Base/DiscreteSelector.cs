@@ -12,7 +12,7 @@ namespace GibFrame.Selectors
 
         protected abstract IEnumerator SelectCoroutine();
 
-        private void Start()
+        protected override void Start()
         {
             StartCoroutine(SelectCoroutine());
         }

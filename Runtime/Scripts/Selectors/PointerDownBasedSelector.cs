@@ -11,9 +11,10 @@ namespace GibFrame.Selectors
     {
         public enum InputType { MOUSE, TOUCH, BOTH }
 
+        [Header("Pointer based")]
         [SerializeField] private InputType input;
-        private Camera mainCamera;
         [SerializeField] private UnityEvent OnMissed;
+        [SerializeField] private Camera targetCamera = null;
 
         protected void Update()
         {
@@ -22,11 +23,11 @@ namespace GibFrame.Selectors
                 if (Input.touchCount > 0)
                 {
                     Touch touch = Input.GetTouch(0);
-                    Ray ray = mainCamera.ScreenPointToRay(touch.position);
+                    Ray ray = GetCamera().ScreenPointToRay(touch.position);
                     if (UnityUtils.IsAnyPointerOverGameObject()) return;
                     if (touch.phase == TouchPhase.Ended)
                     {
-                        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mask))
+                        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Mask))
                         {
                             if (IsColliderValid(hit.collider))
                             {
@@ -46,9 +47,9 @@ namespace GibFrame.Selectors
             {
                 if (Input.GetMouseButtonUp(0))
                 {
-                    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                    Ray ray = GetCamera().ScreenPointToRay(Input.mousePosition);
                     if (UnityUtils.IsAnyPointerOverGameObject()) return;
-                    if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, mask))
+                    if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Mask))
                     {
                         if (IsColliderValid(hit.collider))
                         {
@@ -64,9 +65,10 @@ namespace GibFrame.Selectors
             }
         }
 
-        private void Start()
+        private Camera GetCamera()
         {
-            mainCamera = Camera.main;
+            targetCamera ??= Camera.main;
+            return targetCamera;
         }
     }
 }

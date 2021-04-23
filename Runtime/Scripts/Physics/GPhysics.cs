@@ -10,96 +10,52 @@ namespace GibFrame.Physic
 {
     public static class GPhysics
     {
-        public static Collider[] MatchingOverlapSphere(Vector3 position, float radius, Collider[] colliders, int layerMask, QueryTriggerInteraction queryTriggerInteraction, params Predicate<Collider>[] predicates)
+        public static int OverlapSphereNonAllocExecute(Vector3 position, float radius, Collider[] buffer, Action<Collider> Operation)
         {
-            Physics.OverlapSphereNonAlloc(position, radius, colliders, layerMask, queryTriggerInteraction);
-            colliders = colliders.GetPredicatesMatchingObjects(predicates);
-            return colliders;
+            int res = Physics.OverlapSphereNonAlloc(position, radius, buffer);
+            for (int i = 0; i < res; i++)
+            {
+                Operation(buffer[i]);
+            }
+            return res;
         }
 
-        public static Collider[] MatchingOverlapSphere(Vector3 position, float radius, int layerMask, params Predicate<Collider>[] predicates)
+        public static int OverlapSphereNonAllocExecute(Vector3 position, float radius, Collider[] buffer, int layermask, Action<Collider> Operation)
         {
-            Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask);
-            colliders = colliders.GetPredicatesMatchingObjects(predicates);
-            return colliders;
+            int res = Physics.OverlapSphereNonAlloc(position, radius, buffer, layermask);
+            for (int i = 0; i < res; i++)
+            {
+                Operation(buffer[i]);
+            }
+            return res;
         }
 
-        public static Collider[] MatchingOverlapSphere(Vector3 position, float radius, params Predicate<Collider>[] predicates)
+        public static int OverlapSphereNonAllocExecute(Vector3 position, float radius, Collider[] buffer, int layermask, QueryTriggerInteraction queryTriggerInteraction, Action<Collider> Operation)
+        {
+            int res = Physics.OverlapSphereNonAlloc(position, radius, buffer, layermask, queryTriggerInteraction);
+            for (int i = 0; i < res; i++)
+            {
+                Operation(buffer[i]);
+            }
+            return res;
+        }
+
+        public static TOutput[] ConverterOverlapSphere<TOutput>(Vector3 position, float radius, Converter<Collider, TOutput> converter)
         {
             Collider[] colliders = Physics.OverlapSphere(position, radius);
-            return colliders = colliders.GetPredicatesMatchingObjects(predicates);
+            return colliders.ConvertAll(converter);
         }
 
-        public static Collider[] MatchingOverlapBox(Vector3 center, Vector3 halfExtents, Quaternion orientation, int layerMask, QueryTriggerInteraction queryTriggerInteraction, params Predicate<Collider>[] predicates)
+        public static TOutput[] ConverterOverlapSphere<TOutput>(Vector3 position, float radius, int layerMask, Converter<Collider, TOutput> converter)
         {
-            Collider[] colliders = Physics.OverlapBox(center, halfExtents, orientation, layerMask, queryTriggerInteraction);
-            return colliders = colliders.GetPredicatesMatchingObjects(predicates);
+            Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask);
+            return colliders.ConvertAll(converter);
         }
 
-        public static Collider[] MatchingOverlapBox(Vector3 center, Vector3 halfExtents, Quaternion orientation, int layerMask, params Predicate<Collider>[] predicates)
+        public static TOutput[] ConverterOverlapSphere<TOutput>(Vector3 position, float radius, int layerMask, QueryTriggerInteraction queryTriggerInteraction, Converter<Collider, TOutput> converter)
         {
-            Collider[] colliders = Physics.OverlapBox(center, halfExtents, orientation, layerMask);
-            return colliders = colliders.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static Collider[] MatchingOverlapBox(Vector3 center, Vector3 halfExtents, Quaternion orientation, params Predicate<Collider>[] predicates)
-        {
-            Collider[] colliders = Physics.OverlapBox(center, halfExtents, orientation);
-            return colliders = colliders.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static Collider[] MatchingOverlapBox(Vector3 center, Vector3 halfExtents, params Predicate<Collider>[] predicates)
-        {
-            Collider[] colliders = Physics.OverlapBox(center, halfExtents);
-            return colliders = colliders.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Vector3 origin, Vector3 direction, float maxDistance, int layerMask, QueryTriggerInteraction queryTriggerInteraction, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance, layerMask, queryTriggerInteraction);
-            return hits.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Vector3 origin, Vector3 direction, float maxDistance, int layerMask, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance, layerMask);
-            return hits.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Vector3 origin, Vector3 direction, float maxDistance, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance);
-            return hits.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Vector3 origin, Vector3 direction, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(origin, direction);
-            return hits.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Ray ray, float maxDistance, int layerMask, QueryTriggerInteraction queryTriggerInteraction, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance, layerMask, queryTriggerInteraction);
-            return hits.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Ray ray, float maxDistance, int layerMask, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance, layerMask);
-            return hits.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Ray ray, float maxDistance, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance);
-            return hits.GetPredicatesMatchingObjects(predicates);
-        }
-
-        public static RaycastHit[] MatchingRaycastAll(Ray ray, params Predicate<RaycastHit>[] predicates)
-        {
-            RaycastHit[] hits = Physics.RaycastAll(ray);
-            return hits.GetPredicatesMatchingObjects(predicates);
+            Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask, queryTriggerInteraction);
+            return colliders.ConvertAll(converter);
         }
 
         public static Vector3 CalculateThrowVelocity(Vector3 origin, Vector3 target, float angle, float gravityMagnitude)
