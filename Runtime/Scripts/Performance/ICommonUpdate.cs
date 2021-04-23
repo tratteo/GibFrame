@@ -1,6 +1,6 @@
 ﻿namespace GibFrame.Performance
 {
-    public interface ICommonUpdate
+    public interface ICommonUpdate : ICommon
     {
         void CommonUpdate(float deltaTime);
     }

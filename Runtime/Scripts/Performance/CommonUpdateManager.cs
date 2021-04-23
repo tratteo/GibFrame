@@ -9,53 +9,96 @@ namespace GibFrame.Performance
     public class CommonUpdateManager : MonoSingleton<CommonUpdateManager>
     {
         private readonly List<ICommonFixedUpdate> commonFixedUpdates = new List<ICommonFixedUpdate>();
+
         private readonly List<ICommonLateUpdate> commonLateUpdates = new List<ICommonLateUpdate>();
+
         private readonly List<ICommonUpdate> commonUpdates = new List<ICommonUpdate>();
+
         [Header("Preferences")]
         [Tooltip("Scan for all MonoBehaviours on scene loading")]
         [SerializeField] private bool scanOnSceneLoading = false;
+
         [Tooltip("Clear all the subscriptions when rescanning")]
         [SerializeField] private bool clearOnRescan = false;
+
         [Tooltip("Whether should disabled gameobjects be updated")]
         [SerializeField] private bool updateDisabled = false;
 
-        public void Register(MonoBehaviour mono)
+        /// <summary>
+        ///   Returns the number of successful registrations for this object. Returns <strong> -1 </strong> if the instance of the
+        ///   CommonUpdateManager is <strong> <c> null </c></strong>
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="update"> </param>
+        /// <returns> </returns>
+        public static int Register<T>(T update) where T : ICommon
         {
-            if (mono is ICommonUpdate update)
+            if (Instance != null)
             {
-                Register(update);
+                int registrations = 0;
+                if (update is ICommonUpdate commonUpdate)
+                {
+                    if (!Instance.commonUpdates.Contains(commonUpdate))
+                    {
+                        Instance.commonUpdates.Add(commonUpdate);
+                        registrations++;
+                    }
+                }
+                if (update is ICommonFixedUpdate fixedUpdate)
+                {
+                    if (!Instance.commonFixedUpdates.Contains(fixedUpdate))
+                    {
+                        Instance.commonFixedUpdates.Add(fixedUpdate);
+                        registrations++;
+                    }
+                }
+                if (update is ICommonLateUpdate lateUpdate)
+                {
+                    if (!Instance.commonLateUpdates.Contains(lateUpdate))
+                    {
+                        Instance.commonLateUpdates.Add(lateUpdate);
+                        registrations++;
+                    }
+                }
+                return registrations;
             }
-            if (mono is ICommonFixedUpdate fixedUpdate)
+            else
             {
-                Register(fixedUpdate);
-            }
-            if (mono is ICommonLateUpdate lateUpdate)
-            {
-                Register(lateUpdate);
+                UnityEngine.Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Be sure that a CommonUpdateManager is present in the scene");
+                return -1;
             }
         }
 
-        public void Register(ICommonUpdate update)
+        /// <summary>
+        ///   Returns the number of successful unregistrations for this object. Returns <strong> -1 </strong> if the instance of the
+        ///   CommonUpdateManager is <strong> <c> null </c></strong>
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="update"> </param>
+        /// <returns> </returns>
+        public static int Unregister<T>(T update) where T : ICommon
         {
-            if (!commonUpdates.Contains(update))
+            if (Instance != null)
             {
-                commonUpdates.Add(update);
+                int unregistrations = 0;
+                if (update is ICommonUpdate commonUpdate)
+                {
+                    unregistrations += Instance.commonUpdates.Remove(commonUpdate) ? 1 : 0;
+                }
+                if (update is ICommonFixedUpdate fixedUpdate)
+                {
+                    unregistrations += Instance.commonFixedUpdates.Remove(fixedUpdate) ? 1 : 0;
+                }
+                if (update is ICommonLateUpdate lateUpdate)
+                {
+                    unregistrations += Instance.commonLateUpdates.Remove(lateUpdate) ? 1 : 0;
+                }
+                return unregistrations;
             }
-        }
-
-        public void Register(ICommonLateUpdate update)
-        {
-            if (!commonLateUpdates.Contains(update))
+            else
             {
-                commonLateUpdates.Add(update);
-            }
-        }
-
-        public void Register(ICommonFixedUpdate update)
-        {
-            if (!commonFixedUpdates.Contains(update))
-            {
-                commonFixedUpdates.Add(update);
+                UnityEngine.Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Be sure that a CommonUpdateManager is present in the scene");
+                return -1;
             }
         }
 
@@ -69,38 +112,7 @@ namespace GibFrame.Performance
             }
 
             MonoBehaviour[] monos = FindObjectsOfType<MonoBehaviour>();
-            monos.ForEach((m) => Register(m));
-        }
-
-        public void Unregister(MonoBehaviour mono)
-        {
-            if (mono is ICommonUpdate)
-            {
-                Unregister(mono as ICommonUpdate);
-            }
-            if (mono is ICommonLateUpdate)
-            {
-                Unregister(mono as ICommonLateUpdate);
-            }
-            if (mono is ICommonFixedUpdate)
-            {
-                Unregister(mono as ICommonFixedUpdate);
-            }
-        }
-
-        public bool Unregister(ICommonUpdate update)
-        {
-            return commonUpdates.Remove(update);
-        }
-
-        public bool Unregister(ICommonLateUpdate update)
-        {
-            return commonLateUpdates.Remove(update);
-        }
-
-        public bool Unregister(ICommonFixedUpdate update)
-        {
-            return commonFixedUpdates.Remove(update);
+            monos.ForEach((m) => { if (m is ICommon) Register(m as ICommon); });
         }
 
         protected override void Awake()
@@ -161,7 +173,7 @@ namespace GibFrame.Performance
             {
                 if (CanUpdate(update))
                 {
-                    update.CommonLateUpdate();
+                    update.CommonLateUpdate(Time.deltaTime);
                 }
             }
             commonLateUpdates.RemoveAll((u) => !IsValid(u));

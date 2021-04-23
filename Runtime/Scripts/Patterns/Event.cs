@@ -19,12 +19,15 @@ namespace GibFrame.Patterns
 
         public void Purge()
         {
-            Delegate[] delegates = Invocation.GetInvocationList();
-            foreach (Delegate del in delegates)
+            if (Invocation != null)
             {
-                Invocation -= (del as Action);
+                Delegate[] delegates = Invocation.GetInvocationList();
+                foreach (Delegate del in delegates)
+                {
+                    Invocation -= (del as Action);
+                }
+                Invocation = null;
             }
-            Invocation = null;
         }
     }
 
@@ -42,12 +45,15 @@ namespace GibFrame.Patterns
 
         public void Purge()
         {
-            Delegate[] delegates = Invocation.GetInvocationList();
-            foreach (Delegate del in delegates)
+            if (Invocation != null)
             {
-                Invocation -= (del as Action<A>);
+                Delegate[] delegates = Invocation.GetInvocationList();
+                foreach (Delegate del in delegates)
+                {
+                    Invocation -= (del as Action<A>);
+                }
+                Invocation = null;
             }
-            Invocation = null;
         }
     }
 
@@ -65,12 +71,15 @@ namespace GibFrame.Patterns
 
         public void Purge()
         {
-            Delegate[] delegates = Invocation.GetInvocationList();
-            foreach (Delegate del in delegates)
+            if (Invocation != null)
             {
-                Invocation -= (del as Action<A1, A2>);
+                Delegate[] delegates = Invocation.GetInvocationList();
+                foreach (Delegate del in delegates)
+                {
+                    Invocation -= (del as Action<A1, A2>);
+                }
+                Invocation = null;
             }
-            Invocation = null;
         }
     }
 
@@ -88,12 +97,15 @@ namespace GibFrame.Patterns
 
         public void Purge()
         {
-            Delegate[] delegates = Invocation.GetInvocationList();
-            foreach (Delegate del in delegates)
+            if (Invocation != null)
             {
-                Invocation -= (del as Action<A1, A2, A3>);
+                Delegate[] delegates = Invocation.GetInvocationList();
+                foreach (Delegate del in delegates)
+                {
+                    Invocation -= (del as Action<A1, A2, A3>);
+                }
+                Invocation = null;
             }
-            Invocation = null;
         }
     }
 
@@ -111,12 +123,15 @@ namespace GibFrame.Patterns
 
         public void Purge()
         {
-            Delegate[] delegates = Invocation.GetInvocationList();
-            foreach (Delegate del in delegates)
+            if (Invocation != null)
             {
-                Invocation -= (del as Action<A1, A2, A3, A4>);
+                Delegate[] delegates = Invocation.GetInvocationList();
+                foreach (Delegate del in delegates)
+                {
+                    Invocation -= (del as Action<A1, A2, A3, A4>);
+                }
+                Invocation = null;
             }
-            Invocation = null;
         }
     }
 }

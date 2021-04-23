@@ -1,7 +1,7 @@
 ﻿namespace GibFrame.Performance
 {
-    public interface ICommonLateUpdate
+    public interface ICommonLateUpdate : ICommon
     {
-        void CommonLateUpdate();
+        void CommonLateUpdate(float deltaTime);
     }
 }
