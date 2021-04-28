@@ -7,9 +7,10 @@ namespace GibFrame.Patterns
     {
         private readonly Image valueBar;
         private readonly Text valueText;
-        private readonly string valueTextFormat;
 
         public float CurrentValue { get; private set; }
+
+        public string TextFormat { get; private set; }
 
         public float MaxValue { get; private set; }
 
@@ -25,7 +26,7 @@ namespace GibFrame.Patterns
             CurrentValue = maxValue;
             this.valueBar = valueBar;
             this.valueText = valueText;
-            this.valueTextFormat = valueTextFormat;
+            this.TextFormat = valueTextFormat;
             AdjustVisuals();
         }
 
@@ -42,6 +43,10 @@ namespace GibFrame.Patterns
         }
 
         public ValueContainerSystem(float maxHealth, Text healthText, string healthTextFormat) : this(maxHealth, null, healthText, healthTextFormat)
+        {
+        }
+
+        public ValueContainerSystem(float maxHealth, string healthTextFormat) : this(maxHealth, null, null, healthTextFormat)
         {
         }
 
@@ -88,9 +93,9 @@ namespace GibFrame.Patterns
             }
             if (valueText != null)
             {
-                if (valueTextFormat != "")
+                if (TextFormat != "")
                 {
-                    valueText.text = string.Format(valueTextFormat, CurrentValue);
+                    valueText.text = string.Format(TextFormat, CurrentValue);
                 }
                 else
                 {
