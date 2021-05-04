@@ -18,13 +18,14 @@ namespace GibFrame.Joystick
         protected bool dragging = false;
         [SerializeField] private float handleLimit = 1F;
         [SerializeField] private float zeroThreshold = 0F;
-        private Vector2 direction;
 
         public float Horizontal { get; private set; }
 
         public float Vertical { get; private set; }
 
-        public Vector2 Direction => direction.normalized;
+        public Vector2 Direction => new Vector2(Horizontal, Vertical);
+
+        public Vector3 Direction3 => new Vector3(Horizontal, 0F, Vertical);
 
         public float Radius => handleLimit * background.sizeDelta.x / 2F;
 
@@ -37,7 +38,6 @@ namespace GibFrame.Joystick
         {
             Horizontal = 0F;
             Vertical = 0F;
-            direction = Vector2.zero;
             dragging = false;
         }
 
@@ -67,14 +67,11 @@ namespace GibFrame.Joystick
             {
                 Horizontal = 0F;
                 Vertical = 0F;
-                this.direction = Vector2.zero;
             }
             else
             {
                 Horizontal = clampedPos.x / Radius;
                 Vertical = clampedPos.y / Radius;
-                this.direction.x = Horizontal;
-                this.direction.y = Vertical;
             }
         }
 
@@ -82,7 +79,6 @@ namespace GibFrame.Joystick
         {
             Vertical = 0F;
             Horizontal = 0F;
-            direction = Vector2.zero;
             handle.anchoredPosition = Vector2.zero;
         }
     }
