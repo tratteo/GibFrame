@@ -1,63 +1,47 @@
-﻿using UnityEngine;
+﻿using GibFrame.Utils;
+using UnityEngine;
 
 namespace GibFrame.Debug
 {
-    public static class GDebug
+    public static partial class GDebug
     {
-        public static void DrawWireCube(Vector3 center, Vector3 halfExtents, Color color, float duration)
+        public static void DrawWireBox(Box box, Color color, float duration)
         {
-            Vector3 a, b, c, d;
-            a = new Vector3(center.x - halfExtents.x, center.y - halfExtents.y, center.z - halfExtents.z);
-            b = new Vector3(center.x - halfExtents.x, center.y - halfExtents.y, center.z + halfExtents.z);
-            c = new Vector3(center.x + halfExtents.x, center.y - halfExtents.y, center.z + halfExtents.z);
-            d = new Vector3(center.x + halfExtents.x, center.y - halfExtents.y, center.z - halfExtents.z);
-            UnityEngine.Debug.DrawLine(a, b, color, duration);
-            UnityEngine.Debug.DrawLine(b, c, color, duration);
-            UnityEngine.Debug.DrawLine(c, d, color, duration);
-            UnityEngine.Debug.DrawLine(d, a, color, duration);
-            Vector3 _a = a + Vector3.up * 2F * halfExtents.y;
-            Vector3 _b = b + Vector3.up * 2F * halfExtents.y;
-            Vector3 _c = c + Vector3.up * 2F * halfExtents.y;
-            Vector3 _d = d + Vector3.up * 2F * halfExtents.y;
-            UnityEngine.Debug.DrawLine(_a, _b, color, duration);
-            UnityEngine.Debug.DrawLine(_b, _c, color, duration);
-            UnityEngine.Debug.DrawLine(_c, _d, color, duration);
-            UnityEngine.Debug.DrawLine(_d, _a, color, duration);
-
-            UnityEngine.Debug.DrawLine(_a, a, color, duration);
-            UnityEngine.Debug.DrawLine(_b, b, color, duration);
-            UnityEngine.Debug.DrawLine(_c, c, color, duration);
-            UnityEngine.Debug.DrawLine(_d, d, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontTopLeft, box.FrontTopRight, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontTopRight, box.FrontBottomRight, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontBottomRight, box.FrontBottomLeft, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontBottomLeft, box.FrontTopLeft, color, duration);
+            UnityEngine.Debug.DrawLine(box.BackTopLeft, box.BackTopRight, color, duration);
+            UnityEngine.Debug.DrawLine(box.BackTopRight, box.BackBottomRight, color, duration);
+            UnityEngine.Debug.DrawLine(box.BackBottomRight, box.BackBottomLeft, color, duration);
+            UnityEngine.Debug.DrawLine(box.BackBottomLeft, box.BackTopLeft, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontTopLeft, box.BackTopLeft, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontTopRight, box.BackTopRight, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontBottomRight, box.BackBottomRight, color, duration);
+            UnityEngine.Debug.DrawLine(box.FrontBottomLeft, box.BackBottomLeft, color, duration);
         }
 
-        public static void DrawWireCube(Vector3 center, Vector3 halfExtents)
+        public static void DrawWireBox(Box box)
         {
-            DrawWireCube(center, halfExtents, Color.cyan, 0F);
+            DrawWireBox(box, Color.cyan, 0F);
         }
 
-        public static void DrawWireCube(Vector3 center, Vector3 halfExtents, Color color)
+        public static void DrawWireBox(Box box, Color color)
         {
-            DrawWireCube(center, halfExtents, color, 0F);
+            DrawWireBox(box, color, 0F);
         }
 
-        public static void DrawWireCube(Vector3 center, Vector3 halfExtents, float duration)
+        public static void DrawWireBox(Box box, float duration)
         {
-            DrawWireCube(center, halfExtents, Color.cyan, duration);
+            DrawWireBox(box, Color.cyan, duration);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="center"> </param>
-        /// <param name="radius"> </param>
-        /// <param name="color"> </param>
-        /// <param name="duration"> </param>
-        /// <param name="quality"> Define the quality of the wire sphere, from 1 to 10 </param>
         public static void DrawWireSphere(Vector3 center, float radius, Color color, float duration, int quality = 3)
         {
             quality = Mathf.Clamp(quality, 1, 10);
 
             int segments = quality << 1;
-            int subdivisions = quality << 3;
+            int subdivisions = quality << 2;
             int halfSegments = segments >> 1;
             float strideAngle = 360F / subdivisions;
             float segmentStride = 180F / segments;
@@ -136,6 +120,26 @@ namespace GibFrame.Debug
         public static void DrawArrow(Vector3 pos, Vector3 direction)
         {
             DrawArrow(pos, direction, Color.cyan, 0F, 0.25F, 25F);
+        }
+
+        public static void DrawCastBox(Vector3 origin, Vector3 halfExtents, Quaternion orientation, Vector3 direction, float distance, float duration)
+        {
+            direction.Normalize();
+            Box bottomBox = new Box(origin, halfExtents, orientation);
+            Box topBox = new Box(origin + (direction * distance), halfExtents, orientation);
+
+            DrawArrow(bottomBox.BackBottomLeft, topBox.BackBottomLeft - bottomBox.BackBottomLeft, Color.yellow, duration);
+            DrawArrow(bottomBox.BackBottomRight, topBox.BackBottomRight - bottomBox.BackBottomRight, Color.yellow, duration);
+            DrawArrow(bottomBox.BackTopLeft, topBox.BackTopLeft - bottomBox.BackTopLeft, Color.yellow, duration);
+            DrawArrow(bottomBox.BackTopRight, topBox.BackTopRight - bottomBox.BackTopRight, Color.yellow, duration);
+
+            DrawArrow(bottomBox.FrontTopLeft, topBox.FrontTopLeft - bottomBox.FrontTopLeft, Color.yellow, duration);
+            DrawArrow(bottomBox.FrontTopRight, topBox.FrontTopRight - bottomBox.FrontTopRight, Color.yellow, duration);
+            DrawArrow(bottomBox.FrontBottomLeft, topBox.FrontBottomLeft - bottomBox.FrontBottomLeft, Color.yellow, duration);
+            DrawArrow(bottomBox.FrontBottomRight, topBox.FrontBottomRight - bottomBox.FrontBottomRight, Color.yellow, duration);
+
+            DrawWireBox(bottomBox, Color.green, duration);
+            DrawWireBox(topBox, Color.green, duration);
         }
     }
 }
