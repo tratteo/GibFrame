@@ -4,21 +4,37 @@ namespace GibFrame.Utils
 {
     public struct Box
     {
-        public Vector3 FrontTopLeft { get; private set; }
+        public Vector3 LocalFrontTopLeft { get; private set; }
 
-        public Vector3 FrontTopRight { get; private set; }
+        public Vector3 LocalFrontTopRight { get; private set; }
 
-        public Vector3 FrontBottomLeft { get; private set; }
+        public Vector3 LocalFrontBottomLeft { get; private set; }
 
-        public Vector3 FrontBottomRight { get; private set; }
+        public Vector3 LocalFrontBottomRight { get; private set; }
 
-        public Vector3 BackTopLeft { get; private set; }
+        public Vector3 LocalBackTopLeft { get { return -LocalFrontBottomRight; } }
 
-        public Vector3 BackTopRight { get; private set; }
+        public Vector3 LocalBackTopRight { get { return -LocalFrontBottomLeft; } }
 
-        public Vector3 BackBottomLeft { get; private set; }
+        public Vector3 LocalBackBottomLeft { get { return -LocalFrontTopRight; } }
 
-        public Vector3 BackBottomRight { get; private set; }
+        public Vector3 LocalBackBottomRight { get { return -LocalFrontTopLeft; } }
+
+        public Vector3 FrontTopLeft { get { return LocalFrontTopLeft + Origin; } }
+
+        public Vector3 FrontTopRight { get { return LocalFrontTopRight + Origin; } }
+
+        public Vector3 FrontBottomLeft { get { return LocalFrontBottomLeft + Origin; } }
+
+        public Vector3 FrontBottomRight { get { return LocalFrontBottomRight + Origin; } }
+
+        public Vector3 BackTopLeft { get { return LocalBackTopLeft + Origin; } }
+
+        public Vector3 BackTopRight { get { return LocalBackTopRight + Origin; } }
+
+        public Vector3 BackBottomLeft { get { return LocalBackBottomLeft + Origin; } }
+
+        public Vector3 BackBottomRight { get { return LocalBackBottomRight + Origin; } }
 
         public Vector3 Origin { get; private set; }
 
@@ -29,28 +45,20 @@ namespace GibFrame.Utils
 
         public Box(Vector3 origin, Vector3 halfExtents)
         {
-            BackBottomLeft = new Vector3(origin.x - halfExtents.x, origin.y - halfExtents.y, origin.z - halfExtents.z);
-            FrontBottomLeft = new Vector3(origin.x - halfExtents.x, origin.y - halfExtents.y, origin.z + halfExtents.z);
-            FrontBottomRight = new Vector3(origin.x + halfExtents.x, origin.y - halfExtents.y, origin.z + halfExtents.z);
-            BackBottomRight = new Vector3(origin.x + halfExtents.x, origin.y - halfExtents.y, origin.z - halfExtents.z);
-            BackTopLeft = BackBottomLeft + Vector3.up * 2F * halfExtents.y;
-            FrontTopLeft = FrontBottomLeft + Vector3.up * 2F * halfExtents.y;
-            FrontTopRight = FrontBottomRight + Vector3.up * 2F * halfExtents.y;
-            BackTopRight = BackBottomRight + Vector3.up * 2F * halfExtents.y;
+            this.LocalFrontTopLeft = new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z);
+            this.LocalFrontTopRight = new Vector3(halfExtents.x, halfExtents.y, -halfExtents.z);
+            this.LocalFrontBottomLeft = new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
+            this.LocalFrontBottomRight = new Vector3(halfExtents.x, -halfExtents.y, -halfExtents.z);
+
             this.Origin = origin;
         }
 
         public void Rotate(Quaternion orientation)
         {
-            BackBottomLeft = RotatePointAroundPivot(BackBottomLeft, Vector3.zero, orientation);
-            FrontBottomLeft = RotatePointAroundPivot(FrontBottomLeft, Vector3.zero, orientation);
-            FrontBottomRight = RotatePointAroundPivot(FrontBottomRight, Vector3.zero, orientation);
-            BackBottomRight = RotatePointAroundPivot(BackBottomRight, Vector3.zero, orientation);
-
-            BackTopLeft = RotatePointAroundPivot(BackTopLeft, Vector3.zero, orientation);
-            FrontTopLeft = RotatePointAroundPivot(FrontTopLeft, Vector3.zero, orientation);
-            FrontTopRight = RotatePointAroundPivot(FrontTopRight, Vector3.zero, orientation);
-            BackTopRight = RotatePointAroundPivot(BackTopRight, Vector3.zero, orientation);
+            LocalFrontTopLeft = RotatePointAroundPivot(LocalFrontTopLeft, Vector3.zero, orientation);
+            LocalFrontTopRight = RotatePointAroundPivot(LocalFrontTopRight, Vector3.zero, orientation);
+            LocalFrontBottomLeft = RotatePointAroundPivot(LocalFrontBottomLeft, Vector3.zero, orientation);
+            LocalFrontBottomRight = RotatePointAroundPivot(LocalFrontBottomRight, Vector3.zero, orientation);
         }
 
         private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rotation)
