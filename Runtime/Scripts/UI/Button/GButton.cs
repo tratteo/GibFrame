@@ -1,7 +1,6 @@
 ﻿//Copyright (c) matteo
 //GButton.cs - com.tratteo.gibframe
 
-using System.Collections.Generic;
 using GibFrame.Extensions;
 using GibFrame.Patterns;
 using UnityEngine;
@@ -13,6 +12,9 @@ namespace GibFrame.UI
 {
     public class GButton : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
+        public bool enableLongPress;
+        public int longPressDelay;
+        public UnityEvent onLongPressed;
         public Sprite pressedSprite;
         public bool colorPressEffect;
         public Color32 pressedColor;
@@ -26,49 +28,56 @@ namespace GibFrame.UI
         public bool callbackOnlyOnPointerInside = true;
         private Sprite unpressedSprite;
 
-        private List<AbstractCallback> OnReleaseCallbacks;
-        private List<AbstractCallback> OnPressedCallbacks;
-        private List<AbstractCallback> OnPointerEnterCallbacks;
-        private List<AbstractCallback> OnPointerExitCallbacks;
-        private List<AbstractCallback> OnCancelCallbacks;
+        private CallbackEvent OnReleaseEvent;
+        private CallbackEvent OnPressedEvent;
+        private CallbackEvent OnPointerEnterEvent;
+        private CallbackEvent OnPointerExitEvent;
+        private CallbackEvent OnCancelEvent;
+        private CallbackEvent OnLongPressEvent;
 
         private EventTrigger.Entry pointerDown;
         private EventTrigger.Entry pointerUp;
         private bool canReleaseExecute = false;
         private bool clicked = false;
         private GButton[] childButtons;
+        private float currentPressTime = 0F;
+
+
 
         public void AddOnCancelCallback(AbstractCallback Callback)
+
         {
-            OnCancelCallbacks.Add(Callback);
+            OnCancelEvent.Subscribe(Callback);
         }
 
         public void AddOnPressedCallback(AbstractCallback Callback)
         {
-            OnPressedCallbacks.Add(Callback);
+            OnPressedEvent.Subscribe(Callback);
         }
 
         public void AddOnReleasedCallback(AbstractCallback Callback)
         {
-            OnReleaseCallbacks.Add(Callback);
+            OnReleaseEvent.Subscribe(Callback);
         }
 
         public void AddOnPointerEnterCallback(AbstractCallback callback)
         {
-            OnPointerEnterCallbacks.Add(callback);
+            OnPointerEnterEvent.Subscribe(callback);
         }
 
         public void AddOnPointerExitCallback(AbstractCallback callback)
         {
-            OnPointerExitCallbacks.Add(callback);
+            OnPointerExitEvent.Subscribe(callback);
+        }
+
+        public void AddOnLongPressedCallback(AbstractCallback callback)
+        {
+            OnLongPressEvent.Subscribe(callback);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            foreach (AbstractCallback callback in OnPointerEnterCallbacks)
-            {
-                callback.Invoke();
-            }
+            OnPointerEnterEvent.Invoke();
 
             if (callbackOnlyOnPointerInside)
             {
@@ -82,10 +91,7 @@ namespace GibFrame.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            foreach (AbstractCallback callback in OnPointerExitCallbacks)
-            {
-                callback.Invoke();
-            }
+            OnPointerExitEvent.Invoke();
             if (callbackOnlyOnPointerInside)
             {
                 canReleaseExecute = false;
@@ -95,11 +101,13 @@ namespace GibFrame.UI
 
         protected virtual void Awake()
         {
-            OnReleaseCallbacks = new List<AbstractCallback>();
-            OnPressedCallbacks = new List<AbstractCallback>();
-            OnPointerExitCallbacks = new List<AbstractCallback>();
-            OnPointerEnterCallbacks = new List<AbstractCallback>();
-            OnCancelCallbacks = new List<AbstractCallback>();
+            OnReleaseEvent = new CallbackEvent();
+            OnPressedEvent = new CallbackEvent();
+            OnPointerExitEvent = new CallbackEvent();
+            OnPointerEnterEvent = new CallbackEvent();
+            OnCancelEvent = new CallbackEvent();
+            OnLongPressEvent = new CallbackEvent();
+
             childButtons = GetComponentsInChildren<GButton>(true);
             childButtons = childButtons.GetPredicatesMatchingObjects((b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject));
             image = GetComponentInChildren<Image>();
@@ -125,44 +133,44 @@ namespace GibFrame.UI
             trigger.triggers.Add(pointerUp);
         }
 
+        private void Update()
+        {
+            if (enableLongPress && clicked)
+            {
+                currentPressTime += Time.unscaledDeltaTime * 1000F;
+                if (currentPressTime >= longPressDelay)
+                {
+                    onLongPressed.Invoke();
+                    OnLongPressEvent.Invoke();
+                    currentPressTime = 0;
+                    Released();
+                }
+            }
+        }
+
         private void Pressed()
         {
             clicked = true;
             PressUI();
             onPressed.Invoke();
-            foreach (AbstractCallback callback in OnPressedCallbacks)
-            {
-                callback.Invoke();
-            }
-            foreach (GButton child in childButtons)
-            {
-                child.onPressed?.Invoke();
-            }
+            OnPressedEvent.Invoke();
+            childButtons.ForEach(c => c.onPressed?.Invoke());
         }
 
         private void Released()
         {
             ResetUI();
             clicked = false;
-
+            currentPressTime = 0F;
             if (canReleaseExecute || !callbackOnlyOnPointerInside)
             {
                 onReleased.Invoke();
-                foreach (GButton child in childButtons)
-                {
-                    child.onReleased?.Invoke();
-                }
-                foreach (AbstractCallback callback in OnReleaseCallbacks)
-                {
-                    callback.Invoke();
-                }
+                childButtons.ForEach(c => c.onReleased?.Invoke());
+                OnReleaseEvent.Invoke();
             }
             else
             {
-                foreach (AbstractCallback callback in OnCancelCallbacks)
-                {
-                    callback.Invoke();
-                }
+                OnCancelEvent.Invoke();
             }
         }
 
@@ -198,10 +206,8 @@ namespace GibFrame.UI
             {
                 image.sprite = pressedSprite;
             }
-            foreach (GButton child in childButtons)
-            {
-                child.PressUI();
-            }
+
+            childButtons.ForEach(b => b.ResetUI());
         }
     }
 }

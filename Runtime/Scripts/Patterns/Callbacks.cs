@@ -2,9 +2,35 @@
 //Callbacks.cs - com.tratteo.gibframe
 
 using System;
+using System.Collections.Generic;
 
 namespace GibFrame.Patterns
 {
+    public class CallbackEvent
+    {
+        private readonly List<AbstractCallback> callbacks;
+
+        public CallbackEvent()
+        {
+            callbacks = new List<AbstractCallback>();
+        }
+
+        public void Subscribe(AbstractCallback callback)
+        {
+            callbacks.Add(callback);
+        }
+
+        public bool Unsubscribe(AbstractCallback callback)
+        {
+            return callbacks.Remove(callback);
+        }
+
+        public void Invoke()
+        {
+            callbacks.ForEach(c => c?.Invoke());
+        }
+    }
+
     public abstract class AbstractCallback
     {
         public abstract void Invoke();
@@ -55,6 +81,7 @@ namespace GibFrame.Patterns
         {
             this.Event = action;
         }
+
 
         public override void Invoke()
         {

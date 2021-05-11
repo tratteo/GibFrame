@@ -10,7 +10,7 @@ using UnityEngine;
 public class GButton_CE : Editor
 {
     private GButton script;
-    private SerializedProperty pointerDownProp, pointerUpProp;
+    private SerializedProperty pointerDownProp, pointerUpProp, longPressedProp;
     private GUIStyle labelStyle;
 
     public override void OnInspectorGUI()
@@ -22,6 +22,12 @@ public class GButton_CE : Editor
         EditorGUILayout.Space(4);
         script.callbackOnlyOnPointerInside = EditorGUILayout.Toggle("Events only on pointer inside", script.callbackOnlyOnPointerInside);
         script.inheritCallbackEvents = EditorGUILayout.Toggle("Inherit callbacks activation", script.inheritCallbackEvents);
+        script.enableLongPress = EditorGUILayout.Toggle("Long press", script.enableLongPress);
+        if (script.enableLongPress)
+        {
+            script.longPressDelay = EditorGUILayout.IntField("Long press delay", script.longPressDelay);
+            EditorGUILayout.PropertyField(longPressedProp);
+        }
         EditorGUILayout.Space(10);
         EditorGUILayout.LabelField("Graphics", labelStyle);
         EditorGUILayout.Space(4);
@@ -41,7 +47,10 @@ public class GButton_CE : Editor
         if (GUI.changed)
         {
             EditorUtility.SetDirty(script);
-            EditorSceneManager.MarkSceneDirty(script.gameObject.scene);
+            if (!Application.isPlaying)
+            {
+                EditorSceneManager.MarkSceneDirty(script.gameObject.scene);
+            }
             serializedObject.ApplyModifiedProperties();
         }
     }
@@ -52,6 +61,7 @@ public class GButton_CE : Editor
 
         pointerDownProp = serializedObject.FindProperty("onPressed");
         pointerUpProp = serializedObject.FindProperty("onReleased");
+        longPressedProp = serializedObject.FindProperty("onLongPressed");
         labelStyle = new GUIStyle();
         labelStyle.fontSize = 16;
         labelStyle.normal.textColor = Color.white;
