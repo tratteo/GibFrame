@@ -77,7 +77,11 @@ public class GuardedExecutable
             GuardedAttribute attribute = Attribute.GetCustomAttribute(field, typeof(GuardedAttribute)) as GuardedAttribute;
             if (attribute != null)
             {
-                Print(attribute, field, field.GetValue(obj), obj.GetType(), parentObj, logBuilder);
+                var value = field.GetValue(obj);
+                if (IsNullOrDefault(value))
+                {
+                    Print(attribute, field, value, obj.GetType(), parentObj, logBuilder);
+                }
             }
             if (field.FieldType.IsClass)
             {
@@ -90,21 +94,19 @@ public class GuardedExecutable
         });
     }
 
-    //[InitializeOnLoad]
-    //public class Startup
-    //{
-    //    static Startup()
-    //    {
-    //        EditorCoroutineUtility.StartCoroutineOwnerless(Verify());
-    //    }
-
-    //    private static IEnumerator Verify()
-    //    {
-    //        while (true)
-    //        {
-    //            VerifyGuardedObjects();
-    //            yield return new EditorWaitForSeconds(1F);
-    //        }
-    //    }
-    //}
+    private static bool IsNullOrDefault<T>(T arg)
+    {
+        if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
+        if (arg == null) return true;
+        if (object.Equals(arg, default(T))) return true;
+        Type methodType = typeof(T);
+        if (Nullable.GetUnderlyingType(methodType) != null) return false;
+        Type argumentType = arg.GetType();
+        if (argumentType.IsValueType && argumentType != methodType)
+        {
+            object obj = Activator.CreateInstance(arg.GetType());
+            return obj.Equals(arg);
+        }
+        return false;
+    }
 }
