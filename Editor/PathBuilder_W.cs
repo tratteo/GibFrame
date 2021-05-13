@@ -17,7 +17,7 @@ public class PathBuilder_W : EditorWindow
     private float sProb = 1F;
     private GUIStyle sectionsStyle;
 
-    [MenuItem("Window/GibFrame/Path Builder")]
+    [MenuItem("GibFrame/Path Builder")]
     public static void ShowWindow()
     {
         GetWindow(typeof(PathBuilder_W)).titleContent = new GUIContent("Path Builder");
