@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using GibFrame.Extensions;
@@ -27,16 +29,62 @@ public class GuardedExecutable
 
     public static void VerifyGuardedObjects(bool scene, bool prefabs)
     {
+        List<UnityEngine.Object> objs = new List<UnityEngine.Object>();
+        if (scene)
+        {
+            objs.AddRange(GetAllObjectsInScene());
+        }
+        if (prefabs)
+        {
+            objs.AddRange(GetAllAssetsObjects());
+        }
         StringBuilder logBuilder = new StringBuilder();
-        MonoBehaviour[] objs = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
         objs.ForEach(o =>
         {
-            bool persistent = EditorUtility.IsPersistent(o);
-            if (scene && prefabs || (persistent && prefabs) || (!persistent && scene))
-            {
-                LogRecursively(o, o, logBuilder);
-            }
+            LogRecursively(o, o, logBuilder);
         });
+    }
+
+    public static List<UnityEngine.Object> GetAllAssetsObjects()
+    {
+        string path = "";
+        List<UnityEngine.Object> al = new List<UnityEngine.Object>();
+        string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + path);
+        foreach (string fileName in fileEntries)
+        {
+            int index = fileName.LastIndexOf("/");
+            string localPath = "Assets/" + path;
+
+            if (index > 0)
+                localPath += fileName.Substring(index);
+
+            UnityEngine.Object t = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
+            if (t is GameObject go)
+            {
+                MonoBehaviour[] behvs = go.GetComponents<MonoBehaviour>();
+                al.AddRange(behvs);
+            }
+            else if (t is ScriptableObject so)
+            {
+                al.Add(so);
+            }
+        }
+
+        return al;
+    }
+
+    private static List<UnityEngine.Object> GetAllObjectsInScene()
+    {
+        List<UnityEngine.Object> res = new List<UnityEngine.Object>();
+
+        foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+        {
+            if (EditorUtility.IsPersistent(go))
+                continue;
+            MonoBehaviour[] behvs = go.GetComponents<MonoBehaviour>();
+            res.AddRange(behvs);
+        }
+        return res;
     }
 
     private static void Print(GuardedAttribute guarded, FieldInfo field, object fieldVal, Type parentClass, UnityEngine.Object obj, StringBuilder logBuilder)
@@ -53,17 +101,17 @@ public class GuardedExecutable
         switch (guarded.Gravity)
         {
             case GuardedAttribute.MissingValueGravity.INFO:
-                logBuilder.AppendFormat("Field <b>{0}</b> of class <b>{1}</b> sitting on GameObject <b>{2}</b> is set to default value: <b>{3}</b>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
+                logBuilder.AppendFormat("Field <b>{0}</b> of class <b>{1}</b> sitting on GameObject <b>{2}</b> is set to default value <b>{3}</b>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
                 Debug.Log(logBuilder.ToString());
                 break;
 
             case GuardedAttribute.MissingValueGravity.WARNING:
-                logBuilder.AppendFormat("Field <color=yellow><b>{0}</b></color> of class <color=yellow><b>{1}</b></color> sitting on GameObject <b>{2}</b> is set to default value: <color=yellow><b>{3}</b></color>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
+                logBuilder.AppendFormat("Field <color=yellow><b>{0}</b></color> of class <color=yellow><b>{1}</b></color> sitting on GameObject <b>{2}</b> is set to default value <color=yellow><b>{3}</b></color>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
                 Debug.LogWarning(logBuilder.ToString());
                 break;
 
             case GuardedAttribute.MissingValueGravity.ERROR:
-                logBuilder.AppendFormat("Field <color=red><b>{0}</b></color> of class <color=red><b>{1}</b></color> sitting on GameObject <b>{2}</b> is set to default value: <color=red><b>{3}</b></color>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
+                logBuilder.AppendFormat("Field <color=red><b>{0}</b></color> of class <color=red><b>{1}</b></color> sitting on GameObject <b>{2}</b> is set to default value <color=red><b>{3}</b></color>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
                 Debug.LogError(logBuilder.ToString());
                 break;
         }
