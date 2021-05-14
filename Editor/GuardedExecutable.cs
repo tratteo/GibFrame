@@ -32,59 +32,76 @@ public class GuardedExecutable
         List<UnityEngine.Object> objs = new List<UnityEngine.Object>();
         if (scene)
         {
-            objs.AddRange(GetAllObjectsInScene());
+            objs.AddRange(GetAllBehavioursInScene());
         }
         if (prefabs)
         {
-            objs.AddRange(GetAllAssetsObjects());
+            objs.AddRange(GetAllBehavioursInAssets());
         }
         StringBuilder logBuilder = new StringBuilder();
-        objs.ForEach(o =>
+        objs.ForEach(obj =>
         {
-            LogRecursively(o, o, logBuilder);
+            GuardRecursively(obj, obj, logBuilder);
         });
     }
 
-    public static List<UnityEngine.Object> GetAllAssetsObjects()
+    public static List<UnityEngine.Object> GetAllBehavioursInAssets(string path = "")
     {
-        string path = "";
         List<UnityEngine.Object> al = new List<UnityEngine.Object>();
         string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + path);
         foreach (string fileName in fileEntries)
         {
             int index = fileName.LastIndexOf("/");
-            string localPath = "Assets/" + path;
+            string localPath = "Assets";
 
             if (index > 0)
-                localPath += fileName.Substring(index);
-
-            UnityEngine.Object t = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
-            if (t is GameObject go)
             {
-                MonoBehaviour[] behvs = go.GetComponents<MonoBehaviour>();
-                al.AddRange(behvs);
+                localPath += fileName.Substring(index);
             }
-            else if (t is ScriptableObject so)
+
+            UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
+            if (asset is GameObject obj)
+            {
+                MonoBehaviour[] monos = obj.GetComponents<MonoBehaviour>();
+                al.AddRange(monos);
+            }
+            else if (asset is ScriptableObject so)
             {
                 al.Add(so);
             }
         }
-
+        string[] dirs = Directory.GetDirectories(Application.dataPath + "/" + path);
+        foreach (string dir in dirs)
+        {
+            string relativePath = path;
+            int index = dir.LastIndexOf("/");
+            if (index > 0)
+            {
+                string val = dir.Substring(index);
+                relativePath += val;
+                al.AddRange(GetAllBehavioursInAssets(relativePath));
+            }
+        }
         return al;
     }
 
-    private static List<UnityEngine.Object> GetAllObjectsInScene()
+    private static List<UnityEngine.Object> GetAllBehavioursInScene()
     {
-        List<UnityEngine.Object> res = new List<UnityEngine.Object>();
-
-        foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+        UnityEngine.Object[] objs = UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
+        List<UnityEngine.Object> sel = new List<UnityEngine.Object>();
+        objs.ForEach(o =>
         {
-            if (EditorUtility.IsPersistent(go))
-                continue;
-            MonoBehaviour[] behvs = go.GetComponents<MonoBehaviour>();
-            res.AddRange(behvs);
-        }
-        return res;
+            if (o is GameObject obj)
+            {
+                MonoBehaviour[] monos = obj.GetComponents<MonoBehaviour>();
+                sel.AddRange(monos);
+            }
+            else if (o is ScriptableObject so)
+            {
+                sel.Add(so);
+            }
+        });
+        return sel;
     }
 
     private static void Print(GuardedAttribute guarded, FieldInfo field, object fieldVal, Type parentClass, UnityEngine.Object obj, StringBuilder logBuilder)
@@ -117,13 +134,12 @@ public class GuardedExecutable
         }
     }
 
-    private static void LogRecursively(object obj, UnityEngine.Object parentObj, StringBuilder logBuilder)
+    private static void GuardRecursively(object obj, UnityEngine.Object parentObj, StringBuilder logBuilder)
     {
         FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         fields.ForEach(field =>
         {
-            GuardedAttribute attribute = Attribute.GetCustomAttribute(field, typeof(GuardedAttribute)) as GuardedAttribute;
-            if (attribute != null)
+            if (Attribute.GetCustomAttribute(field, typeof(GuardedAttribute)) is GuardedAttribute attribute)
             {
                 var value = field.GetValue(obj);
                 if (IsNullOrDefault(value))
@@ -136,7 +152,7 @@ public class GuardedExecutable
                 object val = field.GetValue(obj);
                 if (val != null)
                 {
-                    LogRecursively(val, parentObj, logBuilder);
+                    GuardRecursively(val, parentObj, logBuilder);
                 }
             }
         });
@@ -146,7 +162,7 @@ public class GuardedExecutable
     {
         if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
         if (arg == null) return true;
-        if (object.Equals(arg, default(T))) return true;
+        if (Equals(arg, default(T))) return true;
         Type methodType = typeof(T);
         if (Nullable.GetUnderlyingType(methodType) != null) return false;
         Type argumentType = arg.GetType();
