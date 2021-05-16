@@ -204,6 +204,24 @@ namespace GibFrame.Extensions
             return count;
         }
 
+        public static T PickRandom<T>(this IEnumerable<T> set, int seed)
+        {
+            return set.ElementAt(new Random(seed).Next(0, set.Count()));
+        }
+
+        public static List<T> Shuffle<T>(this List<T> set, int seed)
+        {
+            Random prng = new Random(seed);
+            for (int i = 0; i < set.Count - 1; i++)
+            {
+                int index = prng.Next(i, set.Count);
+                T temp = set[index];
+                set[index] = set[i];
+                set[i] = temp;
+            }
+            return set;
+        }
+
         public static T[] Shuffle<T>(this T[] arr, int seed)
         {
             Random prng = new Random(seed);

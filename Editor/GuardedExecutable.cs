@@ -47,7 +47,7 @@ public class GuardedExecutable
 
     public static List<UnityEngine.Object> GetAllBehavioursInAssets(string path = "")
     {
-        List<UnityEngine.Object> al = new List<UnityEngine.Object>();
+        List<UnityEngine.Object> sel = new List<UnityEngine.Object>();
         string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + path);
         foreach (string fileName in fileEntries)
         {
@@ -60,29 +60,38 @@ public class GuardedExecutable
             }
 
             UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
-            if (asset is GameObject obj)
+            if (asset)
             {
-                MonoBehaviour[] monos = obj.GetComponents<MonoBehaviour>();
-                al.AddRange(monos);
-            }
-            else if (asset is ScriptableObject so)
-            {
-                al.Add(so);
+                if (asset is GameObject gameObject)
+                {
+                    MonoBehaviour[] monos = gameObject.GetComponentsInChildren<MonoBehaviour>();
+                    if (monos != null && monos.Length > 0)
+                    {
+                        sel.AddRange(monos);
+                    }
+                }
+                else if (asset is ScriptableObject so)
+                {
+                    if (so)
+                    {
+                        sel.Add(so);
+                    }
+                }
             }
         }
         string[] dirs = Directory.GetDirectories(Application.dataPath + "/" + path);
         foreach (string dir in dirs)
         {
             string relativePath = path;
-            int index = dir.LastIndexOf("/");
+            int index = dir.LastIndexOfAny(new char[] { '/', '\\' });
             if (index > 0)
             {
                 string val = dir.Substring(index);
                 relativePath += val;
-                al.AddRange(GetAllBehavioursInAssets(relativePath));
+                sel.AddRange(GetAllBehavioursInAssets(relativePath));
             }
         }
-        return al;
+        return sel;
     }
 
     private static List<UnityEngine.Object> GetAllBehavioursInScene()
@@ -91,14 +100,17 @@ public class GuardedExecutable
         List<UnityEngine.Object> sel = new List<UnityEngine.Object>();
         objs.ForEach(o =>
         {
-            if (o is GameObject obj)
+            if (o)
             {
-                MonoBehaviour[] monos = obj.GetComponents<MonoBehaviour>();
-                sel.AddRange(monos);
-            }
-            else if (o is ScriptableObject so)
-            {
-                sel.Add(so);
+                if (o is GameObject obj)
+                {
+                    MonoBehaviour[] monos = obj.GetComponentsInChildren<MonoBehaviour>();
+                    sel.AddRange(monos);
+                }
+                else if (o is ScriptableObject so)
+                {
+                    sel.Add(so);
+                }
             }
         });
         return sel;
@@ -136,6 +148,7 @@ public class GuardedExecutable
 
     private static void GuardRecursively(object obj, UnityEngine.Object parentObj, StringBuilder logBuilder)
     {
+        if (obj == null) return;
         FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         fields.ForEach(field =>
         {
