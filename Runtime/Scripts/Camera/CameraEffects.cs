@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace GibFrame.CameraUtils
+namespace GibFrame
 {
     public class CameraEffects
     {

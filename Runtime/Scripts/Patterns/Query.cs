@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GibFrame.Patterns
+namespace GibFrame
 {
     public class Query<Result> : IEquatable<Query<Result>>
     {

@@ -1,7 +1,9 @@
-﻿using GibFrame.Utils.Mathematics;
+﻿//Copyright (c) matteo
+//VectorExtensions.cs - com.tratteo.gibframe
+
 using UnityEngine;
 
-namespace GibFrame.Extensions
+namespace GibFrame
 {
     public static class VectorExtensions
     {

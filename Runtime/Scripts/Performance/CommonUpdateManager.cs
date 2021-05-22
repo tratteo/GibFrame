@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using GibFrame.Extensions;
-using GibFrame.Patterns;
+﻿//Copyright (c) matteo
+//CommonUpdateManager.cs - com.tratteo.gibframe
+
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +34,10 @@ namespace GibFrame.Performance
         /// <returns> </returns>
         public static int Register<T>(T update) where T : ICommon
         {
+            if (Instance == null)
+            {
+                Instance = FindObjectOfType<CommonUpdateManager>();
+            }
             if (Instance != null)
             {
                 int registrations = 0;
@@ -64,7 +69,7 @@ namespace GibFrame.Performance
             }
             else
             {
-                //UnityEngine.Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Be sure that a CommonUpdateManager is present in the scene");
+                UnityEngine.Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Be sure that a CommonUpdateManager is present in the scene");
                 return -1;
             }
         }
@@ -78,6 +83,10 @@ namespace GibFrame.Performance
         /// <returns> </returns>
         public static int Unregister<T>(T update) where T : ICommon
         {
+            if (Instance == null)
+            {
+                Instance = FindObjectOfType<CommonUpdateManager>();
+            }
             if (Instance != null)
             {
                 int unregistrations = 0;
@@ -193,7 +202,6 @@ namespace GibFrame.Performance
                     update.CommonUpdate(Time.deltaTime);
                 }
             }
-
             commonUpdates.RemoveAll((u) => !IsValid(u));
         }
 

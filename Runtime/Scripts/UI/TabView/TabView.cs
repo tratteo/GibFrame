@@ -1,7 +1,6 @@
 ﻿//Copyright (c) matteo
 //TabView.cs - com.tratteo.gibframe
 
-using GibFrame.Extensions;
 using UnityEngine;
 
 namespace GibFrame.UI

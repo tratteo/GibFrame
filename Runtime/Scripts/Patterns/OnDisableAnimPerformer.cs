@@ -4,7 +4,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace GibFrame.Patterns
+namespace GibFrame
 {
     public class OnDisableAnimPerformer : MonoBehaviour
     {

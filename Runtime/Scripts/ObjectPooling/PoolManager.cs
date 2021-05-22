@@ -2,7 +2,6 @@
 //PoolManager.cs - com.tratteo.gibframe
 
 using System.Collections.Generic;
-using GibFrame.Patterns;
 
 using UnityEngine;
 

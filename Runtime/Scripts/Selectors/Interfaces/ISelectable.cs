@@ -1,7 +1,7 @@
 ﻿//Copyright (c) matteo
 //ISelectable.cs - com.tratteo.gibframe
 
-namespace GibFrame.Selectors
+namespace GibFrame
 {
     public interface ISelectable
     {

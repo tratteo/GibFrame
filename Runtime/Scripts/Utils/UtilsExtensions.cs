@@ -1,8 +1,11 @@
-﻿using System;
+﻿//Copyright (c) matteo
+//UtilsExtensions.cs - com.tratteo.gibframe
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GibFrame.Utils
+namespace GibFrame
 {
     public static class UtilsExtensions
     {

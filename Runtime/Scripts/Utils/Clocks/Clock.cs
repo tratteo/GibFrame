@@ -3,10 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using GibFrame.Patterns;
 using UnityEngine;
 
-namespace GibFrame.Utils.Clocks
+namespace GibFrame
 {
     public class Clock : AbstractClock
     {

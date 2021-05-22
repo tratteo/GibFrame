@@ -1,8 +1,10 @@
-﻿using System;
-using GibFrame.Utils.Mathematics;
+﻿//Copyright (c) matteo
+//Randomized.cs - com.tratteo.gibframe
+
+using System;
 using UnityEngine;
 
-namespace GibFrame.DataStructures
+namespace GibFrame
 {
     public class Randomized<T>
     {

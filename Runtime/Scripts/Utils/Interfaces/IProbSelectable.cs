@@ -1,7 +1,7 @@
 ﻿//Copyright (c) matteo
 //IProbSelectable.cs - com.tratteo.gibframe
 
-namespace GibFrame.Utils
+namespace GibFrame
 {
     /// <summary>
     ///   Implement this interface to make an object selectable based on a certain probability

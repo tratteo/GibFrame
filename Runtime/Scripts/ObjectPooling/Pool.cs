@@ -2,7 +2,6 @@
 //Pool.cs - com.tratteo.gibframe
 
 using System;
-using GibFrame.Utils;
 using UnityEngine;
 
 namespace GibFrame.ObjectPooling

@@ -3,10 +3,9 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using GibFrame.Patterns;
 using UnityEngine;
 
-namespace GibFrame.Utils
+namespace GibFrame
 {
     public class Timer
     {

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GibFrame.Selectors
+namespace GibFrame
 {
     public abstract class Selector : MonoBehaviour
     {

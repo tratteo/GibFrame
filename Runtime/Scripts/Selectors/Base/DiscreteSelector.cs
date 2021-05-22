@@ -4,7 +4,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace GibFrame.Selectors
+namespace GibFrame
 {
     public abstract class DiscreteSelector : Selector
     {

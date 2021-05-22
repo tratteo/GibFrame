@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GibFrame.DataStructures
+namespace GibFrame
 {
     public enum SortingType { DESCENDING, ASCENDING }
 

@@ -1,4 +1,5 @@
-﻿using GibFrame.Patterns;
+﻿//Copyright (c) matteo
+//UpdateJob.cs - com.tratteo.gibframe
 
 namespace GibFrame.Performance
 {

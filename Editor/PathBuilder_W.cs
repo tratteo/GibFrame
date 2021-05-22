@@ -2,7 +2,7 @@
 //PathBuilder_W.cs - com.tratteo.gibframe.Editor
 
 using System.Collections.Generic;
-using GibFrame.PathBuilder;
+using GibFrame;
 using UnityEditor;
 using UnityEngine;
 

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace GibFrame.Utils.Mathematics
+namespace GibFrame
 {
     /// <summary>
     ///   Trat Math

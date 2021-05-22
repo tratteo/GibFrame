@@ -1,18 +1,24 @@
-﻿using System;
+﻿//Copyright (c) matteo
+//ValueContainerSystem.cs - com.tratteo.gibframe
+
+using System;
 using UnityEngine.UI;
 
-namespace GibFrame.Patterns
+namespace GibFrame
 {
+    [Serializable]
     public class ValueContainerSystem
     {
         private readonly Image valueBar;
         private readonly Text valueText;
+        private float currentValue;
+        private float maxValue;
 
-        public float CurrentValue { get; private set; }
+        public float CurrentValue => currentValue;
 
         public string TextFormat { get; private set; }
 
-        public float MaxValue { get; private set; }
+        public float MaxValue => maxValue;
 
         public event Action<float> OnDecrease;
 
@@ -22,8 +28,8 @@ namespace GibFrame.Patterns
 
         public ValueContainerSystem(float maxValue, Image valueBar, Text valueText, string valueTextFormat)
         {
-            MaxValue = maxValue;
-            CurrentValue = maxValue;
+            this.maxValue = maxValue;
+            currentValue = maxValue;
             this.valueBar = valueBar;
             this.valueText = valueText;
             this.TextFormat = valueTextFormat;
@@ -52,8 +58,8 @@ namespace GibFrame.Patterns
 
         public void Decrease(float amount)
         {
-            CurrentValue -= amount;
-            if (CurrentValue < 0F) CurrentValue = 0F;
+            currentValue -= amount;
+            if (CurrentValue < 0F) currentValue = 0F;
             OnDecrease?.Invoke(amount);
             if (CurrentValue == 0F) OnExhaust?.Invoke();
 
@@ -62,27 +68,27 @@ namespace GibFrame.Patterns
 
         public void Exhaust()
         {
-            Decrease(MaxValue);
+            Decrease(maxValue);
         }
 
-        public float GetPercentage() => CurrentValue / MaxValue;
+        public float GetPercentage() => CurrentValue / maxValue;
 
         public void Increase(float amount)
         {
-            CurrentValue += amount;
-            if (CurrentValue > MaxValue) CurrentValue = MaxValue;
+            currentValue += amount;
+            if (CurrentValue > maxValue) currentValue = maxValue;
             OnIncrease?.Invoke(amount);
             AdjustVisuals();
         }
 
         public void Refull()
         {
-            Increase(MaxValue);
+            Increase(maxValue);
         }
 
         public void SetMaxValue(float maxHealth)
         {
-            MaxValue = maxHealth;
+            maxValue = maxHealth;
         }
 
         private void AdjustVisuals()

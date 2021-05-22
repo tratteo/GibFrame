@@ -2,11 +2,9 @@
 //GPhysics.cs - com.tratteo.gibframe
 
 using System;
-using GibFrame.Extensions;
-using GibFrame.Utils.Mathematics;
 using UnityEngine;
 
-namespace GibFrame.Physic
+namespace GibFrame
 {
     public static class GPhysics
     {

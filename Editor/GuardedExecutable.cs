@@ -1,9 +1,12 @@
-﻿using System;
+﻿//Copyright (c) matteo
+//GuardedExecutable.cs - com.tratteo.gibframe.Editor
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using GibFrame.Extensions;
+using GibFrame;
 using UnityEditor;
 using UnityEngine;
 

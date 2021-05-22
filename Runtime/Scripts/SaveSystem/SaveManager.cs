@@ -12,12 +12,6 @@ namespace GibFrame.SaveSystem
 {
     public static class SaveManager
     {
-        //Can write here the static file names to use in the game
-        //I.E
-        //public static readonly string PLAYER_DATA = Application.persistentDataPath + "/player_data.data";
-        //Calling the methods will look like this:
-        //SaveManager.GetInstance().SavePersistentData<T>(data, SaveManager.PLAYER_DATA);
-
         /// <summary>
         ///   Save a generic type of data in the application persisten data path.
         /// </summary>
@@ -143,7 +137,7 @@ namespace GibFrame.SaveSystem
 
             public static void MarkDirty(params (object, string)[] elements)
             {
-                jobs = jobs ?? new Queue<SerializeJob>();
+                jobs ??= new Queue<SerializeJob>();
                 foreach ((object, string) elem in elements)
                 {
                     jobs.Enqueue(new SerializeJob(elem.Item1, elem.Item2));

@@ -2,10 +2,9 @@
 //PathingOption.cs - com.tratteo.gibframe
 
 using System;
-using GibFrame.Utils;
 using UnityEngine;
 
-namespace GibFrame.PathBuilder
+namespace GibFrame
 {
     [System.Serializable]
     internal class PathingOption : IProbSelectable, IEquatable<PathingOption>

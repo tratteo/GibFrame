@@ -2,11 +2,9 @@
 //Path.cs - com.tratteo.gibframe
 
 using System.Collections.Generic;
-using GibFrame.Extensions;
-using GibFrame.Utils;
 using UnityEngine;
 
-namespace GibFrame.PathBuilder
+namespace GibFrame
 {
     public class Path : MonoBehaviour
     {

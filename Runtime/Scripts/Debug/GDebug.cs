@@ -1,7 +1,9 @@
-﻿using GibFrame.Utils;
+﻿//Copyright (c) matteo
+//GDebug.cs - com.tratteo.gibframe
+
 using UnityEngine;
 
-namespace GibFrame.Debug
+namespace GibFrame
 {
     public static partial class GDebug
     {

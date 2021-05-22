@@ -1,8 +1,6 @@
 ﻿//Copyright (c) matteo
 //GButton.cs - com.tratteo.gibframe
 
-using GibFrame.Extensions;
-using GibFrame.Patterns;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -41,8 +39,6 @@ namespace GibFrame.UI
         private bool clicked = false;
         private GButton[] childButtons;
         private float currentPressTime = 0F;
-
-
 
         public void AddOnCancelCallback(AbstractCallback Callback)
 

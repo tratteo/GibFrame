@@ -1,8 +1,11 @@
-﻿using System;
+﻿//Copyright (c) matteo
+//CollectionsExtensions.cs - com.tratteo.gibframe
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GibFrame.Extensions
+namespace GibFrame
 {
     public static class CollectionsExtensions
     {

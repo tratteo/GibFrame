@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿//Copyright (c) matteo
+//Box.cs - com.tratteo.gibframe
 
-namespace GibFrame.Utils
+using UnityEngine;
+
+namespace GibFrame
 {
     public struct Box
     {

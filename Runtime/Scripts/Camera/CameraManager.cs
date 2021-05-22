@@ -3,11 +3,10 @@
 
 using System;
 using System.Collections;
-using GibFrame.Patterns;
 
 using UnityEngine;
 
-namespace GibFrame.CameraUtils
+namespace GibFrame
 {
     /// <summary>
     ///   Attach this component to a GameObject and insert all the cameras in the slot, then use this component to acces and manipulate them

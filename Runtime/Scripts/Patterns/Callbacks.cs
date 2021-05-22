@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GibFrame.Patterns
+namespace GibFrame
 {
     public class CallbackEvent
     {
@@ -81,7 +81,6 @@ namespace GibFrame.Patterns
         {
             this.Event = action;
         }
-
 
         public override void Invoke()
         {

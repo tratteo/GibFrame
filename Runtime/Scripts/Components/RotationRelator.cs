@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿//Copyright (c) matteo
+//RotationRelator.cs - com.tratteo.gibframe
 
-namespace GibFrame.Components
+using UnityEngine;
+
+namespace GibFrame
 {
     public class RotationRelator : MonoBehaviour
     {

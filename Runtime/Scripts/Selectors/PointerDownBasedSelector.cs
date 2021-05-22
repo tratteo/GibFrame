@@ -1,11 +1,10 @@
 ﻿//Copyright (c) matteo
 //PointerDownBasedSelector.cs - com.tratteo.gibframe
 
-using GibFrame.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GibFrame.Selectors
+namespace GibFrame
 {
     public class PointerDownBasedSelector : Selector
     {

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace GibFrame.Patterns
+namespace GibFrame
 {
     public class Event
     {

@@ -1,6 +1,9 @@
-﻿using System;
+﻿//Copyright (c) matteo
+//ArrayExtensions.cs - com.tratteo.gibframe
 
-namespace GibFrame.Extensions
+using System;
+
+namespace GibFrame
 {
     public static class ArrayExtensions
     {

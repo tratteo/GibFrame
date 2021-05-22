@@ -3,11 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using GibFrame.Debug;
-using GibFrame.Utils;
 using UnityEngine;
 
-namespace GibFrame.PathBuilder
+namespace GibFrame
 {
     [ExecuteAlways]
     public class Waypoint : MonoBehaviour, IEquatable<Waypoint>

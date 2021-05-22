@@ -1,5 +1,5 @@
 ﻿//Copyright (c) matteo
-//TFixedJoystick.cs - com.tratteo.gibframe
+//FixedJoystick.cs - com.tratteo.gibframe
 
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -2,10 +2,9 @@
 //DistanceBasedSelector.cs - com.tratteo.gibframe
 
 using System.Collections;
-using GibFrame.Extensions;
 using UnityEngine;
 
-namespace GibFrame.Selectors
+namespace GibFrame
 {
     public class DistanceBasedSelector : DiscreteSelector
     {

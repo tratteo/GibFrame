@@ -2,12 +2,10 @@
 //UIUtils.cs - com.tratteo.gibframe
 
 using System.Collections;
-using GibFrame.Patterns;
-using GibFrame.Utils.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GibFrame.Utils
+namespace GibFrame
 {
     public class UIUtils
     {

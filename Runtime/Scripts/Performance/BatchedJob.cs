@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿//Copyright (c) matteo
+//BatchedJob.cs - com.tratteo.gibframe
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GibFrame.Patterns;
 using UnityEngine;
 
 namespace GibFrame.Performance

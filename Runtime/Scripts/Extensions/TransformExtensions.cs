@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿//Copyright (c) matteo
+//TransformExtensions.cs - com.tratteo.gibframe
+
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace GibFrame.Extensions
+namespace GibFrame
 {
     public static class TransformExtensions
     {

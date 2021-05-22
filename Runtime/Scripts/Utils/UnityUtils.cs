@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace GibFrame.Utils
+namespace GibFrame
 {
     public class UnityUtils
     {

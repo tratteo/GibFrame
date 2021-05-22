@@ -45,14 +45,14 @@ namespace GibFrame.Asynchronous.Await
             ProcessCoroutine(instruction);
         }
 
-        void INotifyCompletion.OnCompleted(Action continuation)
-        {
-            OnCompleted(continuation);
-        }
-
         public T GetResult()
         {
             return Instruction;
+        }
+
+        void INotifyCompletion.OnCompleted(Action continuation)
+        {
+            OnCompleted(continuation);
         }
 
         protected virtual void OnCompleted(Action continuation)

@@ -1,4 +1,7 @@
-﻿using GibFrame.DataStructures;
+﻿//Copyright (c) matteo
+//RandomizedVariable_PD.cs - com.tratteo.gibframe.Editor
+
+using GibFrame;
 using UnityEditor;
 using UnityEngine;
 

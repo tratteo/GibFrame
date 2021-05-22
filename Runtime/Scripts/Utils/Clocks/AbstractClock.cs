@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace GibFrame.Utils.Clocks
+namespace GibFrame
 {
     public abstract class AbstractClock
     {
