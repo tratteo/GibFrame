@@ -82,24 +82,6 @@ internal class Guarded_E
         return sel;
     }
 
-    [MenuItem("GibFrame/Guarded/Verify Scene")]
-    internal static void VerifySceneGuardedObjects()
-    {
-        VerifyGuardedObjects(true, false);
-    }
-
-    [MenuItem("GibFrame/Guarded/Verify Prefabs")]
-    internal static void VerifyPrefabsGuardedObjects()
-    {
-        VerifyGuardedObjects(false, true);
-    }
-
-    [MenuItem("GibFrame/Guarded/Verify %&v")]
-    internal static void VerifyGuardedObjects()
-    {
-        VerifyGuardedObjects(true, true);
-    }
-
     private static List<UnityEngine.Object> GetAllBehavioursInScene()
     {
         UnityEngine.Object[] objs = UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();

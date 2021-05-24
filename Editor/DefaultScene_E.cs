@@ -11,19 +11,33 @@ using UnityEngine;
 
 internal static class DefaultScene_E
 {
-    internal const string KEY = "c_scene_";
+    internal const string USER_SCENE = "u_scene";
+    internal const string REQUESTED_BOOL = "d_requested";
     private static bool isLoadingDefaultScene = false;
 
-    [MenuItem("GibFrame/Play default scene %l")]
-    internal static void LoadDefaultScene()
+    internal static void PlayDefaultScene()
     {
         if (IsDefaultSceneValid())
         {
             isLoadingDefaultScene = true;
-            EditorPrefs.SetString(KEY, UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).path);
+            EditorPrefs.SetString(USER_SCENE, UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).path);
+            EditorPrefs.SetBool(REQUESTED_BOOL, true);
             EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
             EditorSceneManager.OpenScene(GibFrameEditorSettings.Data.defaultSceneName);
             EditorApplication.EnterPlaymode();
+        }
+        else
+        {
+            Debug.LogWarning("Unable to load the default scene, check in GibFrame settings that the default scene path is correctly set");
+        }
+    }
+
+    internal static void LoadDefaultScene()
+    {
+        if (IsDefaultSceneValid())
+        {
+            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+            EditorSceneManager.OpenScene(GibFrameEditorSettings.Data.defaultSceneName);
         }
         else
         {
@@ -36,15 +50,15 @@ internal static class DefaultScene_E
         switch (state)
         {
             case PlayModeStateChange.EnteredEditMode:
-                if (GibFrameEditorSettings.Data.restoreOpenedScenes)
+                if (GibFrameEditorSettings.Data.restoreOpenedScenes && EditorPrefs.GetBool(REQUESTED_BOOL))
                 {
-                    string key = EditorPrefs.GetString(KEY);
+                    string key = EditorPrefs.GetString(USER_SCENE);
                     if (File.Exists(key))
                     {
                         EditorSceneManager.OpenScene(key);
                     }
                 }
-
+                EditorPrefs.SetBool(REQUESTED_BOOL, false);
                 break;
 
             case PlayModeStateChange.EnteredPlayMode:
@@ -54,7 +68,7 @@ internal static class DefaultScene_E
             case PlayModeStateChange.ExitingEditMode:
                 if (GibFrameEditorSettings.Data.loadDefaultSceneOnPlay && !isLoadingDefaultScene)
                 {
-                    LoadDefaultScene();
+                    PlayDefaultScene();
                 }
                 break;
 

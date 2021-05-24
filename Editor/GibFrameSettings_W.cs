@@ -14,13 +14,6 @@ internal class GibFrameSettings_W : EditorWindow
     private GUILayoutOption[] defaultOptions;
     private GUIStyle sectionsStyle;
 
-    [MenuItem("Edit/GibFrame settings", false, 1 << 8)]
-    internal static void ShowWindow()
-    {
-        GetWindow(typeof(GibFrameSettings_W)).titleContent = new GUIContent("GibFrame settings");
-        GibFrameEditorSettings.LoadSettings();
-    }
-
     internal static void AddDefineSymbols(params string[] symbols)
     {
         string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);

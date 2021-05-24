@@ -20,12 +20,6 @@ internal class PathBuilder_W : EditorWindow
     private float sProb = 1F;
     private GUIStyle sectionsStyle;
 
-    [MenuItem("GibFrame/Path Builder")]
-    internal static void ShowWindow()
-    {
-        GetWindow(typeof(PathBuilder_W)).titleContent = new GUIContent("Path Builder");
-    }
-
     private void OnEnable()
     {
         waypoint = Resources.Load("GibFrame/PathBuilder/Waypoint_P") as GameObject;
