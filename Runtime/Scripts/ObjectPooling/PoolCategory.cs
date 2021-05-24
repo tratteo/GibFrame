@@ -27,18 +27,6 @@ namespace GibFrame.ObjectPooling
             this.pools.AddRange(pools);
         }
 
-        /// <summary> <summary> Initialize the pools </summary> <param name="position"> </param>
-        public void Instantiate(Vector3 position)
-        {
-            startPosition = position;
-            int length = pools.Count;
-            for (int i = 0; i < length; i++)
-            {
-                InstantiatePool(pools[i]);
-            }
-            pools.NormalizeProbabilities();
-        }
-
         public Pool GetPool(string tag)
         {
             return pools.Find((p) => p.Tag.Equals(tag));
@@ -57,21 +45,6 @@ namespace GibFrame.ObjectPooling
                 }
             }
             return count;
-        }
-
-        public void InstantiatePool(Pool pool)
-        {
-            poolsDictionary ??= new Dictionary<string, Queue<GameObject>>();
-            if (poolsDictionary.ContainsKey(pool.Tag)) return;
-            Queue<GameObject> objectPool = new Queue<GameObject>();
-            int poolDim = pool.Size;
-            for (int j = 0; j < poolDim; j++)
-            {
-                GameObject obj = UnityEngine.Object.Instantiate(pool.Prefab, startPosition, Quaternion.identity);
-                obj.SetActive(false);
-                objectPool.Enqueue(obj);
-            }
-            poolsDictionary.Add(pool.Tag, objectPool);
         }
 
         public bool ContainsPool(string name)
@@ -135,6 +108,32 @@ namespace GibFrame.ObjectPooling
         public bool Equals(PoolCategory other)
         {
             return other.Name.Equals(Name);
+        }
+
+        internal void Instantiate(Vector3 position)
+        {
+            startPosition = position;
+            int length = pools.Count;
+            for (int i = 0; i < length; i++)
+            {
+                InstantiatePool(pools[i]);
+            }
+            pools.NormalizeProbabilities();
+        }
+
+        private void InstantiatePool(Pool pool)
+        {
+            poolsDictionary ??= new Dictionary<string, Queue<GameObject>>();
+            if (poolsDictionary.ContainsKey(pool.Tag)) return;
+            Queue<GameObject> objectPool = new Queue<GameObject>();
+            int poolDim = pool.Size;
+            for (int j = 0; j < poolDim; j++)
+            {
+                GameObject obj = UnityEngine.Object.Instantiate(pool.Prefab, startPosition, Quaternion.identity);
+                obj.SetActive(false);
+                objectPool.Enqueue(obj);
+            }
+            poolsDictionary.Add(pool.Tag, objectPool);
         }
     }
 }

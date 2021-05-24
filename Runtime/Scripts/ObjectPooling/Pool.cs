@@ -35,8 +35,6 @@ namespace GibFrame.ObjectPooling
             this.influence = influence;
         }
 
-        public float ProvideSelectProbability() => influence;
-
         public void SetSelectProbability(float prob)
         {
             influence = prob;
@@ -46,5 +44,7 @@ namespace GibFrame.ObjectPooling
         {
             return other.Tag.Equals(Tag);
         }
+
+        public float ProvideSelectProbability() => influence;
     }
 }

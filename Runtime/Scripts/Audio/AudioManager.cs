@@ -16,35 +16,30 @@ namespace GibFrame.Audio
         [SerializeField] private Sound[] sounds = null;
         [SerializeField] private Sound[] musics = null;
 
-        public bool SoundActive { get; private set; } = true;
-
-        public bool MusicActive { get; private set; } = true;
-
         public void PlaySound(string name)
         {
-            if (!SoundActive)
-            {
-                return;
-            }
-
+            if (!IsSoundValid(name)) return;
             Sound s = Array.Find(sounds, sound => sound.name == name);
             s.source.Play();
         }
 
         public void StopSound(string name)
         {
+            if (!IsSoundValid(name)) return;
             Sound s = Array.Find(sounds, sound => sound.name == name);
             s.source.Stop();
         }
 
         public bool IsSoundPlaying(string name)
         {
+            if (!IsSoundValid(name)) return false;
             Sound s = Array.Find(sounds, sound => sound.name == name);
-            return s != null && s.source.isPlaying;
+            return s.source.isPlaying;
         }
 
         public void SmoothOutSound(string name, float duration)
         {
+            if (!IsSoundValid(name)) return;
             Sound s = Array.Find(sounds, sound => sound.name == name);
             if (s.source.isPlaying)
             {
@@ -54,11 +49,7 @@ namespace GibFrame.Audio
 
         public void SmoothInSound(string name, float duration)
         {
-            if (!SoundActive)
-            {
-                return;
-            }
-
+            if (!IsSoundValid(name)) return;
             Sound s = Array.Find(sounds, sound => sound.name == name);
             StartCoroutine(SmoothInSound_C(s, duration));
         }
@@ -75,48 +66,30 @@ namespace GibFrame.Audio
             }
         }
 
-        public void ToggleSounds(bool active)
-        {
-            if (!active)
-            {
-                int length = sounds.Length;
-                for (int i = 0; i < length; i++)
-                {
-                    if (sounds[i].source.isPlaying)
-                    {
-                        sounds[i].source.volume = 0F;
-                    }
-                }
-            }
-
-            SoundActive = active;
-        }
-
         public void PlayMusic(string name)
         {
-            if (!MusicActive)
-            {
-                return;
-            }
-
+            if (!IsMusicValid(name)) return;
             Sound s = Array.Find(musics, sound => sound.name == name);
             s.source.Play();
         }
 
         public void StopMusic(string name)
         {
+            if (!IsMusicValid(name)) return;
             Sound s = Array.Find(musics, sound => sound.name == name);
             s.source.Stop();
         }
 
         public bool IsMusicPlaying(string name)
         {
+            if (!IsMusicValid(name)) return false;
             Sound s = Array.Find(musics, music => music.name == name);
             return s != null && s.source.isPlaying;
         }
 
         public void SmoothOutMusic(string name, float duration)
         {
+            if (!IsMusicValid(name)) return;
             Sound s = Array.Find(musics, sound => sound.name == name);
             if (s.source.isPlaying)
             {
@@ -126,11 +99,7 @@ namespace GibFrame.Audio
 
         public void SmoothInMusic(string name, float duration)
         {
-            if (!MusicActive)
-            {
-                return;
-            }
-
+            if (!IsMusicValid(name)) return;
             Sound s = Array.Find(musics, sound => sound.name == name);
             StartCoroutine(SmoothInSound_C(s, duration));
         }
@@ -145,23 +114,6 @@ namespace GibFrame.Audio
                     s.source.volume = s.currentVolume;
                 }
             }
-        }
-
-        public void ToggleMusic(bool active)
-        {
-            if (!active)
-            {
-                int length = musics.Length;
-                for (int i = 0; i < length; i++)
-                {
-                    if (musics[i].source.isPlaying)
-                    {
-                        musics[i].source.volume = 0F;
-                    }
-                }
-            }
-
-            MusicActive = active;
         }
 
         protected override void Awake()
@@ -189,6 +141,28 @@ namespace GibFrame.Audio
                 musics[i].source.pitch = musics[i].pitch;
                 musics[i].source.loop = musics[i].loop;
             }
+        }
+
+        private bool IsSoundValid(string name)
+        {
+            Sound s = Array.Find(sounds, sound => sound.name == name);
+            if (s == null)
+            {
+                Debug.LogError("Unable to find the specified sound: " + name);
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsMusicValid(string name)
+        {
+            Sound s = Array.Find(musics, music => music.name == name);
+            if (s == null)
+            {
+                Debug.LogError("Unable to find the specified music: " + name);
+                return false;
+            }
+            return true;
         }
 
         private IEnumerator SmoothOutSound_C(Sound s, float duration)

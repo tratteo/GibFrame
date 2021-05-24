@@ -67,7 +67,6 @@ namespace GibFrame.Asynchronous.Await
         {
             Instruction = instruction;
             Coroutine = new Enumerator(this);
-
             Awaiter.Instance.StartAwaiterCoroutine(this);
         }
 
