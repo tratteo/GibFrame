@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//BatchedJob.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.Performance : BatchedJob.cs
+//
+// All Rights Reserved
 
 using System.Collections;
 using System.Collections.Generic;

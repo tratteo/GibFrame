@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//OnDisableAnimPerformer.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : OnDisableAnimPerformer.cs
+//
+// All Rights Reserved
 
 using System.Collections;
 using UnityEngine;

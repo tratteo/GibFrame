@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//TransitionHandler.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.SceneManagement : TransitionHandler.cs
+//
+// All Rights Reserved
 
 using System.Collections;
 

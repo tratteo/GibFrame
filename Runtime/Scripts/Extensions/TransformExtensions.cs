@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//TransformExtensions.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : TransformExtensions.cs
+//
+// All Rights Reserved
 
 using System.Collections.Generic;
 using UnityEngine;

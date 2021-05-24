@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//UnityUtils.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : UnityUtils.cs
+//
+// All Rights Reserved
 
 using System;
 using System.Collections.Generic;
@@ -47,23 +50,22 @@ namespace GibFrame
             return default;
         }
 
-        /// <summary>
-        ///   Toggle the visibility of a GameObject and all of his children
-        /// </summary>
-        public static void MakeGameObjectVisible(GameObject obj, bool state)
+        public static Vector3 GetCoordinateCenter(params Vector3[] positions)
         {
-            if (obj == null) return;
-            Transform[] transforms = obj.GetComponentsInChildren<Transform>();
-            Renderer renderer;
-            int length = transforms.Length;
-            for (int i = 0; i < length; i++)
+            int length = positions.Length;
+            float x = 0;
+            float y = 0;
+            float z = 0;
+            foreach (Vector3 obj in positions)
             {
-                renderer = transforms[i].gameObject.GetComponent<Renderer>();
-                if (renderer != null)
-                {
-                    renderer.enabled = state;
-                }
+                x += obj.x;
+                y += obj.y;
+                z += obj.z;
             }
+            x /= length;
+            y /= length;
+            z /= length;
+            return new Vector3(x, y, z);
         }
 
         /// <summary>

@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//Transition.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.SceneManagement.Transitions : Transition.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

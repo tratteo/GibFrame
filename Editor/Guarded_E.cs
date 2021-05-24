@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//GuardedExecutable.cs - com.tratteo.gibframe.Editor
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe.Editor -> %Namespace% : Guarded_E.cs
+//
+// All Rights Reserved
 
 using System;
 using System.Collections.Generic;
@@ -10,27 +13,9 @@ using GibFrame;
 using UnityEditor;
 using UnityEngine;
 
-public class GuardedExecutable
+internal class Guarded_E
 {
-    [MenuItem("GibFrame/Guarded/Verify")]
-    public static void VerifyGuardedObjects()
-    {
-        VerifyGuardedObjects(true, true);
-    }
-
-    [MenuItem("GibFrame/Guarded/Verify Scene")]
-    public static void VerifySceneGuardedObjects()
-    {
-        VerifyGuardedObjects(true, false);
-    }
-
-    [MenuItem("GibFrame/Guarded/Verify Prefabs")]
-    public static void VerifyPrefabsGuardedObjects()
-    {
-        VerifyGuardedObjects(false, true);
-    }
-
-    public static void VerifyGuardedObjects(bool scene, bool prefabs)
+    internal static void VerifyGuardedObjects(bool scene, bool prefabs)
     {
         List<UnityEngine.Object> objs = new List<UnityEngine.Object>();
         if (scene)
@@ -48,7 +33,7 @@ public class GuardedExecutable
         });
     }
 
-    public static List<UnityEngine.Object> GetAllBehavioursInAssets(string path = "")
+    internal static List<UnityEngine.Object> GetAllBehavioursInAssets(string path = "")
     {
         List<UnityEngine.Object> sel = new List<UnityEngine.Object>();
         string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + path);
@@ -95,6 +80,24 @@ public class GuardedExecutable
             }
         }
         return sel;
+    }
+
+    [MenuItem("GibFrame/Guarded/Verify Scene")]
+    internal static void VerifySceneGuardedObjects()
+    {
+        VerifyGuardedObjects(true, false);
+    }
+
+    [MenuItem("GibFrame/Guarded/Verify Prefabs")]
+    internal static void VerifyPrefabsGuardedObjects()
+    {
+        VerifyGuardedObjects(false, true);
+    }
+
+    [MenuItem("GibFrame/Guarded/Verify %&v")]
+    internal static void VerifyGuardedObjects()
+    {
+        VerifyGuardedObjects(true, true);
     }
 
     private static List<UnityEngine.Object> GetAllBehavioursInScene()

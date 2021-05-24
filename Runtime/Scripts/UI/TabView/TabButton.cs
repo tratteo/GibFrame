@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//TabButton.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.UI : TabButton.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 using UnityEngine.EventSystems;

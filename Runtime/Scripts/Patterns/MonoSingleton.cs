@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//MonoSingleton.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : MonoSingleton.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

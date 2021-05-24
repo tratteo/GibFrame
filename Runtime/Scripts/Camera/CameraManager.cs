@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//CameraManager.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : CameraManager.cs
+//
+// All Rights Reserved
 
 using System;
 using System.Collections;

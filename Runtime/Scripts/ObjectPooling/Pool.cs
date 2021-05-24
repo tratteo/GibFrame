@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//Pool.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.ObjectPooling : Pool.cs
+//
+// All Rights Reserved
 
 using System;
 using UnityEngine;

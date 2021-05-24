@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//VectorExtensions.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : VectorExtensions.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 
@@ -8,6 +11,34 @@ namespace GibFrame
     public static class VectorExtensions
     {
         #region Vector3
+
+        public static Vector3 AsPositive(this Vector3 source)
+        {
+            Vector3 res = source;
+            res.Positivize();
+            return res;
+        }
+
+        public static void Positivize(this ref Vector3 source)
+        {
+            source.x = Mathf.Abs(source.x);
+            source.y = Mathf.Abs(source.y);
+            source.z = Mathf.Abs(source.z);
+        }
+
+        public static Vector3 AsNegative(this Vector3 source)
+        {
+            Vector3 res = source;
+            res.Negativize();
+            return res;
+        }
+
+        public static void Negativize(this ref Vector3 source)
+        {
+            source.x = -Mathf.Abs(source.x);
+            source.y = -Mathf.Abs(source.y);
+            source.z = -Mathf.Abs(source.z);
+        }
 
         public static Vector3 Perturbate(this Vector3 source, Vector3 axis, float magnitude)
         {
@@ -83,6 +114,32 @@ namespace GibFrame
             float x = GMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
             float y = GMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
             return source + new Vector2(x, y);
+        }
+
+        public static void Positivize(this ref Vector2 source)
+        {
+            source.x = Mathf.Abs(source.x);
+            source.y = Mathf.Abs(source.y);
+        }
+
+        public static Vector2 AsPositive(this Vector2 source)
+        {
+            Vector2 res = source;
+            res.Positivize();
+            return res;
+        }
+
+        public static Vector2 AsNegative(this Vector2 source)
+        {
+            Vector2 res = source;
+            res.Negativize();
+            return res;
+        }
+
+        public static void Negativize(this ref Vector2 source)
+        {
+            source.x = -Mathf.Abs(source.x);
+            source.y = -Mathf.Abs(source.y);
         }
 
         #endregion Vector2

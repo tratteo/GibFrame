@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//Follow.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : Follow.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

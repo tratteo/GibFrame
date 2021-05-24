@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//ToggleButton_CE.cs - com.tratteo.gibframe.Editor
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe.Editor -> %Namespace% : ToggleButton_CE.cs
+//
+// All Rights Reserved
 
 using GibFrame.UI;
 using UnityEditor;
@@ -7,7 +10,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [CustomEditor(typeof(ToggleButton))]
-public class ToggleButton_CE : GButton_CE
+internal class ToggleButton_CE : GButton_CE
 {
     private ToggleButton script;
     private GUIStyle style;

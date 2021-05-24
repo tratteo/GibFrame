@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//GPhysics.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : GPhysics.cs
+//
+// All Rights Reserved
 
 using System;
 using UnityEngine;
@@ -70,24 +73,6 @@ namespace GibFrame
         public static Vector3 CalculateThrowVelocity(Vector3 origin, Vector3 target, float angle)
         {
             return CalculateThrowVelocity(origin, target, angle, Physics.gravity.magnitude);
-        }
-
-        public static Vector3 GetCenter(params Vector3[] positions)
-        {
-            int length = positions.Length;
-            float x = 0;
-            float y = 0;
-            float z = 0;
-            foreach (Vector3 obj in positions)
-            {
-                x += obj.x;
-                y += obj.y;
-                z += obj.z;
-            }
-            x /= length;
-            y /= length;
-            z /= length;
-            return new Vector3(x, y, z);
         }
     }
 }

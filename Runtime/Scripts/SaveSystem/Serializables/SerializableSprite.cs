@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//SerializableSprite.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.SaveSystem.Serializables : SerializableSprite.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

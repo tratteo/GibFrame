@@ -1,9 +1,12 @@
-﻿//Copyright (c) matteo
-//ICommonLateUpdate.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.Performance : ICommonLateUpdate.cs
+//
+// All Rights Reserved
 
 namespace GibFrame.Performance
 {
-    public interface ICommonLateUpdate : ICommon
+    public interface ICommonLateUpdate
     {
         void CommonLateUpdate(float deltaTime);
     }

@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//CollectionsExtensions.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : CollectionsExtensions.cs
+//
+// All Rights Reserved
 
 using System;
 using System.Collections.Generic;

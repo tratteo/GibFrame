@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//MemoryModule.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.AI : MemoryModule.cs
+//
+// All Rights Reserved
 
 using System;
 

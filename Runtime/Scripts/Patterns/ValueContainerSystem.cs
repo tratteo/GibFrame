@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//ValueContainerSystem.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : ValueContainerSystem.cs
+//
+// All Rights Reserved
 
 using System;
 using UnityEngine.UI;
@@ -16,7 +19,7 @@ namespace GibFrame
 
         public float CurrentValue => currentValue;
 
-        public string TextFormat { get; private set; }
+        public string TextFormat { get; set; }
 
         public float MaxValue => maxValue;
 
@@ -26,33 +29,33 @@ namespace GibFrame
 
         public event Action<float> OnIncrease;
 
-        public ValueContainerSystem(float maxValue, Image valueBar, Text valueText, string valueTextFormat)
+        public ValueContainerSystem(float maxValue, Image bar, Text text, string textFormat)
         {
             this.maxValue = maxValue;
             currentValue = maxValue;
-            this.valueBar = valueBar;
-            this.valueText = valueText;
-            this.TextFormat = valueTextFormat;
+            this.valueBar = bar;
+            this.valueText = text;
+            this.TextFormat = textFormat;
             AdjustVisuals();
         }
 
-        public ValueContainerSystem(float maxHealth) : this(maxHealth, null, null, "")
+        public ValueContainerSystem(float maxValue) : this(maxValue, null, null, "")
         {
         }
 
-        public ValueContainerSystem(float maxHealth, Image healthBar) : this(maxHealth, healthBar, null, "")
+        public ValueContainerSystem(float maxValue, Image bar) : this(maxValue, bar, null, "")
         {
         }
 
-        public ValueContainerSystem(float maxHealth, Image healthBar, Text healthText) : this(maxHealth, healthBar, healthText, "")
+        public ValueContainerSystem(float maxValue, Image bar, Text text) : this(maxValue, bar, text, "")
         {
         }
 
-        public ValueContainerSystem(float maxHealth, Text healthText, string healthTextFormat) : this(maxHealth, null, healthText, healthTextFormat)
+        public ValueContainerSystem(float maxValue, Text text, string textFormat) : this(maxValue, null, text, textFormat)
         {
         }
 
-        public ValueContainerSystem(float maxHealth, string healthTextFormat) : this(maxHealth, null, null, healthTextFormat)
+        public ValueContainerSystem(float maxValue, string textFormat) : this(maxValue, null, null, textFormat)
         {
         }
 
@@ -62,7 +65,6 @@ namespace GibFrame
             if (CurrentValue < 0F) currentValue = 0F;
             OnDecrease?.Invoke(amount);
             if (CurrentValue == 0F) OnExhaust?.Invoke();
-
             AdjustVisuals();
         }
 
@@ -99,7 +101,7 @@ namespace GibFrame
             }
             if (valueText != null)
             {
-                if (TextFormat != "")
+                if (TextFormat != string.Empty)
                 {
                     valueText.text = string.Format(TextFormat, CurrentValue);
                 }

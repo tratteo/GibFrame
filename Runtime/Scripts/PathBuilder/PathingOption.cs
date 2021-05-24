@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//PathingOption.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : PathingOption.cs
+//
+// All Rights Reserved
 
 using System;
 using UnityEngine;

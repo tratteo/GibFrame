@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//UpdateJob.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.Performance : UpdateJob.cs
+//
+// All Rights Reserved
 
 namespace GibFrame.Performance
 {

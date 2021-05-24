@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//GuardedAttribute.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : GuardedAttribute.cs
+//
+// All Rights Reserved
 
 using System;
 using UnityEngine;

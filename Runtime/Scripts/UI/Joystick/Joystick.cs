@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//Joystick.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.Joystick : Joystick.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 using UnityEngine.EventSystems;

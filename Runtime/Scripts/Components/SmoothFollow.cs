@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//SmoothFollow.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : SmoothFollow.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

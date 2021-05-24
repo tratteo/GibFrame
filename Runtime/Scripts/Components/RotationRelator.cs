@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//RotationRelator.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : RotationRelator.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

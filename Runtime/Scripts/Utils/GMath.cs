@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//GMath.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : GMath.cs
+//
+// All Rights Reserved
 
 using System;
 

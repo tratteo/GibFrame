@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//GButton_CE.cs - com.tratteo.gibframe.Editor
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe.Editor -> %Namespace% : GButton_CE.cs
+//
+// All Rights Reserved
 
 using GibFrame.UI;
 using UnityEditor;
@@ -7,7 +10,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [CustomEditor(typeof(GButton))]
-public class GButton_CE : Editor
+internal class GButton_CE : Editor
 {
     private GButton script;
     private SerializedProperty pointerDownProp, pointerUpProp, longPressedProp;

@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//AsyncLoader.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.SceneManagement : AsyncLoader.cs
+//
+// All Rights Reserved
 
 using System.Collections;
 using UnityEngine;

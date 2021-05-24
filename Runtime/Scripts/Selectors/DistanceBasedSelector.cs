@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//DistanceBasedSelector.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : DistanceBasedSelector.cs
+//
+// All Rights Reserved
 
 using System.Collections;
 using UnityEngine;

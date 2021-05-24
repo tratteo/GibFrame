@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//CommonUpdateManager.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.Performance : CommonUpdateManager.cs
+//
+// All Rights Reserved
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,7 +35,7 @@ namespace GibFrame.Performance
         /// <typeparam name="T"> </typeparam>
         /// <param name="update"> </param>
         /// <returns> </returns>
-        public static int Register<T>(T update) where T : ICommon
+        public static int Register<T>(T update) where T : class
         {
             if (Instance == null)
             {
@@ -81,7 +84,7 @@ namespace GibFrame.Performance
         /// <typeparam name="T"> </typeparam>
         /// <param name="update"> </param>
         /// <returns> </returns>
-        public static int Unregister<T>(T update) where T : ICommon
+        public static int Unregister<T>(T update) where T : class
         {
             if (Instance == null)
             {
@@ -121,7 +124,7 @@ namespace GibFrame.Performance
             }
 
             MonoBehaviour[] monos = FindObjectsOfType<MonoBehaviour>();
-            monos.ForEach((m) => { if (m is ICommon) Register(m as ICommon); });
+            monos.ForEach((m) => Register(m));
         }
 
         protected override void Awake()

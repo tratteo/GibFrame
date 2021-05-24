@@ -1,12 +1,15 @@
-﻿//Copyright (c) matteo
-//PathBuilder_W.cs - com.tratteo.gibframe.Editor
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe.Editor -> %Namespace% : PathBuilder_W.cs
+//
+// All Rights Reserved
 
 using System.Collections.Generic;
 using GibFrame;
 using UnityEditor;
 using UnityEngine;
 
-public class PathBuilder_W : EditorWindow
+internal class PathBuilder_W : EditorWindow
 {
     public List<Waypoint> to;
     private int startPointsIndex = 0;
@@ -18,7 +21,7 @@ public class PathBuilder_W : EditorWindow
     private GUIStyle sectionsStyle;
 
     [MenuItem("GibFrame/Path Builder")]
-    public static void ShowWindow()
+    internal static void ShowWindow()
     {
         GetWindow(typeof(PathBuilder_W)).titleContent = new GUIContent("Path Builder");
     }

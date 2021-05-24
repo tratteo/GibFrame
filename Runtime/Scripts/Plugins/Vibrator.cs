@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//Vibrator.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.Plugins : Vibrator.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 

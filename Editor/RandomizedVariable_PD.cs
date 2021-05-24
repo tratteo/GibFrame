@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//RandomizedVariable_PD.cs - com.tratteo.gibframe.Editor
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe.Editor -> %Namespace% : RandomizedVariable_PD.cs
+//
+// All Rights Reserved
 
 using GibFrame;
 using UnityEditor;
@@ -7,7 +10,7 @@ using UnityEngine;
 
 [CustomPropertyDrawer(typeof(RandomizedInt))]
 [CustomPropertyDrawer(typeof(RandomizedFloat))]
-public class RandomizedVariable_PD : PropertyDrawer
+internal class RandomizedVariable_PD : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {

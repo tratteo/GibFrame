@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//SerializableType.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.SaveSystem.Serializables : SerializableType.cs
+//
+// All Rights Reserved
 
 using System;
 

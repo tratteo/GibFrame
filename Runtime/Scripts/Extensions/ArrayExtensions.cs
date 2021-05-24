@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//ArrayExtensions.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : ArrayExtensions.cs
+//
+// All Rights Reserved
 
 using System;
 

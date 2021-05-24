@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//Event.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : Event.cs
+//
+// All Rights Reserved
 
 using System;
 

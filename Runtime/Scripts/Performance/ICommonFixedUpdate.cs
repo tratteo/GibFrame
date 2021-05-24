@@ -1,9 +1,12 @@
-﻿//Copyright (c) matteo
-//ICommonFixedUpdate.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame.Performance : ICommonFixedUpdate.cs
+//
+// All Rights Reserved
 
 namespace GibFrame.Performance
 {
-    public interface ICommonFixedUpdate : ICommon
+    public interface ICommonFixedUpdate
     {
         void CommonFixedUpdate(float fixedDeltaTime);
     }

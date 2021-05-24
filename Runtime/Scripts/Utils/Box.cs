@@ -1,5 +1,8 @@
-﻿//Copyright (c) matteo
-//Box.cs - com.tratteo.gibframe
+﻿// Copyright (c) Matteo Beltrame
+//
+// com.tratteo.gibframe -> GibFrame : Box.cs
+//
+// All Rights Reserved
 
 using UnityEngine;
 
