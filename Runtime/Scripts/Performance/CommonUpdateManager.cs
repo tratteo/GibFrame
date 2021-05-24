@@ -40,6 +40,16 @@ namespace GibFrame.Performance
             if (Instance == null)
             {
                 Instance = FindObjectOfType<CommonUpdateManager>();
+#if !GIB_NO_COMM_RUNTIME_INSTANTIATE
+                if (Instance == null)
+                {
+                    GameObject obj = new GameObject()
+                    {
+                        name = "CommonUpdateManagerRuntime"
+                    };
+                    Instance = obj.AddComponent<CommonUpdateManager>();
+                }
+#endif
             }
             if (Instance != null)
             {
@@ -72,7 +82,7 @@ namespace GibFrame.Performance
             }
             else
             {
-                UnityEngine.Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Be sure that a CommonUpdateManager is present in the scene");
+                UnityEngine.Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Either add a CommonUpdateManager in the scene or enable auto runtime instantiation in GibFrame settings");
                 return -1;
             }
         }

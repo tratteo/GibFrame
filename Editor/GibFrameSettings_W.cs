@@ -18,9 +18,10 @@ internal class GibFrameSettings_W : EditorWindow
     internal static void ShowWindow()
     {
         GetWindow(typeof(GibFrameSettings_W)).titleContent = new GUIContent("GibFrame settings");
+        GibFrameEditorSettings.LoadSettings();
     }
 
-    internal static void AddDefineSymbols(IEnumerable<string> symbols)
+    internal static void AddDefineSymbols(params string[] symbols)
     {
         string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
         List<string> allDefines = definesString.Split(';').ToList();
@@ -28,7 +29,7 @@ internal class GibFrameSettings_W : EditorWindow
         PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, string.Join(";", allDefines.ToArray()));
     }
 
-    internal static void RemoveDefineSymbols(IEnumerable<string> symbols)
+    internal static void RemoveDefineSymbols(params string[] symbols)
     {
         string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
         List<string> allDefines = definesString.Split(';').ToList();
@@ -84,38 +85,54 @@ internal class GibFrameSettings_W : EditorWindow
         {
             List<string> addSymbols = new List<string>();
             List<string> removeSymbols = new List<string>();
-            EditorUtility.SetDirty(this);
             if (!GibFrameEditorSettings.Data.enableCommonUpdate)
             {
-                addSymbols.Add("GIB_NO_COMMUPDATE");
+                addSymbols.Add(GibFrameEditorSettings.DISABLED_COMMUPDATE);
             }
             else
             {
-                removeSymbols.Add("GIB_NO_COMMUPDATE");
+                removeSymbols.Add(GibFrameEditorSettings.DISABLED_COMMUPDATE);
             }
             if (!GibFrameEditorSettings.Data.enableCommonFixedUpdate)
             {
-                addSymbols.Add("GIB_NO_COMMFIXEDUPDATE");
+                addSymbols.Add(GibFrameEditorSettings.DISABLED_COMMFIXEDUPDATE);
             }
             else
             {
-                removeSymbols.Add("GIB_NO_COMMFIXEDUPDATE");
+                removeSymbols.Add(GibFrameEditorSettings.DISABLED_COMMFIXEDUPDATE);
             }
             if (!GibFrameEditorSettings.Data.enableCommonLateUpdate)
             {
-                addSymbols.Add("GIB_NO_COMMLATEUPDATE");
+                addSymbols.Add(GibFrameEditorSettings.DISABLED_COMMLATEUPDATE);
             }
             else
             {
-                removeSymbols.Add("GIB_NO_COMMLATEUPDATE");
+                removeSymbols.Add(GibFrameEditorSettings.DISABLED_COMMLATEUPDATE);
             }
             if (addSymbols.Count > 0)
             {
-                AddDefineSymbols(addSymbols);
+                AddDefineSymbols(addSymbols.ToArray());
             }
             if (removeSymbols.Count > 0)
             {
-                RemoveDefineSymbols(removeSymbols);
+                RemoveDefineSymbols(removeSymbols.ToArray());
+            }
+            GibFrameEditorSettings.SaveSettings();
+        }
+        EditorGUI.BeginChangeCheck();
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField(new GUIContent("Auto updater instantiate", "Automatically instantiate the CommonUpdateManager when needed in runtime, if not present in scene"), defaultOptions);
+        GibFrameEditorSettings.Data.runtimeCommonUpdateInstantiate = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.runtimeCommonUpdateInstantiate, defaultOptions);
+        EditorGUILayout.EndHorizontal();
+        if (EditorGUI.EndChangeCheck())
+        {
+            if (!GibFrameEditorSettings.Data.runtimeCommonUpdateInstantiate)
+            {
+                AddDefineSymbols(GibFrameEditorSettings.DISABLED_RUNTIME_UPDATER_INSTANTIATE);
+            }
+            else
+            {
+                RemoveDefineSymbols(GibFrameEditorSettings.DISABLED_RUNTIME_UPDATER_INSTANTIATE);
             }
             GibFrameEditorSettings.SaveSettings();
         }

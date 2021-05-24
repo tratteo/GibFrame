@@ -39,7 +39,10 @@ internal static class DefaultScene_E
                 if (GibFrameEditorSettings.Data.restoreOpenedScenes)
                 {
                     string key = EditorPrefs.GetString(KEY);
-                    EditorSceneManager.OpenScene(key);
+                    if (File.Exists(key))
+                    {
+                        EditorSceneManager.OpenScene(key);
+                    }
                 }
 
                 break;

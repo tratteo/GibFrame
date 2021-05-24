@@ -10,6 +10,10 @@ using UnityEngine;
 
 public class GibFrameEditorSettings
 {
+    public const string DISABLED_COMMUPDATE = "GIB_NO_COMMUPDATE";
+    public const string DISABLED_COMMFIXEDUPDATE = "GIB_NO_COMMFIXEDUPDATE";
+    public const string DISABLED_COMMLATEUPDATE = "GIB_NO_COMMLATEUPDATE";
+    public const string DISABLED_RUNTIME_UPDATER_INSTANTIATE = "GIB_NO_COMM_RUNTIME_INSTANTIATE";
     internal const string PATH = ".gibconfig.json";
 
     public static GibFrameEditorSettingsData Data { get; private set; }

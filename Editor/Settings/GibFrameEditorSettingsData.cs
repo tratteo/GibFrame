@@ -14,9 +14,11 @@ public class GibFrameEditorSettingsData
     public bool enableCommonUpdate;
     public bool enableCommonFixedUpdate;
     public bool enableCommonLateUpdate;
+    public bool runtimeCommonUpdateInstantiate;
 
     public GibFrameEditorSettingsData()
     {
+        runtimeCommonUpdateInstantiate = true;
         loadDefaultSceneOnPlay = false;
         restoreOpenedScenes = true;
         enableCommonFixedUpdate = true;
