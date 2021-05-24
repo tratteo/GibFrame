@@ -8,9 +8,6 @@ using System;
 
 namespace GibFrame
 {
-    /// <summary>
-    ///   Trat Math
-    /// </summary>
     public static class GMath
     {
         public const float RadToDeg = 57.29578F;

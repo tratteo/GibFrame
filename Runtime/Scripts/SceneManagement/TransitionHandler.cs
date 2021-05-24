@@ -5,8 +5,7 @@
 // All Rights Reserved
 
 using System.Collections;
-
-using GibFrame.SceneManagement.Transitions;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,39 +13,28 @@ namespace GibFrame.SceneManagement
 {
     public class TransitionHandler : MonoSingleton<TransitionHandler>
     {
-        public enum TransitionType { FADE }
+        [SerializeField] private string inAnimationName = "In";
+        [SerializeField] private string outAnimationName = "Out";
 
-        private Transition fade;
-        private bool custom = false;
+        public bool IsTransitioning { get; private set; } = false;
 
-        public void AnimateTransition(TransitionType transition, int sceneIndex, bool async = false, float speed = 1F)
+        public void AnimateTransition(string childName, string sceneName, bool async = false, float speed = 1F)
         {
-            StartCoroutine(Animate_C(GetAnimByType(transition), sceneIndex, async, speed));
-        }
-
-        public void AnimateTransition(TransitionType transition, string sceneName, bool async = false, float speed = 1F)
-        {
-            StartCoroutine(Animate_C(GetAnimByType(transition), SceneUtility.GetBuildIndexByScenePath(sceneName), async, speed));
-        }
-
-        public void AnimateTransition(string prefabName, string sceneName, bool async = false, float speed = 1F)
-        {
-            custom = true;
-            Transform obj = transform.GetFirstChildWithName(prefabName, true);
+            Transform obj = transform.GetFirstChildWithName(childName, true);
             if (obj == null)
             {
-                throw new System.Exception("Unable to find the scene transition with the name: " + prefabName);
+                UnityEngine.Debug.LogError("TransitionHandler: unable to find the scene transition with the name: " + childName);
             }
             else
             {
-                Transition transition = obj.GetComponent<Transition>();
-                if (transition == null)
+                Animator animator = obj.GetComponent<Animator>();
+                if (animator == null)
                 {
-                    throw new System.Exception("Unable to retrieve the transition component from object: " + prefabName);
+                    UnityEngine.Debug.LogError("TransitionHandler: unable to retrieve the animator component from object: " + childName);
                 }
                 else
                 {
-                    StartCoroutine(Animate_C(transition, SceneUtility.GetBuildIndexByScenePath(sceneName), async, speed));
+                    StartCoroutine(Animate_C(animator, SceneUtility.GetBuildIndexByScenePath(sceneName), async, speed));
                 }
             }
         }
@@ -55,50 +43,44 @@ namespace GibFrame.SceneManagement
         {
             persistent = true;
             base.Awake();
-            fade = transform.GetFirstChildWithName("Fade", true).GetComponent<Transition>();
         }
 
-        private IEnumerator Animate_C(Transition transition, int sceneIndex, bool async, float speed)
+        private IEnumerator Animate_C(Animator transitionAnimator, int sceneIndex, bool async, float speed)
         {
-            GameObject anim = transition.gameObject;
-            if (anim != null)
+            if (!IsTransitioning && transitionAnimator)
             {
-                Animator animator = anim.GetComponent<Animator>();
-                anim.SetActive(true);
-                animator.SetFloat("Speed", speed);
-                yield return new WaitForSeconds(transition.InDuration / speed);
-                if (async)
+                AnimationClip inClip = transitionAnimator.runtimeAnimatorController.animationClips.ToList().Find(c => c.name.Equals(inAnimationName));
+                AnimationClip outClip = transitionAnimator.runtimeAnimatorController.animationClips.ToList().Find(c => c.name.Equals(outAnimationName));
+                if (inClip == null || outClip == null)
                 {
-                    SceneUtil.LoadSceneAsynchronously(sceneIndex);
-                    while (!SceneManager.GetActiveScene().buildIndex.Equals(sceneIndex))
-                    {
-                        yield return new WaitForEndOfFrame();
-                    }
+                    UnityEngine.Debug.LogError("Unable to retrieve the animations from the transition animator, double check that the names are correct");
                 }
                 else
                 {
-                    SceneManager.LoadScene(sceneIndex);
-                }
+                    IsTransitioning = true;
+                    transitionAnimator.gameObject.SetActive(true);
+                    transitionAnimator.speed = speed;
+                    transitionAnimator.Play(inClip.name);
+                    yield return new WaitForSeconds(inClip.length / speed);
+                    if (async)
+                    {
+                        SceneUtil.LoadSceneAsynchronously(sceneIndex);
+                        while (!SceneManager.GetActiveScene().buildIndex.Equals(sceneIndex))
+                        {
+                            yield return new WaitForEndOfFrame();
+                        }
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene(sceneIndex);
+                    }
 
-                animator.SetTrigger("Trigger");
-                yield return new WaitForSeconds(transition.OutDuration / speed);
-                anim.SetActive(false);
-                if (custom)
-                {
-                    Destroy(transition.gameObject);
-                    custom = false;
+                    transitionAnimator.Play(outClip.name);
+                    yield return new WaitForSeconds(outClip.length / speed);
+                    transitionAnimator.gameObject.SetActive(false);
+                    IsTransitioning = false;
                 }
             }
-        }
-
-        private Transition GetAnimByType(TransitionType transitionType)
-        {
-            switch (transitionType)
-            {
-                case TransitionType.FADE:
-                    return fade;
-            }
-            return null;
         }
     }
 }

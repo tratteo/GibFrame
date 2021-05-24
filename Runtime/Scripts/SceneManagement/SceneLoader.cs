@@ -9,10 +9,6 @@ using UnityEngine.SceneManagement;
 
 namespace GibFrame.SceneManagement
 {
-    /// <summary>
-    ///   Utilities class to manage the scene management. Attach this component to a GameObject and use the EventTrigger component to
-    ///   trigger the functions
-    /// </summary>
     public class SceneLoader : MonoBehaviour
     {
         public void LoadScene(string name)

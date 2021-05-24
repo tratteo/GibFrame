@@ -148,7 +148,7 @@ namespace GibFrame.Audio
             Sound s = Array.Find(sounds, sound => sound.name == name);
             if (s == null)
             {
-                Debug.LogError("Unable to find the specified sound: " + name);
+                UnityEngine.Debug.LogError("Unable to find the specified sound: " + name);
                 return false;
             }
             return true;
@@ -159,7 +159,7 @@ namespace GibFrame.Audio
             Sound s = Array.Find(musics, music => music.name == name);
             if (s == null)
             {
-                Debug.LogError("Unable to find the specified music: " + name);
+                UnityEngine.Debug.LogError("Unable to find the specified music: " + name);
                 return false;
             }
             return true;

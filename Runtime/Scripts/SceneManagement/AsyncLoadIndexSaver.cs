@@ -6,19 +6,16 @@
 
 namespace GibFrame.SceneManagement
 {
-    /// <summary>
-    ///   Static class to save the index of the scene to load asynchronously
-    /// </summary>
-    public static class AsyncLoadIndexSaver
+    internal static class AsyncLoadIndexSaver
     {
         private static int indexToPreload;
 
-        public static int GetSceneIndexToPreload()
+        internal static int GetSceneIndexToPreload()
         {
             return indexToPreload;
         }
 
-        public static void SetIndexToPreload(int index)
+        internal static void SetIndexToPreload(int index)
         {
             indexToPreload = index;
         }

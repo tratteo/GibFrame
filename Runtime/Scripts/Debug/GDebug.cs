@@ -6,7 +6,7 @@
 
 using UnityEngine;
 
-namespace GibFrame
+namespace GibFrame.Debug
 {
     public static partial class GDebug
     {
