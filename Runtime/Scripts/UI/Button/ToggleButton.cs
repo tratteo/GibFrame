@@ -24,13 +24,25 @@ namespace GibFrame.UI
         {
             if (state)
             {
-                icon.sprite = enabledSprite != null ? enabledSprite : icon.sprite;
-                icon.color = enabledColor;
+                if (spriteChange)
+                {
+                    icon.sprite = enabledSprite != null ? enabledSprite : icon.sprite;
+                }
+                if (colorChange)
+                {
+                    icon.color = enabledColor;
+                }
             }
             else
             {
-                icon.sprite = disabledSprite != null ? disabledSprite : icon.sprite;
-                icon.color = disabledColor;
+                if (spriteChange)
+                {
+                    icon.sprite = disabledSprite != null ? disabledSprite : icon.sprite;
+                }
+                if (colorChange)
+                {
+                    icon.color = disabledColor;
+                }
             }
         }
 
