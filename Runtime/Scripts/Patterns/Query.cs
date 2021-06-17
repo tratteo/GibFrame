@@ -18,7 +18,7 @@ namespace GibFrame
             this.Provider = Provider;
         }
 
-        public void UsubscribeProvider()
+        public void UnsubscribeProvider()
         {
             foreach (Delegate del in Provider.GetInvocationList())
             {
@@ -50,7 +50,7 @@ namespace GibFrame
             this.Provider = Provider;
         }
 
-        public void UsubscribeProvider()
+        public void UnsubscribeProvider()
         {
             foreach (Delegate del in Provider.GetInvocationList())
             {
@@ -82,7 +82,7 @@ namespace GibFrame
             this.Provider = Provider;
         }
 
-        public void UsubscribeProvider()
+        public void UnsubscribeProvider()
         {
             foreach (Delegate del in Provider.GetInvocationList())
             {
@@ -126,7 +126,7 @@ namespace GibFrame
             Providers.Clear();
         }
 
-        public void UsubscribeProvider(object sender, Func<Result> Provider)
+        public void UnsubscribeProvider(object sender, Func<Result> Provider)
         {
             Query<Result> del = new Query<Result>();
             del.SubscribeProvider(Provider);
@@ -166,7 +166,7 @@ namespace GibFrame
             Providers.Add((sender, query));
         }
 
-        public void UsubscribeProvider(object sender, Func<A, Result> Provider)
+        public void UnsubscribeProvider(object sender, Func<A, Result> Provider)
         {
             Query<A, Result> del = new Query<A, Result>();
             del.SubscribeProvider(Provider);
@@ -207,7 +207,7 @@ namespace GibFrame
             Providers.Add((sender, query));
         }
 
-        public void UsubscribeProvider(object sender, Func<A1, A2, Result> Provider)
+        public void UnsubscribeProvider(object sender, Func<A1, A2, Result> Provider)
         {
             Query<A1, A2, Result> del = new Query<A1, A2, Result>();
             del.SubscribeProvider(Provider);
