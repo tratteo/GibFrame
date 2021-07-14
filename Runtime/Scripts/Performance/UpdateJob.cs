@@ -6,18 +6,22 @@
 
 namespace GibFrame.Performance
 {
-    public class UpdateJob
+    public class UpdateJob : ICommonUpdate
     {
+        private readonly AbstractCallback Job;
         private float currentTime = 0F;
         private float updateTime;
-        private AbstractCallback Job;
 
         public bool Active { get; private set; } = true;
 
-        public UpdateJob(AbstractCallback Job, float updateTime)
+        public UpdateJob(AbstractCallback Job, float updateTime, bool start = true)
         {
             this.Job = Job;
             this.updateTime = updateTime;
+            if (start)
+            {
+                CommonUpdateManager.Register(this);
+            }
         }
 
         public void EditUpdateTime(float updateTime)
@@ -26,7 +30,7 @@ namespace GibFrame.Performance
             currentTime = 0F;
         }
 
-        public void Step(float deltaTime)
+        public void CommonUpdate(float deltaTime)
         {
             if (!Active) return;
 
@@ -40,11 +44,13 @@ namespace GibFrame.Performance
 
         public void Suspend()
         {
+            CommonUpdateManager.Unregister(this);
             Active = false;
         }
 
         public void Resume()
         {
+            CommonUpdateManager.Register(this);
             Active = true;
             currentTime = 0F;
         }

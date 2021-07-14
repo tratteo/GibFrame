@@ -10,15 +10,16 @@ using UnityEngine.SceneManagement;
 
 namespace GibFrame.Performance
 {
-    public class CommonUpdateManager : MonoSingleton<CommonUpdateManager>
+    public class CommonUpdateManager : MonoBehaviour
     {
+        [Header("Preferences")]
+        [SerializeField] protected bool persistent = false;
+        [SerializeField] protected HideFlags flags;
         private readonly List<ICommonFixedUpdate> commonFixedUpdates = new List<ICommonFixedUpdate>();
 
         private readonly List<ICommonLateUpdate> commonLateUpdates = new List<ICommonLateUpdate>();
 
         private readonly List<ICommonUpdate> commonUpdates = new List<ICommonUpdate>();
-
-        [Header("Preferences")]
         [Tooltip("Scan for all MonoBehaviours on scene loading")]
         [SerializeField] private bool scanOnSceneLoading = false;
 
@@ -27,6 +28,8 @@ namespace GibFrame.Performance
 
         [Tooltip("Whether should disabled gameobjects be updated")]
         [SerializeField] private bool updateDisabled = false;
+
+        private static CommonUpdateManager Instance { get; set; }
 
         /// <summary>
         ///   Returns the number of successful registrations for this object. Returns <strong> -1 </strong> if the instance of the
@@ -137,9 +140,22 @@ namespace GibFrame.Performance
             monos.ForEach((m) => Register(m));
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
+
+            if (persistent)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
+            gameObject.hideFlags = flags;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 

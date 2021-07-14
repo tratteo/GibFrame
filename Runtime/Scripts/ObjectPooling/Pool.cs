@@ -23,7 +23,7 @@ namespace GibFrame.ObjectPooling
 
         public GameObject Prefab => prefab;
 
-        public int Size => size;
+        public int Size { get => size; set => size = value; }
 
         public float Influence => influence;
 
