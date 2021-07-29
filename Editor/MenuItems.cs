@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 internal class MenuItems
@@ -44,5 +45,11 @@ internal class MenuItems
     internal static void LoadDefaultScene()
     {
         DefaultScene_E.LoadDefaultScene();
+    }
+
+    [MenuItem("GibFrame/Check for updates")]
+    internal static void CheckForUpdates()
+    {
+        AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/tratteo/GibFrame.git");
     }
 }
