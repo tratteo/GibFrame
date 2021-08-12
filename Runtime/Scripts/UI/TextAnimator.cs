@@ -26,7 +26,7 @@ namespace GibFrame.UI
 
         private IEnumerator Animate_C()
         {
-            WaitForSeconds delay = new WaitForSeconds(1F / elementsPerSecond);
+            WaitForSecondsRealtime delay = new WaitForSecondsRealtime(1F / elementsPerSecond);
             StringBuilder builder = new StringBuilder();
             string finalText = target.text;
             string[] arr = GetElements();

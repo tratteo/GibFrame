@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace GibFrame.Debug
 {
-    public static partial class GDebug
+    public static class GDebug
     {
         public static void DrawWireBox(Box box, Color color, float duration)
         {
@@ -145,6 +145,12 @@ namespace GibFrame.Debug
 
             DrawWireBox(bottomBox, Color.green, duration);
             DrawWireBox(topBox, Color.green, duration);
+        }
+
+        [System.Diagnostics.Conditional("GIB_ENABLE_LOG")]
+        public static void Log(object message)
+        {
+            UnityEngine.Debug.Log(message);
         }
     }
 }

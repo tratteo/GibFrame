@@ -1,29 +1,34 @@
 ﻿// Copyright (c) Matteo Beltrame
 //
-// com.tratteo.gibframe.Editor -> %Namespace% : EditorSettingsData.cs
+// com.tratteo.gibframe.Editor -> GibEditor : GibFrameEditorSettingsData.cs
 //
 // All Rights Reserved
 
-[System.Serializable]
-public class GibFrameEditorSettingsData
+namespace GibEditor
 {
-    public string defaultSceneName;
-    public bool loadDefaultSceneOnPlay;
-    public bool restoreOpenedScenes;
-
-    public bool enableCommonUpdate;
-    public bool enableCommonFixedUpdate;
-    public bool enableCommonLateUpdate;
-    public bool runtimeCommonUpdateInstantiate;
-
-    public GibFrameEditorSettingsData()
+    [System.Serializable]
+    internal class GibFrameEditorSettingsData
     {
-        runtimeCommonUpdateInstantiate = true;
-        loadDefaultSceneOnPlay = false;
-        restoreOpenedScenes = true;
-        enableCommonFixedUpdate = true;
-        enableCommonLateUpdate = true;
-        enableCommonUpdate = true;
-        defaultSceneName = "";
+        public string defaultSceneName;
+        public bool loadDefaultSceneOnPlay;
+        public bool restoreOpenedScenes;
+        public bool enableLogging;
+        public bool enableCommonUpdate;
+        public bool enableCommonFixedUpdate;
+        public bool enableCommonLateUpdate;
+        public bool runtimeCommonUpdateInstantiate;
+
+        public GibFrameEditorSettingsData()
+        {
+            loadDefaultSceneOnPlay = false;
+            restoreOpenedScenes = true;
+            defaultSceneName = "";
+
+            runtimeCommonUpdateInstantiate = true;
+            enableLogging = true;
+            enableCommonFixedUpdate = true;
+            enableCommonLateUpdate = true;
+            enableCommonUpdate = true;
+        }
     }
 }
