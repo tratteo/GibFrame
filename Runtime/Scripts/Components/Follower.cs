@@ -11,7 +11,7 @@ namespace GibFrame
     /// <summary>
     ///   Attach this component to a camera and select a target in the editor, the camera will follow it. Can adjust the offset and the hardness
     /// </summary>
-    public class SmoothFollow : MonoBehaviour
+    public class Follower : MonoBehaviour
     {
         public Transform target;
         public Vector3 offset;

@@ -11,7 +11,7 @@ namespace GibFrame
     /// <summary>
     ///   Attach this component to a particleSystem, once the particle system is stopped od finished the script will destory the gameObject
     /// </summary>
-    public class ParticleSystemAutoDestroy : MonoBehaviour
+    public class ParticleSystemAutoInhibit : MonoBehaviour
     {
         public enum Action { DISABLE, DESTROY }
 

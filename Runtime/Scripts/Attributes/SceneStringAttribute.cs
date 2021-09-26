@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
-public class SceneStringAttribute : PropertyAttribute
+namespace GibFrame
 {
+    public class SceneStringAttribute : PropertyAttribute
+    {
+    }
 }
