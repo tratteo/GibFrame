@@ -5,7 +5,7 @@
 // All Rights Reserved
 
 using System.Collections.Generic;
-using GibFrame;
+using GibFrame.PathBuilder;
 using UnityEditor;
 using UnityEngine;
 

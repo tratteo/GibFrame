@@ -7,7 +7,7 @@
 using System;
 using UnityEngine;
 
-namespace GibFrame
+namespace GibFrame.PathBuilder
 {
     [System.Serializable]
     internal class PathingOption : IProbSelectable, IEquatable<PathingOption>

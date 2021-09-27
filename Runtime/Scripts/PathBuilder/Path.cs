@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GibFrame
+namespace GibFrame.PathBuilder
 {
     public class Path : MonoBehaviour
     {

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using GibFrame.Debug;
 using UnityEngine;
 
-namespace GibFrame
+namespace GibFrame.PathBuilder
 {
     [ExecuteAlways]
     public class Waypoint : MonoBehaviour, IEquatable<Waypoint>
