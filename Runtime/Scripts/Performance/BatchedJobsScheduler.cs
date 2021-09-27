@@ -11,22 +11,22 @@ using UnityEngine;
 
 namespace GibFrame.Performance
 {
-    public class BatchedJob : MonoBehaviour
+    public class BatchedJobsScheduler : MonoBehaviour
     {
-        private List<AbstractCallback> operations = new List<AbstractCallback>();
+        private readonly List<AbstractCallback> operations = new List<AbstractCallback>();
         private int batch;
         private YieldInstruction yieldInstruction;
 
         public bool Dispatching { get; private set; } = false;
 
-        public static BatchedJob Compose(int batch, YieldInstruction yieldInstruction)
+        public static BatchedJobsScheduler Compose(int batch, YieldInstruction yieldInstruction)
         {
             GameObject obj = new GameObject
             {
                 hideFlags = HideFlags.HideInHierarchy,
                 name = "BatchedJob"
             };
-            BatchedJob job = obj.AddComponent<BatchedJob>();
+            BatchedJobsScheduler job = obj.AddComponent<BatchedJobsScheduler>();
             job.Setup(batch, yieldInstruction);
 
             return job;
