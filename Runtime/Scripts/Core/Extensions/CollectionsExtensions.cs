@@ -89,7 +89,7 @@ namespace GibFrame
             return elems;
         }
 
-        public static List<T> GetMaxs<T>(this IEnumerable<T> set, Func<T, double> Predicate)
+        public static List<T> GetMaxes<T>(this IEnumerable<T> set, Func<T, double> Predicate)
         {
             T obj = GetMax(set, Predicate);
             List<T> elems = new List<T>();
@@ -135,7 +135,6 @@ namespace GibFrame
         public static int GetPredicatestMatchingObjectsNonAlloc<T>(this T[] set, params Predicate<T>[] predicates)
         {
             int res = 0;
-
             int index = 0;
             bool valid = true;
             for (int i = 0; i < set.Count(); i++)
