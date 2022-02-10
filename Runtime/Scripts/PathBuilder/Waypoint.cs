@@ -11,10 +11,13 @@ using UnityEngine;
 
 namespace GibFrame.PathBuilder
 {
+
+
+
     [ExecuteAlways]
     public class Waypoint : MonoBehaviour, IEquatable<Waypoint>
     {
-        [SerializeField] private List<PathingOption> options;
+        [SerializeField] private readonly List<PathingOption> options;
 
         public Vector3 Position { get => transform.position; }
 
