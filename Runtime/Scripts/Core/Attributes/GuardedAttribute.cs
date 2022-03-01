@@ -12,7 +12,8 @@ namespace GibFrame
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class GuardedAttribute : PropertyAttribute
     {
-        public enum MissingValueGravity { INFO, WARNING, ERROR }
+        public enum MissingValueGravity
+        { INFO, WARNING, ERROR }
 
         public string Message { get; private set; }
 

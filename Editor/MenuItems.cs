@@ -5,6 +5,7 @@
 // All Rights Reserved
 
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ namespace GibEditor
 {
     internal class MenuItems
     {
+        private static AddRequest packageManagerRequest;
+
         [MenuItem("GibFrame/Path Builder", false, 22)]
         internal static void ShowPathBuilderWindow()
         {
@@ -58,7 +61,23 @@ namespace GibEditor
         [MenuItem("GibFrame/Check for updates")]
         internal static void CheckForUpdates()
         {
-            AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/tratteo/GibFrame.git");
+            packageManagerRequest = Client.Add("https://github.com/tratteo/GibFrame.git");
+            EditorUtility.DisplayProgressBar("Update", "Checking for updates...", 0.75F);
+            EditorApplication.update += UpdateRequestHandler;
+        }
+
+        private static void UpdateRequestHandler()
+        {
+            if (packageManagerRequest.IsCompleted)
+            {
+                EditorUtility.ClearProgressBar();
+                if (packageManagerRequest.Status == StatusCode.Success)
+                    EditorUtility.DisplayDialog("Update", "GibFrame updated successfully", "Ok");
+                else if (packageManagerRequest.Status >= StatusCode.Failure)
+                    EditorUtility.DisplayDialog("Update", $"Unable to update GibFrame, error: {packageManagerRequest.Error.message}", "Ok");
+
+                EditorApplication.update -= UpdateRequestHandler;
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using GibFrame;
 using UnityEditor;
 using UnityEngine;
@@ -29,10 +30,14 @@ namespace GibEditor
                 objs.AddRange(GetAllBehavioursInAssets());
             }
             StringBuilder logBuilder = new StringBuilder();
-            objs.ForEach(obj =>
+            for (int i = 0; i < objs.Count; i++)
             {
+                var obj = objs[i];
+                EditorUtility.DisplayProgressBar("Guarding members", $"Checking {obj.name}", (float)i / objs.Count);
                 GuardRecursively(obj, obj, logBuilder);
-            });
+            }
+            EditorUtility.ClearProgressBar();
+            Debug.Log($"Guarding process completed, analyzed {objs.Count} elements");
         }
 
         internal static List<UnityEngine.Object> GetAllBehavioursInAssets(string path = "")
@@ -46,7 +51,7 @@ namespace GibEditor
 
                 if (index > 0)
                 {
-                    localPath += fileName.Substring(index);
+                    localPath += fileName[index..];
                 }
 
                 UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
@@ -76,7 +81,7 @@ namespace GibEditor
                 int index = dir.LastIndexOfAny(new char[] { '/', '\\' });
                 if (index > 0)
                 {
-                    string val = dir.Substring(index);
+                    string val = dir[index..];
                     relativePath += val;
                     sel.AddRange(GetAllBehavioursInAssets(relativePath));
                 }
@@ -88,21 +93,23 @@ namespace GibEditor
         {
             UnityEngine.Object[] objs = UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
             List<UnityEngine.Object> sel = new List<UnityEngine.Object>();
-            objs.ForEach(o =>
+            for (int i = 0; i < objs.Length; i++)
             {
-                if (o)
+                var current = objs[i];
+                if (current)
                 {
-                    if (o is GameObject obj)
+                    if (current is GameObject obj)
                     {
                         MonoBehaviour[] monos = obj.GetComponentsInChildren<MonoBehaviour>();
                         sel.AddRange(monos);
                     }
-                    else if (o is ScriptableObject so)
+                    else if (current is ScriptableObject so)
                     {
                         sel.Add(so);
                     }
                 }
-            });
+            }
+
             return sel;
         }
 
@@ -140,8 +147,9 @@ namespace GibEditor
         {
             if (obj == null) return;
             FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            fields.ForEach(field =>
+            for (int i = 0; i < fields.Length; i++)
             {
+                var field = fields[i];
                 if (Attribute.GetCustomAttribute(field, typeof(GuardedAttribute)) is GuardedAttribute attribute)
                 {
                     var value = field.GetValue(obj);
@@ -150,15 +158,15 @@ namespace GibEditor
                         Print(attribute, field, value, obj.GetType(), parentObj, logBuilder);
                     }
                 }
-                if (field.FieldType.IsClass)
-                {
-                    object val = field.GetValue(obj);
-                    if (val != null)
-                    {
-                        GuardRecursively(val, parentObj, logBuilder);
-                    }
-                }
-            });
+                //if (field.FieldType.IsClass)
+                //{
+                //    object val = field.GetValue(obj);
+                //    if (val != null)
+                //    {
+                //        GuardRecursively(val, parentObj, logBuilder);
+                //    }
+                //}
+            }
         }
 
         private static bool IsNullOrDefault<T>(T arg)
