@@ -13,12 +13,11 @@ namespace GibFrame
     /// </summary>
     public class ParticleSystemAutoInhibit : MonoBehaviour
     {
-        public enum Action { DISABLE, DESTROY }
+        public enum Action
+        { Disable, Destroy }
 
+        public Action onSimulationEnded;
         private new ParticleSystem particleSystem;
-
-        [SerializeField]
-        private Action onSimulationEnded;
 
         public void Start()
         {
@@ -33,11 +32,11 @@ namespace GibFrame
                 {
                     switch (onSimulationEnded)
                     {
-                        case Action.DESTROY:
+                        case Action.Destroy:
                             Destroy(gameObject);
                             break;
 
-                        case Action.DISABLE:
+                        case Action.Disable:
                             gameObject.SetActive(false);
                             break;
                     }
