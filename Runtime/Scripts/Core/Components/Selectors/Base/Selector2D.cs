@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using TypeReferences;
 using UnityEngine;
 
 namespace GibFrame
@@ -19,7 +18,6 @@ namespace GibFrame
         [Tooltip("Call the function for ISelectable components")]
         public bool notifySelectables = true;
         private readonly List<Predicate<Collider>> predicates = new List<Predicate<Collider>>();
-        [SerializeField] private TargetType[] targetTypes;
         [Header("Debug")]
         [SerializeField] private bool debugRender = true;
         private Collider currentCollider;
@@ -77,13 +75,6 @@ namespace GibFrame
 
         protected bool IsColliderValid(Collider collider)
         {
-            foreach (var type in targetTypes)
-            {
-                if (collider.GetComponent(type.Type) is null)
-                {
-                    return false;
-                }
-            }
             foreach (var predicate in predicates)
             {
                 if (predicate != null && !predicate(collider))
@@ -106,35 +97,6 @@ namespace GibFrame
             currentCollider = newCollider;
             var newSelectable = newCollider.GetComponent<ISelectable>();
             currentSelected = newSelectable;
-        }
-
-#if UNITY_EDITOR
-
-        private void OnValidate()
-        {
-            if (targetTypes is null)
-            {
-                return;
-            }
-
-            foreach (var type in targetTypes)
-            {
-                if (type.Type is not null && !type.Type.IsInterface && !type.Type.IsSubclassOf(typeof(Component)))
-                {
-                    UnityEngine.Debug.LogError($"Selector[{gameObject}]: Target types must be either components or interfaces");
-                }
-            }
-        }
-
-#endif
-
-        [Serializable]
-        private struct TargetType
-        {
-            [SerializeField]
-            private TypeReference type;
-
-            public Type Type => type;
         }
     }
 }
