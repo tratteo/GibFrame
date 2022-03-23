@@ -46,7 +46,7 @@ namespace GibFrame.Performance
 #if !GIB_NO_COMM_RUNTIME_INSTANTIATE
                 if (Instance == null)
                 {
-                    GameObject obj = new GameObject()
+                    var obj = new GameObject()
                     {
                         name = "CommonUpdateManagerRuntime"
                     };
@@ -56,7 +56,7 @@ namespace GibFrame.Performance
             }
             if (Instance != null)
             {
-                int registrations = 0;
+                var registrations = 0;
                 if (update is ICommonUpdate commonUpdate)
                 {
                     if (!Instance.commonUpdates.Contains(commonUpdate))
@@ -105,7 +105,7 @@ namespace GibFrame.Performance
             }
             if (Instance != null)
             {
-                int unregistrations = 0;
+                var unregistrations = 0;
                 if (update is ICommonUpdate commonUpdate)
                 {
                     unregistrations += Instance.commonUpdates.Remove(commonUpdate) ? 1 : 0;
@@ -136,8 +136,11 @@ namespace GibFrame.Performance
                 commonLateUpdates.Clear();
             }
 
-            MonoBehaviour[] monos = FindObjectsOfType<MonoBehaviour>();
-            monos.ForEach((m) => Register(m));
+            var monos = FindObjectsOfType<MonoBehaviour>();
+            foreach (var mono in monos)
+            {
+                Register(mono);
+            }
         }
 
         protected void Awake()
@@ -163,7 +166,11 @@ namespace GibFrame.Performance
         {
             if (update is MonoBehaviour mono)
             {
-                if (!mono) return false;
+                if (!mono)
+                {
+                    return false;
+                }
+
                 return mono.enabled && (updateDisabled || mono.gameObject.activeSelf);
             }
             return update != null;
@@ -190,8 +197,8 @@ namespace GibFrame.Performance
 
         private void FixedUpdate()
         {
-            List<ICommonFixedUpdate> unmutable = new List<ICommonFixedUpdate>(commonFixedUpdates);
-            foreach (ICommonFixedUpdate update in unmutable)
+            var unmutable = new List<ICommonFixedUpdate>(commonFixedUpdates);
+            foreach (var update in unmutable)
             {
                 if (CanUpdate(update))
                 {
@@ -206,8 +213,8 @@ namespace GibFrame.Performance
 
         private void LateUpdate()
         {
-            List<ICommonLateUpdate> unmutable = new List<ICommonLateUpdate>(commonLateUpdates);
-            foreach (ICommonLateUpdate update in unmutable)
+            var unmutable = new List<ICommonLateUpdate>(commonLateUpdates);
+            foreach (var update in unmutable)
             {
                 if (CanUpdate(update))
                 {
@@ -223,8 +230,8 @@ namespace GibFrame.Performance
 
         private void Update()
         {
-            List<ICommonUpdate> unmutable = new List<ICommonUpdate>(commonUpdates);
-            foreach (ICommonUpdate update in unmutable)
+            var unmutable = new List<ICommonUpdate>(commonUpdates);
+            foreach (var update in unmutable)
             {
                 if (CanUpdate(update))
                 {

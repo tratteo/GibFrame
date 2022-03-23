@@ -12,7 +12,8 @@ namespace GibFrame
 {
     public abstract class AbstractClock
     {
-        private enum RateParadigm { FIXED, RANDOM_RANGE, SCALE_FUNC }
+        private enum RateParadigm
+        { Fixed, RandomRange, ScaleFunc }
 
         private RateParadigm paradigm;
         private Vector2 rateRange;
@@ -28,7 +29,7 @@ namespace GibFrame
         {
             this.context = context;
             routineActive = false;
-            paradigm = RateParadigm.FIXED;
+            paradigm = RateParadigm.Fixed;
             rate = fixedRate;
             if (startNow)
             {
@@ -41,7 +42,7 @@ namespace GibFrame
             this.context = context;
             routineActive = false;
             this.rateRange = rateRange;
-            paradigm = RateParadigm.RANDOM_RANGE;
+            paradigm = RateParadigm.RandomRange;
             rate = UnityEngine.Random.Range(this.rateRange.x, this.rateRange.y);
             if (startNow)
             {
@@ -54,7 +55,7 @@ namespace GibFrame
             this.context = context;
             routineActive = false;
             this.scaleFunc = scaleFunc;
-            paradigm = RateParadigm.SCALE_FUNC;
+            paradigm = RateParadigm.ScaleFunc;
             rate = scaleFunc(0);
             if (startNow)
             {
@@ -90,24 +91,24 @@ namespace GibFrame
 
         public void EditRate(float newRate)
         {
-            this.rate = newRate;
+            rate = newRate;
         }
 
         public void EditRate(Vector2 newRate)
         {
-            this.rateRange = newRate;
+            rateRange = newRate;
         }
 
         public void EditRate(Func<int, float> newRate)
         {
-            this.scaleFunc = newRate;
+            scaleFunc = newRate;
         }
 
         protected abstract void Callback();
 
         private IEnumerator Rate_C()
         {
-            WaitForFixedUpdate wait = new WaitForFixedUpdate();
+            var wait = new WaitForFixedUpdate();
             while (routineActive)
             {
                 if (isPaused)
@@ -121,14 +122,14 @@ namespace GibFrame
 
                     switch (paradigm)
                     {
-                        case RateParadigm.FIXED:
+                        case RateParadigm.Fixed:
                             break;
 
-                        case RateParadigm.RANDOM_RANGE:
+                        case RateParadigm.RandomRange:
                             rate = UnityEngine.Random.Range(rateRange.x, rateRange.y);
                             break;
 
-                        case RateParadigm.SCALE_FUNC:
+                        case RateParadigm.ScaleFunc:
                             rate = scaleFunc((int)Time.timeSinceLevelLoad);
                             break;
                     }

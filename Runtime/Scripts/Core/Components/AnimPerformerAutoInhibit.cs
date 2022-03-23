@@ -9,8 +9,12 @@ using UnityEngine;
 
 namespace GibFrame
 {
-    public class OnDisableAnimPerformer : MonoBehaviour
+    public class AnimPerformerAutoInhibit : MonoBehaviour
     {
+        public enum Action
+        { Disable, Destroy }
+
+        [SerializeField] private Action action = Action.Disable;
         [SerializeField] private string exitAnimName;
         private AnimationClip exitAnim;
         private Animator animator;
@@ -34,7 +38,7 @@ namespace GibFrame
         protected virtual void Awake()
         {
             animator = GetComponent<Animator>();
-            for (int i = 0; i < animator.runtimeAnimatorController.animationClips.Length; i++)
+            for (var i = 0; i < animator.runtimeAnimatorController.animationClips.Length; i++)
             {
                 if (animator.runtimeAnimatorController.animationClips[i].name == exitAnimName)
                 {
@@ -48,7 +52,16 @@ namespace GibFrame
         {
             animator.Play(exitAnim.name);
             yield return new WaitForSeconds(exitAnim.length);
-            gameObject.SetActive(false);
+            switch (action)
+            {
+                case Action.Disable:
+                    gameObject.SetActive(false);
+                    break;
+
+                case Action.Destroy:
+                    Destroy(gameObject);
+                    break;
+            }
         }
     }
 }

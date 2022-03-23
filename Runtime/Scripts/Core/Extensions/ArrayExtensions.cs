@@ -5,6 +5,7 @@
 // All Rights Reserved
 
 using System;
+using System.Collections.Generic;
 
 namespace GibFrame
 {
@@ -21,9 +22,9 @@ namespace GibFrame
                 throw new System.Exception("Unable to copy arrays of wrong dimensions");
             }
 
-            int exIndex = 0;
-            int toIndex = 0;
-            for (int i = 0; i < from.Length; i++)
+            var exIndex = 0;
+            var toIndex = 0;
+            for (var i = 0; i < from.Length; i++)
             {
                 if (i != indexesExcepts[exIndex])
                 {
@@ -32,9 +33,43 @@ namespace GibFrame
                 else
                 {
                     if (exIndex < indexesExcepts.Length - 1)
+                    {
                         exIndex++;
+                    }
                 }
             }
+        }
+
+        public static List<T> FindAll<T>(this T[] collection, int upTo, Predicate<T> predicate)
+        {
+            var match = new List<T>();
+            for (var i = 0; i < collection.Length; i++)
+            {
+                if (i > upTo)
+                {
+                    return match;
+                }
+
+                var item = collection[i];
+                if (predicate(item))
+                {
+                    match.Add(item);
+                }
+            }
+            return match;
+        }
+
+        public static List<T> FindAll<T>(this T[] collection, Predicate<T> predicate)
+        {
+            var match = new List<T>();
+            foreach (var item in collection)
+            {
+                if (predicate(item))
+                {
+                    match.Add(item);
+                }
+            }
+            return match;
         }
 
         /// <summary>
@@ -48,10 +83,10 @@ namespace GibFrame
                 throw new System.Exception("Unable to copy arrays of wrong dimensions");
             }
 
-            int elementToCopy = 0;
-            int exIndex = 0;
+            var elementToCopy = 0;
+            var exIndex = 0;
 
-            for (int i = 0; i < to.Length; i++)
+            for (var i = 0; i < to.Length; i++)
             {
                 if (exIndex > indexesExcepts.Length - 1)
                 {

@@ -10,9 +10,9 @@ namespace GibFrame
 {
     public class RotationRelator : MonoBehaviour
     {
-        [SerializeField] private bool disjoinX;
-        [SerializeField] private bool disjoinY;
-        [SerializeField] private bool disjoinZ;
+        public bool disjoinX;
+        public bool disjoinY;
+        public bool disjoinZ;
         private Vector3 disjointRotation;
 
         public void Disjoin(bool x, bool y, bool z)
@@ -36,9 +36,9 @@ namespace GibFrame
         {
             if (IsDisjointed())
             {
-                float xRot = disjoinX ? disjointRotation.x : transform.rotation.eulerAngles.x;
-                float yRot = disjoinY ? disjointRotation.y : transform.rotation.eulerAngles.y;
-                float zRot = disjoinZ ? disjointRotation.z : transform.rotation.eulerAngles.z;
+                var xRot = disjoinX ? disjointRotation.x : transform.rotation.eulerAngles.x;
+                var yRot = disjoinY ? disjointRotation.y : transform.rotation.eulerAngles.y;
+                var zRot = disjoinZ ? disjointRotation.z : transform.rotation.eulerAngles.z;
                 transform.rotation = Quaternion.Euler(xRot, yRot, zRot);
             }
         }

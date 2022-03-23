@@ -20,7 +20,7 @@ namespace GibFrame
 
         public static double Tanh(double x)
         {
-            double exp = (double)Math.Exp(2 * x);
+            var exp = (double)Math.Exp(2 * x);
             return (exp - 1) / (exp + 1);
         }
 
@@ -40,7 +40,10 @@ namespace GibFrame
             {
                 if (y >= 0)
                 {
-                    if (y == 0) return -90f;
+                    if (y == 0)
+                    {
+                        return -90f;
+                    }
 
                     return (float)-Math.Atan(x / y) * GMath.RadToDeg;
                 }
@@ -53,7 +56,10 @@ namespace GibFrame
             {
                 if (y >= 0)
                 {
-                    if (y == 0) return 90f;
+                    if (y == 0)
+                    {
+                        return 90f;
+                    }
 
                     return (float)Math.Atan(-x / y) * GMath.RadToDeg;
                 }
@@ -77,7 +83,7 @@ namespace GibFrame
             {
                 throw new System.Exception("TMath Exception -> Costant C cannot be 0 in Gaussian function");
             }
-            float sub = x - b;
+            var sub = x - b;
             return (float)(a * Math.Exp(-(sub * sub) / (c * c)));
         }
 
@@ -107,102 +113,6 @@ namespace GibFrame
             return Math.Sign(j - i) + Math.Sign(k - j) + Math.Sign(i - k);
         }
 
-        public static float Abs(float value)
-        {
-            return value > 0 ? value : -value;
-        }
-
-        public static int Abs(int value)
-        {
-            return value > 0 ? value : -value;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="data"> </param>
-        /// <returns> The max value between an arbitrary number of values </returns>
-        public static int Max(params int[] data)
-        {
-            int max = int.MinValue;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] > max)
-                {
-                    max = data[i];
-                }
-            }
-            return max;
-        }
-
-        public static float Max(params float[] data)
-        {
-            float max = float.MinValue;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] > max)
-                {
-                    max = data[i];
-                }
-            }
-            return max;
-        }
-
-        public static double Max(params double[] data)
-        {
-            double max = double.MinValue;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] > max)
-                {
-                    max = data[i];
-                }
-            }
-            return max;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="data"> </param>
-        /// <returns> The min value between an arbitrary number of values </returns>
-        public static int Min(params int[] data)
-        {
-            int min = int.MaxValue;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] < min)
-                {
-                    min = data[i];
-                }
-            }
-            return min;
-        }
-
-        public static float Min(params float[] data)
-        {
-            float min = float.MaxValue;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] < min)
-                {
-                    min = data[i];
-                }
-            }
-            return min;
-        }
-
-        public static double Min(params double[] data)
-        {
-            double min = double.MaxValue;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] < min)
-                {
-                    min = data[i];
-                }
-            }
-            return min;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="data"> </param>
@@ -210,7 +120,7 @@ namespace GibFrame
         public static float Avg(params float[] data)
         {
             float sum = 0;
-            for (int i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++)
             {
                 sum += data[i];
             }
@@ -220,7 +130,7 @@ namespace GibFrame
         public static double Avg(params double[] data)
         {
             double sum = 0;
-            for (int i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++)
             {
                 sum += data[i];
             }
@@ -229,8 +139,8 @@ namespace GibFrame
 
         public static float Avg(params int[] data)
         {
-            int sum = 0;
-            for (int i = 0; i < data.Length; i++)
+            var sum = 0;
+            for (var i = 0; i < data.Length; i++)
             {
                 sum += data[i];
             }
@@ -244,7 +154,7 @@ namespace GibFrame
         public static double Sum(params double[] data)
         {
             double sum = 0;
-            for (int i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++)
             {
                 sum += data[i];
             }
@@ -254,7 +164,7 @@ namespace GibFrame
         public static float Sum(params float[] data)
         {
             float sum = 0;
-            for (int i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++)
             {
                 sum += data[i];
             }
@@ -263,8 +173,8 @@ namespace GibFrame
 
         public static int Sum(params int[] data)
         {
-            int sum = 0;
-            for (int i = 0; i < data.Length; i++)
+            var sum = 0;
+            for (var i = 0; i < data.Length; i++)
             {
                 sum += data[i];
             }
@@ -318,7 +228,7 @@ namespace GibFrame
             /// <returns> A random Gaussian distributed number </returns>
             public static double NextGaussian(double mean, double stdv)
             {
-                double amplitude = 1F / Math.Sqrt(2F * Math.PI * stdv * stdv);
+                var amplitude = 1F / Math.Sqrt(2F * Math.PI * stdv * stdv);
                 if (nextGaussianAvailable)
                 {
                     nextGaussianAvailable = false;

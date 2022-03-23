@@ -11,25 +11,35 @@ namespace GibFrame
 {
     public class PointerDownBasedSelector : Selector
     {
-        public enum InputType { MOUSE, TOUCH, BOTH }
+        public enum InputType
+        { Mouse, Touch, Both }
 
         [Header("Pointer based")]
-        [SerializeField] private InputType input;
+        public InputType input;
         [SerializeField] private UnityEvent OnMissed;
         [SerializeField] private Camera targetCamera = null;
 
         protected void Update()
         {
-            if (input == InputType.TOUCH || input == InputType.BOTH)
+            if (!Enabled)
+            {
+                return;
+            }
+
+            if (input is InputType.Touch or InputType.Both)
             {
                 if (Input.touchCount > 0)
                 {
-                    Touch touch = Input.GetTouch(0);
-                    Ray ray = GetCamera().ScreenPointToRay(touch.position);
-                    if (UnityUtils.IsAnyPointerOverGameObject()) return;
+                    var touch = Input.GetTouch(0);
+                    var ray = GetCamera().ScreenPointToRay(touch.position);
+                    if (UnityUtils.IsAnyPointerOverGameObject())
+                    {
+                        return;
+                    }
+
                     if (touch.phase == TouchPhase.Ended)
                     {
-                        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Mask))
+                        if (Physics.Raycast(ray, out var hit, float.MaxValue, mask))
                         {
                             if (IsColliderValid(hit.collider))
                             {
@@ -45,13 +55,17 @@ namespace GibFrame
                 }
             }
 
-            if (input == InputType.MOUSE || input == InputType.BOTH)
+            if (input is InputType.Mouse or InputType.Both)
             {
                 if (Input.GetMouseButtonUp(0))
                 {
-                    Ray ray = GetCamera().ScreenPointToRay(Input.mousePosition);
-                    if (UnityUtils.IsAnyPointerOverGameObject()) return;
-                    if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Mask))
+                    var ray = GetCamera().ScreenPointToRay(Input.mousePosition);
+                    if (UnityUtils.IsAnyPointerOverGameObject())
+                    {
+                        return;
+                    }
+
+                    if (Physics.Raycast(ray, out var hit, float.MaxValue, mask))
                     {
                         if (IsColliderValid(hit.collider))
                         {
@@ -69,7 +83,7 @@ namespace GibFrame
 
         private Camera GetCamera()
         {
-            targetCamera ??= Camera.main;
+            targetCamera = targetCamera != null ? targetCamera : Camera.main;
             return targetCamera;
         }
     }

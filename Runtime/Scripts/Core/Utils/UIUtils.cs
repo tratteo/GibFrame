@@ -21,7 +21,7 @@ namespace GibFrame
         /// <returns> IEnumerator reference </returns>
         public static IEnumerator FillImage(MonoBehaviour context, Image image, float duration, bool realtime = false, float targetFillAmount = 1F, AbstractCallback callback = null)
         {
-            IEnumerator coroutine = FillImage_C(image, duration, targetFillAmount, realtime, callback);
+            var coroutine = FillImage_C(image, duration, targetFillAmount, realtime, callback);
             context.StartCoroutine(coroutine);
             return coroutine;
         }
@@ -41,8 +41,8 @@ namespace GibFrame
         /// <returns> The formatted string </returns>
         public static string GetTimeStringFromSeconds(float seconds, string format = "{0} h : {1} m : {2} s ")
         {
-            int hours = 0;
-            int minutes = 0;
+            var hours = 0;
+            var minutes = 0;
             while (seconds / 3600 >= 1)
             {
                 hours++;
@@ -58,8 +58,8 @@ namespace GibFrame
 
         private static IEnumerator FillImage_C(Image image, float duration, float targetFillAmount, bool realtime, AbstractCallback Callback)
         {
-            float diff = GMath.Abs(image.fillAmount - targetFillAmount);
-            float stride = Time.fixedDeltaTime / duration;
+            var diff = Mathf.Abs(image.fillAmount - targetFillAmount);
+            var stride = Time.fixedDeltaTime / duration;
             stride *= diff;
             if (targetFillAmount - image.fillAmount > 0F)
             {
@@ -98,17 +98,17 @@ namespace GibFrame
 
         private static void DrawSpriteLine_A(Vector3 from, Vector3 to, float thickness, Image lineImage, Transform parent)
         {
-            Image linkRef = UnityEngine.Object.Instantiate(lineImage);
+            var linkRef = UnityEngine.Object.Instantiate(lineImage);
             if (parent != null)
             {
                 linkRef.transform.SetParent(parent);
             }
 
-            Vector3 differenceVector = to - from;
+            var differenceVector = to - from;
             linkRef.rectTransform.sizeDelta = new Vector2(differenceVector.magnitude, thickness);
             linkRef.rectTransform.pivot = new Vector2(0, 0.5f);
             linkRef.rectTransform.position = from;
-            float angle = Mathf.Atan2(differenceVector.y, differenceVector.x) * Mathf.Rad2Deg;
+            var angle = Mathf.Atan2(differenceVector.y, differenceVector.x) * Mathf.Rad2Deg;
             linkRef.rectTransform.localRotation = Quaternion.Euler(0, 0, angle);
         }
     }

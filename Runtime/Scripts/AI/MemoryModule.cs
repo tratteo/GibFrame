@@ -25,24 +25,15 @@ namespace GibFrame.AI
             Memory = memory;
         }
 
-        public void Reset(float remembranceTime = -1)
-        {
-            this.remembranceTime = remembranceTime == -1 ? InitialRemembranceTime : remembranceTime;
-        }
+        public void Reset(float remembranceTime = -1) => this.remembranceTime = remembranceTime == -1 ? InitialRemembranceTime : remembranceTime;
 
-        public bool Equals(MemoryModule other)
-        {
-            return Memory.Equals(other.Memory);
-        }
+        public bool Equals(MemoryModule other) => Memory.Equals(other.Memory);
 
-        public void TimeStep(float step)
-        {
-            remembranceTime -= step;
-        }
+        public void TimeStep(float step) => remembranceTime -= step;
 
         public override string ToString()
         {
-            return Memory.ToString() + ", RT: " + InitialRemembranceTime;
+            return Memory.ToString() + ", Initial remembrance time: " + InitialRemembranceTime;
         }
     }
 }

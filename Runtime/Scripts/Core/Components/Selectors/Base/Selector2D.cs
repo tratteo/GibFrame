@@ -11,36 +11,36 @@ using UnityEngine;
 
 namespace GibFrame
 {
-    public abstract class Selector2D : MonoBehaviour
+    public abstract class Selector : MonoBehaviour
     {
         [Header("Filters")]
         public LayerMask mask = ~0;
         [Header("Behaviour")]
         [Tooltip("Call the function for ISelectable components")]
         public bool notifySelectables = true;
-        private readonly List<Predicate<Collider2D>> predicates = new List<Predicate<Collider2D>>();
+        private readonly List<Predicate<Collider>> predicates = new List<Predicate<Collider>>();
         [SerializeField] private TargetType[] targetTypes;
         [Header("Debug")]
         [SerializeField] private bool debugRender = true;
-        private Collider2D currentCollider2D;
+        private Collider currentCollider;
         private ISelectable currentSelected = null;
 
-        public virtual bool Enabled { get; private set; } = true;
+        public bool Enabled { get; private set; } = true;
 
-        public Collider2D Selected => currentCollider2D;
+        public Collider Selected => currentCollider;
 
         protected bool DebugRender => debugRender;
 
-        public event Action<Collider2D> OnSelected = delegate { };
+        public event Action<Collider> OnSelected = delegate { };
 
-        public event Action<Collider2D> OnDeselected = delegate { };
+        public event Action<Collider> OnDeselected = delegate { };
 
         public virtual void SetActive(bool state)
         {
             Enabled = state;
         }
 
-        public void InjectPredicates(params Predicate<Collider2D>[] pred)
+        public void InjectPredicates(params Predicate<Collider>[] pred)
         {
             foreach (var p in pred)
             {
@@ -55,16 +55,16 @@ namespace GibFrame
 
         public void ResetSelection()
         {
-            if (currentCollider2D)
+            if (currentCollider)
             {
-                OnDeselected?.Invoke(currentCollider2D);
+                OnDeselected?.Invoke(currentCollider);
             }
             if (currentSelected != null && notifySelectables)
             {
                 currentSelected.OnDeselect();
             }
             currentSelected = null;
-            currentCollider2D = null;
+            currentCollider = null;
         }
 
         protected virtual void Start()
@@ -75,36 +75,36 @@ namespace GibFrame
         {
         }
 
-        protected bool IsCollider2DValid(Collider2D Collider2D)
+        protected bool IsColliderValid(Collider collider)
         {
             foreach (var type in targetTypes)
             {
-                if (Collider2D.GetComponent(type.Type) is null)
+                if (collider.GetComponent(type.Type) is null)
                 {
                     return false;
                 }
             }
             foreach (var predicate in predicates)
             {
-                if (predicate != null && !predicate(Collider2D))
+                if (predicate != null && !predicate(collider))
                 {
                     return false;
                 }
             }
-            return Collider2D.gameObject && !Collider2D.gameObject.Equals(gameObject);
+            return collider.gameObject && !collider.gameObject.Equals(gameObject);
         }
 
-        protected void Select(Collider2D newCollider2D)
+        protected void Select(Collider newCollider)
         {
-            if (newCollider2D && newCollider2D.Equals(currentCollider2D))
+            if (newCollider && newCollider.Equals(currentCollider))
             {
                 return;
             }
             ResetSelection();
 
-            OnSelected?.Invoke(newCollider2D);
-            currentCollider2D = newCollider2D;
-            var newSelectable = newCollider2D.GetComponent<ISelectable>();
+            OnSelected?.Invoke(newCollider);
+            currentCollider = newCollider;
+            var newSelectable = newCollider.GetComponent<ISelectable>();
             currentSelected = newSelectable;
         }
 

@@ -108,13 +108,13 @@ namespace GibFrame.UI
             OnLongPressEvent = new CallbackEvent();
 
             childButtons = GetComponentsInChildren<GButton>(true);
-            childButtons = childButtons.GetPredicatesMatchingObjects((b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject));
+            childButtons = childButtons.FindAll((b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject)).ToArray();
             image = GetComponentInChildren<Image>();
             unpressedSprite = image.sprite;
 
             defaultColor = image.color;
 
-            EventTrigger trigger = gameObject.AddComponent<EventTrigger>();
+            var trigger = gameObject.AddComponent<EventTrigger>();
 
             pointerDown = new EventTrigger.Entry
             {
@@ -153,7 +153,10 @@ namespace GibFrame.UI
             PressUI();
             onPressed.Invoke();
             OnPressedEvent.Invoke();
-            childButtons.ForEach(c => c.onPressed?.Invoke());
+            foreach (var child in childButtons)
+            {
+                child.onPressed?.Invoke();
+            }
         }
 
         private void Released()
@@ -164,7 +167,10 @@ namespace GibFrame.UI
             if (canReleaseExecute || !callbackOnlyOnPointerInside)
             {
                 onReleased.Invoke();
-                childButtons.ForEach(c => c.onReleased?.Invoke());
+                foreach (var child in childButtons)
+                {
+                    child.onReleased?.Invoke();
+                }
                 OnReleaseEvent.Invoke();
             }
             else
@@ -184,7 +190,7 @@ namespace GibFrame.UI
                 image.rectTransform.localScale = Vector2.one;
             }
             image.sprite = unpressedSprite;
-            foreach (GButton child in childButtons)
+            foreach (var child in childButtons)
             {
                 child.ResetUI();
             }
@@ -198,7 +204,7 @@ namespace GibFrame.UI
             }
             if (resizeOnPress)
             {
-                Vector2 newScale = new Vector2(image.rectTransform.localScale.x * pressedScaleMultiplier.x, image.rectTransform.localScale.y * pressedScaleMultiplier.y);
+                var newScale = new Vector2(image.rectTransform.localScale.x * pressedScaleMultiplier.x, image.rectTransform.localScale.y * pressedScaleMultiplier.y);
                 image.rectTransform.localScale = newScale;
             }
             if (pressedSprite != null)
@@ -206,7 +212,10 @@ namespace GibFrame.UI
                 image.sprite = pressedSprite;
             }
 
-            childButtons.ForEach(b => b.ResetUI());
+            foreach (var child in childButtons)
+            {
+                child.ResetUI();
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace GibFrame
 {
-    public class DistanceBasedSelector : DiscreteSelector
+    public class DistanceBasedSelector2D : DiscreteSelector2D
     {
         public enum Paradigm
         { Closest, Farthest }
@@ -23,12 +23,12 @@ namespace GibFrame
         [SerializeField] private bool nonAlloc = false;
         [Tooltip("Define the maximum buffer size when using the non alloc option")]
         [SerializeField] private int bufferSize = 16;
-        private Collider[] buffer;
+        private Collider2D[] buffer;
 
         protected override void Awake()
         {
             base.Awake();
-            buffer = new Collider[bufferSize];
+            buffer = new Collider2D[bufferSize];
         }
 
         protected override IEnumerator SelectCoroutine()
@@ -37,10 +37,10 @@ namespace GibFrame
             yield return delay;
             while (Enabled)
             {
-                Collider selected;
+                Collider2D selected;
                 if (nonAlloc)
                 {
-                    var amount = Physics.OverlapSphereNonAlloc(transform.position, radius, buffer, mask);
+                    var amount = Physics2D.OverlapCircleNonAlloc(transform.position, radius, buffer, mask);
                     selected = ChooseNonAlloc(buffer, amount);
                     if (selected)
                     {
@@ -53,7 +53,7 @@ namespace GibFrame
                 }
                 else
                 {
-                    buffer = Physics.OverlapSphere(transform.position, radius, mask);
+                    buffer = Physics2D.OverlapCircleAll(transform.position, radius, mask);
 
                     selected = ChooseNonAlloc(buffer, buffer.Length);
                     if (selected)
@@ -69,9 +69,9 @@ namespace GibFrame
             }
         }
 
-        private Collider ChooseNonAlloc(IEnumerable<Collider> array, int bufferMatch)
+        private Collider2D ChooseNonAlloc(IEnumerable<Collider2D> array, int bufferMatch)
         {
-            Collider selected = null;
+            Collider2D selected = null;
             switch (paradigm)
             {
                 case Paradigm.Closest:

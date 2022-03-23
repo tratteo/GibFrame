@@ -1,7 +1,9 @@
 {
     "name": "com.tratteo.gibframe",
     "rootNamespace": "com.tratteo.gibframe",
-    "references": [],
+    "references": [
+        "GUID:ea6a6314f279f814facc8c48a7d3c9f1"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

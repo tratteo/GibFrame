@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace GibFrame
 {
-    public class RaycastBasedSelector : DiscreteSelector
+    public class RaycastBasedSelector2D : DiscreteSelector2D
     {
         private Vector3 direction;
         private bool directionOverride = false;
@@ -37,13 +37,18 @@ namespace GibFrame
             yield return delay;
             while (Enabled)
             {
-                var dir = directionOverride ? direction : transform.forward;
+                var dir = directionOverride ? direction : transform.right;
 
-                if (Physics.Raycast(transform.position + offset, dir, out var hit, float.MaxValue, mask))
+                var hit = Physics2D.Raycast(transform.position + offset, dir, float.MaxValue, mask);
+                if (hit.collider)
                 {
-                    if (IsColliderValid(hit.collider))
+                    if (IsCollider2DValid(hit.collider))
                     {
                         Select(hit.collider);
+                    }
+                    else
+                    {
+                        ResetSelection();
                     }
                 }
                 else
@@ -59,7 +64,7 @@ namespace GibFrame
         {
             if (DebugRender)
             {
-                var dir = directionOverride ? direction : transform.forward;
+                var dir = directionOverride ? direction : transform.right;
                 Gizmos.DrawRay(transform.position, dir * 2F);
             }
         }

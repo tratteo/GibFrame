@@ -41,7 +41,7 @@ namespace GibFrame
 
         protected override void Callback()
         {
-            foreach (AbstractCallback callback in callbacks)
+            foreach (var callback in callbacks)
             {
                 callback.Invoke();
             }
@@ -50,7 +50,7 @@ namespace GibFrame
         private void InitializeCallbacks(params AbstractCallback[] callbacks)
         {
             this.callbacks = new List<AbstractCallback>();
-            foreach (AbstractCallback callback in callbacks)
+            foreach (var callback in callbacks)
             {
                 AddCallback(callback);
             }

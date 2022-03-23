@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace GibFrame
 {
-    public abstract class DiscreteSelector : Selector
+    public abstract class DiscreteSelector2D : Selector2D
     {
         [Header("Discrete selector")]
         [SerializeField] protected float updateInterval = 0.2F;
