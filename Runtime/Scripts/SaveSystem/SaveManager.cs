@@ -22,15 +22,14 @@ namespace GibFrame.SaveSystem
         /// <param name="data"> </param>
         /// <param name="path"> </param>
         /// <returns> SaveObject instance, null on error </returns>
-        public static SaveObject SavePersistentData<T>(T data, string path)
+        public static T SavePersistentData<T>(T data, string path)
         {
             TryEncrypt(data);
-            SaveObject saveObject = new SaveObject(data);
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Create);
+            var formatter = new BinaryFormatter();
+            var stream = new FileStream(path, FileMode.Create);
             formatter.Serialize(stream, data);
             stream.Close();
-            return saveObject;
+            return data;
         }
 
         /// <summary>
@@ -42,32 +41,37 @@ namespace GibFrame.SaveSystem
         ///   <code>saveObject.GetData() </code>
         ///   to retrieve data. If the data is not present a null SaveObject will be returned
         /// </returns>
-        public static SaveObject LoadPersistentData(string path)
+        public static bool TryLoadPersistentData<T>(string path, out T result)
         {
-            SaveObject saveObject;
             if (File.Exists(path))
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                FileStream stream = new FileStream(path, FileMode.Open);
+                var formatter = new BinaryFormatter();
+                var stream = new FileStream(path, FileMode.Open);
                 if (stream.Length == 0)
-                    return null;
-                object data = formatter.Deserialize(stream);
+                {
+                    result = default;
+                    return false;
+                }
+
+                var data = formatter.Deserialize(stream);
                 if (data is EncryptedData)
                 {
                     if ((data as EncryptedData).GetDeviceID() != SystemInfo.deviceUniqueIdentifier)
                     {
                         UnityEngine.Debug.LogError("Unauthorized to open encrypted file, identifiers not matching, aborting");
                         stream.Close();
-                        return null;
+                        result = default;
+                        return false;
                     }
                 }
-                saveObject = new SaveObject(data);
+                result = (T)data;
                 stream.Close();
-                return saveObject;
+                return true;
             }
             else
             {
-                return null;
+                result = default;
+                return false;
             }
         }
 
@@ -80,17 +84,12 @@ namespace GibFrame.SaveSystem
         /// <returns> The retrieved or created data </returns>
         public static T LoadOrInitialize<T>(T newData, string path)
         {
-            T data;
-            SaveObject saveObject = LoadPersistentData(path);
-            if (saveObject != null)
-            {
-                data = saveObject.GetData<T>();
-            }
-            else
+            if (!TryLoadPersistentData(path, out T data))
             {
                 data = newData;
                 SavePersistentData(data, path);
             }
+
             return data;
         }
 
@@ -141,7 +140,7 @@ namespace GibFrame.SaveSystem
             public static void MarkDirty(params (object, string)[] elements)
             {
                 jobs ??= new Queue<SerializeJob>();
-                foreach ((object, string) elem in elements)
+                foreach (var elem in elements)
                 {
                     jobs.Enqueue(new SerializeJob(elem.Item1, elem.Item2));
                 }
