@@ -15,6 +15,33 @@ namespace GibFrame.SaveSystem
 {
     public static class SaveManager
     {
+        public static string SaveJson<T>(T jsonClass, string path, bool pretty = true)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var json = JsonUtility.ToJson(jsonClass, pretty);
+            File.WriteAllText(path, json);
+            return json;
+        }
+
+        public static bool TryLoadJson<T>(string path, out T jsonClass)
+        {
+            if (!File.Exists(path))
+            {
+                jsonClass = default;
+                return false;
+            }
+            try
+            {
+                jsonClass = JsonUtility.FromJson<T>(File.ReadAllText(path));
+                return true;
+            }
+            catch (Exception)
+            {
+                jsonClass = default;
+                return false;
+            }
+        }
+
         /// <summary>
         ///   Save a generic type of data in the application persisten data path.
         /// </summary>
@@ -22,7 +49,7 @@ namespace GibFrame.SaveSystem
         /// <param name="data"> </param>
         /// <param name="path"> </param>
         /// <returns> SaveObject instance, null on error </returns>
-        public static T SavePersistentData<T>(T data, string path)
+        public static T SaveBinaryData<T>(T data, string path)
         {
             TryEncrypt(data);
             var formatter = new BinaryFormatter();
@@ -41,7 +68,7 @@ namespace GibFrame.SaveSystem
         ///   <code>saveObject.GetData() </code>
         ///   to retrieve data. If the data is not present a null SaveObject will be returned
         /// </returns>
-        public static bool TryLoadPersistentData<T>(string path, out T result)
+        public static bool TryLoadBinaryData<T>(string path, out T result)
         {
             if (File.Exists(path))
             {
@@ -82,12 +109,12 @@ namespace GibFrame.SaveSystem
         /// <param name="newData"> </param>
         /// <param name="path"> </param>
         /// <returns> The retrieved or created data </returns>
-        public static T LoadOrInitialize<T>(T newData, string path)
+        public static T LoadOrInitializeBinaryData<T>(T newData, string path)
         {
-            if (!TryLoadPersistentData(path, out T data))
+            if (!TryLoadBinaryData(path, out T data))
             {
                 data = newData;
-                SavePersistentData(data, path);
+                SaveBinaryData(data, path);
             }
 
             return data;
@@ -157,7 +184,7 @@ namespace GibFrame.SaveSystem
                 while (jobs.Count > 0)
                 {
                     job = jobs.Dequeue();
-                    SavePersistentData(job.Data, job.Path);
+                    SaveBinaryData(job.Data, job.Path);
                 }
             }
 
