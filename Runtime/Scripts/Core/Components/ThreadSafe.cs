@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace GibFrame
 {
+    /// <summary>
+    ///   Safely execute methods that needs to run on Unity's main thread from any other thread
+    /// </summary>
     public class ThreadSafe : MonoSingleton<ThreadSafe>
     {
         private Queue<Action> updateJobs;
