@@ -21,19 +21,22 @@ namespace GibEditor
         private Waypoint from;
         private float sProb = 1F;
         private GUIStyle sectionsStyle;
+        private SerializedObject so;
 
         private void OnEnable()
         {
             waypoint = Resources.Load("GibFrame/PathBuilder/Waypoint_P") as GameObject;
             sectionsStyle = new GUIStyle();
-            to = new List<Waypoint> { null };
+            to = new List<Waypoint>();
             from = null;
             sectionsStyle.fontSize = 18;
             sectionsStyle.normal.textColor = Color.white;
+            so = new SerializedObject(this);
         }
 
         private void OnGUI()
         {
+            so.Update();
             EditorGUILayout.LabelField(new GUIContent("Setup"), sectionsStyle);
             GUILayout.Space(5);
             path = EditorGUILayout.ObjectField(path, typeof(Path), false) as Path;
@@ -75,10 +78,9 @@ namespace GibEditor
             EditorGUILayout.LabelField(new GUIContent("Pathing"), sectionsStyle);
             GUILayout.Space(5);
             from = EditorGUILayout.ObjectField("From", from, typeof(Waypoint), true) as Waypoint;
-            SerializedObject so = new SerializedObject(this);
             SerializedProperty toProp = so.FindProperty("to");
             EditorGUILayout.PropertyField(toProp, new GUIContent("To"), true, null);
-            so.ApplyModifiedProperties();
+
             if (GUILayout.Button(new GUIContent("Link")))
             {
                 TryLinkWaypoints();
@@ -90,15 +92,21 @@ namespace GibEditor
             if (GUILayout.Button(new GUIContent("Clear")))
             {
                 from = null;
-                to = new List<Waypoint> { null };
+                to = new List<Waypoint>();
             }
 
-            if (Selection.gameObjects.Length == 1 && path == null)
+            so.ApplyModifiedProperties();
+        }
+
+        private void OnSelectionChange()
+        {
+            if (Selection.gameObjects.Length == 1)
             {
                 Path p = Selection.gameObjects[0].GetComponent<Path>();
-                if (p != null)
+                if (p != null && p != path)
                 {
                     path = p;
+                    Repaint();
                 }
             }
         }

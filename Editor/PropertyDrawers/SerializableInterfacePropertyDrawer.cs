@@ -16,9 +16,10 @@ namespace GibFrame.Editor
                 tooltip = $"This reference is marked as interface"
             };
             EditorGUI.BeginProperty(position, label, property);
-            GUI.contentColor = new Color(185 / 255F, 255 / 255F, 185 / 255F);
             EditorGUI.BeginChangeCheck();
+            GUI.contentColor = new Color(185 / 255F, 255 / 255F, 185 / 255F);
             EditorGUI.PropertyField(position, behaviourProp, label, true);
+            GUI.contentColor = Color.white;
             if (EditorGUI.EndChangeCheck())
             {
                 if (!Type.GetType(interfaceProp.stringValue).IsAssignableFrom(behaviourProp.objectReferenceValue.GetType()))
@@ -29,7 +30,6 @@ namespace GibFrame.Editor
                     property.serializedObject.ApplyModifiedPropertiesWithoutUndo();
                 }
             }
-            GUI.contentColor = Color.white;
             EditorGUI.EndProperty();
         }
     }

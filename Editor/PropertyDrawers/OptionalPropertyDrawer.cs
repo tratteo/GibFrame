@@ -13,10 +13,10 @@ namespace GibFrame.Editor
                 tooltip = "This reference is marked as optional, it can safely be null"
             };
             EditorGUI.BeginProperty(position, label, property);
-            GUI.contentColor = new Color(255 / 255F, 233 / 255F, 179 / 255F);
             var prop = property.FindPropertyRelative("obj");
-
+            GUI.contentColor = new Color(255 / 255F, 233 / 255F, 179 / 255F);
             EditorGUI.PropertyField(position, prop, label, true);
+            GUI.contentColor = Color.white;
             EditorGUI.EndProperty();
         }
     }
