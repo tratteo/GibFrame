@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3181753773540452939}
   - component: {fileID: 3181753773540452938}
   - component: {fileID: 3181753773540452937}
-  - component: {fileID: 3861704614822833092}
+  - component: {fileID: 3024984085910676210}
   m_Layer: 5
   m_Name: Tabs
   m_TagString: Untagged
@@ -30,6 +30,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3181753773999026442}
   m_RootOrder: 0
@@ -103,7 +104,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &3861704614822833092
+--- !u!114 &3024984085910676210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,7 +113,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3181753773540452934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66995c5273a661b4a880ae3d955a0ac3, type: 3}
+  m_Script: {fileID: 11500000, guid: 82a42f685ab6f1a43973fbfdcfef24df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3181753773885911466
@@ -143,6 +144,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3181753773999026442}
   m_RootOrder: 1
@@ -201,7 +203,7 @@ GameObject:
   - component: {fileID: 3181753773999026442}
   - component: {fileID: 3181753773999026444}
   - component: {fileID: 3181753773999026443}
-  - component: {fileID: 6742968653252152738}
+  - component: {fileID: 7608104262265572365}
   m_Layer: 5
   m_Name: TabView
   m_TagString: Untagged
@@ -219,6 +221,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3181753773540452935}
   - {fileID: 3181753773885911467}
@@ -268,7 +271,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6742968653252152738
+--- !u!114 &7608104262265572365
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,7 +280,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3181753773999026441}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 404727d691292d041bb237551d9b90ac, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d7e5d7ed81413f449670e5fef90af25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tabButtonPrefab: {fileID: 0}
+  tabButtonPrefab: {fileID: 7831885044297110032, guid: f03ea4967699c8147b23b0bb36c67ca3, type: 3}

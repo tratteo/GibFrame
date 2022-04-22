@@ -5,6 +5,7 @@
 // All Rights Reserved
 
 using GibFrame;
+using GibFrame.Data;
 using UnityEditor;
 using UnityEngine;
 

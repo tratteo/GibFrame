@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6994285925248005458}
   - component: {fileID: 7117358570337029129}
   - component: {fileID: 8005930661978031545}
-  - component: {fileID: 8474068731696257052}
+  - component: {fileID: 5546458447122015650}
   m_Layer: 5
   m_Name: Toast
   m_TagString: Untagged
@@ -29,6 +29,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7297297, y: 0.7297297, z: 0.7297297}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4463140120828827049}
   m_Father: {fileID: 0}
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.92156863, b: 1, a: 0.7254902}
+  m_Color: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0.7254902}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -77,7 +78,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8474068731696257052
+--- !u!114 &5546458447122015650
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5719190905536423622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 991e7d025d4f5e34a8923835d1e93bba, type: 3}
+  m_Script: {fileID: 11500000, guid: 971a5a3e7d6d40142bf09b1fb6e8e2e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6451571584137943032
@@ -117,6 +118,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6994285925248005458}
   m_RootOrder: 0

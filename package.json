@@ -1,8 +1,8 @@
 {
   "name": "com.tratteo.gibframe",
   "version": "5.0.0",
-  "displayName": "GibFrame Package",
-  "description": "A Unity framework containing some useful utitlities",
+  "displayName": "GibFrame",
+  "description": "The Unity framework for gibbon coders",
   "keywords": [
     "plugin",
     "utils"

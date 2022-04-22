@@ -9,8 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using GibFrame;
+using GibFrame.Meta;
 using UnityEditor;
 using UnityEngine;
 
