@@ -19,32 +19,26 @@ namespace GibFrame
             return Array.Find(transforms, (elem) => elem.name.Equals(name));
         }
 
-        public static List<T> GetInterfacesOfType<T>(bool inactive = false)
+        public static List<T> GetInterfacesOfType<T>(bool inactive = false) where T : class
         {
             var interfaces = new List<T>();
-            var monoBehaviours = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>(inactive);
-            foreach (var item in monoBehaviours)
+            var objects = UnityEngine.Object.FindObjectsOfType<GameObject>(inactive);
+            foreach (var obj in objects)
             {
-                if (item is T)
-                {
-                    var elems = item.GetComponents<T>();
-                    foreach (var e in elems)
-                    {
-                        interfaces.Add(e);
-                    }
-                }
+                var elems = obj.GetComponents<T>();
+                interfaces.AddRange(elems);
             }
             return interfaces;
         }
 
-        public static T GetFirstInterfaceOfType<T>(bool inactive = false)
+        public static T GetFirstInterfaceOfType<T>(bool inactive = false) where T : class
         {
-            var monoBehaviours = UnityEngine.Object.FindObjectsOfType<MonoBehaviour>(inactive);
+            var monoBehaviours = UnityEngine.Object.FindObjectsOfType<GameObject>(inactive);
             foreach (var item in monoBehaviours)
             {
-                if (item is T)
+                if (item.TryGetComponent<T>(out var elem))
                 {
-                    return item.gameObject.GetComponent<T>();
+                    return elem;
                 }
             }
             return default;
