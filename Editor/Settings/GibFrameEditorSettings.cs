@@ -16,7 +16,6 @@ namespace GibEditor
         public const string DISABLE_COMMFIXEDUPDATE = "GIB_NO_COMMFIXEDUPDATE";
         public const string DISABLE_COMMLATEUPDATE = "GIB_NO_COMMLATEUPDATE";
         public const string DISABLE_RUNTIME_UPDATER_INSTANTIATE = "GIB_NO_COMM_RUNTIME_INSTANTIATE";
-        public const string ENABLE_LOGGING = "GIB_ENABLE_LOG";
         internal const string PATH = ".gibconfig.json";
 
         public static GibFrameEditorSettingsData Data { get; private set; } = null;
@@ -29,7 +28,7 @@ namespace GibEditor
             }
             else
             {
-                GibFrameEditorSettingsData data = new GibFrameEditorSettingsData();
+                var data = new GibFrameEditorSettingsData();
                 File.WriteAllText(PATH, JsonUtility.ToJson(data));
                 Data = data;
             }
@@ -68,14 +67,6 @@ namespace GibEditor
             static Setup()
             {
                 LoadSettings();
-                if (Data.enableLogging)
-                {
-                    GibFrameSettingsEditorWindow.AddDefineSymbols(ENABLE_LOGGING);
-                }
-                else
-                {
-                    GibFrameSettingsEditorWindow.RemoveDefineSymbols(ENABLE_LOGGING);
-                }
                 EditorApplication.playModeStateChanged += OnPlayModeChanged;
                 EditorApplication.quitting += SaveSettings;
             }

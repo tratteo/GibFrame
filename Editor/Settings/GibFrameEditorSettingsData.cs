@@ -12,7 +12,6 @@ namespace GibEditor
         public string defaultSceneName;
         public bool loadDefaultSceneOnPlay;
         public bool restoreOpenedScenes;
-        public bool enableLogging;
         public bool enableCommonUpdate;
         public bool enableCommonFixedUpdate;
         public bool enableCommonLateUpdate;
@@ -25,7 +24,6 @@ namespace GibEditor
             defaultSceneName = "";
 
             runtimeCommonUpdateInstantiate = true;
-            enableLogging = true;
             enableCommonFixedUpdate = true;
             enableCommonLateUpdate = true;
             enableCommonUpdate = true;

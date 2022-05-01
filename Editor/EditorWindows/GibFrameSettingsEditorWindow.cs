@@ -18,16 +18,16 @@ namespace GibEditor
 
         internal static void AddDefineSymbols(params string[] symbols)
         {
-            string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
-            List<string> allDefines = definesString.Split(';').ToList();
+            var definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            var allDefines = definesString.Split(';').ToList();
             allDefines.AddRange(symbols.Except(allDefines));
             PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, string.Join(";", allDefines.ToArray()));
         }
 
         internal static void RemoveDefineSymbols(params string[] symbols)
         {
-            string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
-            List<string> allDefines = definesString.Split(';').ToList();
+            var definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            var allDefines = definesString.Split(';').ToList();
             allDefines.RemoveAll(s => symbols.Contains(s));
             PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, string.Join(";", allDefines.ToArray()));
         }
@@ -77,8 +77,8 @@ namespace GibEditor
             EditorGUILayout.EndHorizontal();
             if (EditorGUI.EndChangeCheck())
             {
-                List<string> addSymbols = new List<string>();
-                List<string> removeSymbols = new List<string>();
+                var addSymbols = new List<string>();
+                var removeSymbols = new List<string>();
                 if (!GibFrameEditorSettings.Data.enableCommonUpdate)
                 {
                     addSymbols.Add(GibFrameEditorSettings.DISABLE_COMMUPDATE);
@@ -127,26 +127,6 @@ namespace GibEditor
                 else
                 {
                     RemoveDefineSymbols(GibFrameEditorSettings.DISABLE_RUNTIME_UPDATER_INSTANTIATE);
-                }
-                GibFrameEditorSettings.SaveSettings();
-            }
-            GUILayout.Space(10);
-            EditorGUILayout.LabelField(new GUIContent("Logging"), sectionsStyle);
-            GUILayout.Space(5);
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("Enable logging", "Enable guarded logging"), defaultOptions);
-            GibFrameEditorSettings.Data.enableLogging = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.enableLogging, defaultOptions);
-            EditorGUILayout.EndHorizontal();
-            if (EditorGUI.EndChangeCheck())
-            {
-                if (GibFrameEditorSettings.Data.enableLogging)
-                {
-                    AddDefineSymbols(GibFrameEditorSettings.ENABLE_LOGGING);
-                }
-                else
-                {
-                    RemoveDefineSymbols(GibFrameEditorSettings.ENABLE_LOGGING);
                 }
                 GibFrameEditorSettings.SaveSettings();
             }

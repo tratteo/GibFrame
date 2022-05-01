@@ -6,7 +6,6 @@
 
 using GibFrame.UI;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace GibEditor
@@ -14,62 +13,97 @@ namespace GibEditor
     [CustomEditor(typeof(GButton))]
     internal class GButtonCustomEditor : Editor
     {
-        private GButton script;
-        private SerializedProperty pointerDownProp, pointerUpProp, longPressedProp;
         private GUIStyle labelStyle;
 
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.PropertyField(pointerDownProp);
-            EditorGUILayout.PropertyField(pointerUpProp);
-            EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("Behaviour", labelStyle);
-            EditorGUILayout.Space(4);
-            script.callbackOnlyOnPointerInside = EditorGUILayout.Toggle("Events only on pointer inside", script.callbackOnlyOnPointerInside);
-            script.inheritCallbackEvents = EditorGUILayout.Toggle("Inherit callbacks activation", script.inheritCallbackEvents);
-            script.enableLongPress = EditorGUILayout.Toggle("Long press", script.enableLongPress);
-            if (script.enableLongPress)
+            #region Events
+
+            EditorGUILayout.LabelField("Events", labelStyle);
+            EditorGUILayout.Space(5);
+            PropertyField("onPressed");
+            PropertyField("onReleased");
+            var lp = PropertyField("enableLongPress", "Long press");
+            if (lp.boolValue)
             {
-                script.longPressDelay = EditorGUILayout.IntField("Long press delay", script.longPressDelay);
-                EditorGUILayout.PropertyField(longPressedProp);
-            }
-            EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("Graphics", labelStyle);
-            EditorGUILayout.Space(4);
-            EditorGUILayout.LabelField("Pressed sprite");
-            script.pressedSprite = EditorGUILayout.ObjectField(script.pressedSprite, typeof(Sprite), true) as Sprite;
-            script.colorPressEffect = EditorGUILayout.Toggle("Pressed color effect", script.colorPressEffect);
-            if (script.colorPressEffect)
-            {
-                script.pressedColor = EditorGUILayout.ColorField("Pressed color", script.pressedColor);
-            }
-            script.resizeOnPress = EditorGUILayout.Toggle("Resize on press", script.resizeOnPress);
-            if (script.resizeOnPress)
-            {
-                script.pressedScaleMultiplier = EditorGUILayout.Vector2Field("Resize multiplier", script.pressedScaleMultiplier);
+                PropertyField("longPressDelay", "Long press delay");
+                PropertyField("resetOnFire", "Reset on fire", "If disabled, keep firing the event when the button is pressed");
+                PropertyField("onLongPressed");
             }
 
-            if (GUI.changed)
+            EditorGUILayout.Space(10);
+
+            #endregion Events
+
+            #region Behaviour
+
+            EditorGUILayout.LabelField("Behaviour", labelStyle);
+            EditorGUILayout.Space(5);
+            PropertyField("callbackOnlyOnPointerInside", "Events only on pointer inside");
+            PropertyField("inheritCallbackEvents", "Inherit callbacks activation");
+
+            EditorGUILayout.Space(10);
+
+            #endregion Behaviour
+
+            #region Graphics
+
+            EditorGUILayout.LabelField("Graphics", labelStyle);
+            EditorGUILayout.Space(5);
+            PropertyField("pressedSprite", "Pressed sprite");
+            lp = PropertyField("colorPressEffect", "Color effect");
+            if (lp.boolValue)
             {
-                EditorUtility.SetDirty(script);
-                if (!Application.isPlaying)
-                {
-                    EditorSceneManager.MarkSceneDirty(script.gameObject.scene);
-                }
-                serializedObject.ApplyModifiedProperties();
+                PropertyField("pressedColor", "Pressed color");
             }
+            lp = PropertyField("pressedSizeEffect", "Size effect");
+            if (lp.boolValue)
+            {
+                PropertyField("pressedScaleMultiplier", "Pressed scale");
+            }
+
+            #endregion Graphics
         }
 
         protected virtual void OnEnable()
         {
-            script = (GButton)target;
-
-            pointerDownProp = serializedObject.FindProperty("onPressed");
-            pointerUpProp = serializedObject.FindProperty("onReleased");
-            longPressedProp = serializedObject.FindProperty("onLongPressed");
-            labelStyle = new GUIStyle();
-            labelStyle.fontSize = 16;
+            labelStyle = new GUIStyle
+            {
+                fontSize = 16
+            };
             labelStyle.normal.textColor = Color.white;
+        }
+
+        private SerializedProperty PropertyField<T>(string propName, string label = null)
+        {
+            var prop = serializedObject.FindProperty(propName);
+            label ??= propName;
+            serializedObject.Update();
+            if (typeof(T) == typeof(bool))
+            {
+                prop.boolValue = EditorGUILayout.Toggle(label, prop.boolValue);
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                prop.intValue = EditorGUILayout.IntField(label, prop.intValue);
+            }
+            else
+            {
+                EditorGUILayout.PropertyField(prop, new GUIContent(label));
+            }
+            serializedObject.ApplyModifiedProperties();
+            return prop;
+        }
+
+        private SerializedProperty PropertyField(string propName, string label = null, string tooltip = null)
+        {
+            var prop = serializedObject.FindProperty(propName);
+            label ??= propName;
+            tooltip ??= string.Empty;
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(prop, new GUIContent(label, tooltip));
+            serializedObject.ApplyModifiedProperties();
+            return prop;
         }
     }
 }

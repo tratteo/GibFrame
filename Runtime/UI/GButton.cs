@@ -4,6 +4,7 @@
 //
 // All Rights Reserved
 
+using System;
 using GibFrame.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,74 +15,52 @@ namespace GibFrame.UI
 {
     public class GButton : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
-        public bool enableLongPress;
-        public int longPressDelay;
-        public UnityEvent onLongPressed;
-        public Sprite pressedSprite;
-        public bool colorPressEffect;
-        public Color32 pressedColor;
-        public bool resizeOnPress;
-        public Vector2 pressedScaleMultiplier;
-        public Color32 defaultColor;
-        public Image image;
-        public UnityEvent onPressed;
-        public UnityEvent onReleased;
-        public bool inheritCallbackEvents = false;
-        public bool callbackOnlyOnPointerInside = true;
-        private Sprite unpressedSprite;
+        [SerializeField] private Sprite pressedSprite;
 
-        private CallbackEvent OnReleaseEvent;
-        private CallbackEvent OnPressedEvent;
-        private CallbackEvent OnPointerEnterEvent;
-        private CallbackEvent OnPointerExitEvent;
-        private CallbackEvent OnCancelEvent;
-        private CallbackEvent OnLongPressEvent;
+        [SerializeField] private bool colorPressEffect;
+        [SerializeField] private Color32 pressedColor;
+
+        [SerializeField] private bool pressedSizeEffect;
+        [SerializeField] private Vector2 pressedScaleMultiplier = new Vector2(1, 1);
+
+        [SerializeField] private bool enableLongPress;
+        [SerializeField] private UnityEvent onLongPressed;
+        [SerializeField] private int longPressDelay;
+        [SerializeField] private bool resetOnFire = true;
+        [SerializeField] private UnityEvent onPressed;
+        [SerializeField] private UnityEvent onReleased;
+
+        [SerializeField] private bool inheritCallbackEvents = false;
+        [SerializeField] private bool callbackOnlyOnPointerInside = true;
+
+        private Sprite unpressedSprite;
+        private Image image;
+        private Color32 defaultColor;
 
         private EventTrigger.Entry pointerDown;
         private EventTrigger.Entry pointerUp;
-        private bool canReleaseExecute = false;
+        private bool pointerInside = false;
         private bool clicked = false;
         private GButton[] childButtons;
         private float currentPressTime = 0F;
 
-        public void AddOnCancelCallback(AbstractCallback Callback)
+        public event Action LongPressed = delegate { };
 
-        {
-            OnCancelEvent.Subscribe(Callback);
-        }
+        public event Action PointerExit = delegate { };
 
-        public void AddOnPressedCallback(AbstractCallback Callback)
-        {
-            OnPressedEvent.Subscribe(Callback);
-        }
+        public event Action PointerEnter = delegate { };
 
-        public void AddOnReleasedCallback(AbstractCallback Callback)
-        {
-            OnReleaseEvent.Subscribe(Callback);
-        }
+        public event Action Pressed = delegate { };
 
-        public void AddOnPointerEnterCallback(AbstractCallback callback)
-        {
-            OnPointerEnterEvent.Subscribe(callback);
-        }
-
-        public void AddOnPointerExitCallback(AbstractCallback callback)
-        {
-            OnPointerExitEvent.Subscribe(callback);
-        }
-
-        public void AddOnLongPressedCallback(AbstractCallback callback)
-        {
-            OnLongPressEvent.Subscribe(callback);
-        }
+        public event Action Released = delegate { };
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            OnPointerEnterEvent.Invoke();
+            PointerEnter.Invoke();
 
             if (callbackOnlyOnPointerInside)
             {
-                canReleaseExecute = true;
+                pointerInside = true;
                 if (clicked)
                 {
                     PressUI();
@@ -91,23 +70,17 @@ namespace GibFrame.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            OnPointerExitEvent.Invoke();
+            PointerExit.Invoke();
             if (callbackOnlyOnPointerInside)
             {
-                canReleaseExecute = false;
+                pointerInside = false;
                 ResetUI();
             }
+            currentPressTime = 0F;
         }
 
         protected virtual void Awake()
         {
-            OnReleaseEvent = new CallbackEvent();
-            OnPressedEvent = new CallbackEvent();
-            OnPointerExitEvent = new CallbackEvent();
-            OnPointerEnterEvent = new CallbackEvent();
-            OnCancelEvent = new CallbackEvent();
-            OnLongPressEvent = new CallbackEvent();
-
             childButtons = GetComponentsInChildren<GButton>(true);
             childButtons = childButtons.FindAll((b) => b.inheritCallbackEvents && !b.gameObject.Equals(gameObject)).ToArray();
             image = GetComponentInChildren<Image>();
@@ -121,13 +94,13 @@ namespace GibFrame.UI
             {
                 eventID = EventTriggerType.PointerDown
             };
-            pointerDown.callback.AddListener((e) => Pressed());
+            pointerDown.callback.AddListener((e) => OnPressed());
 
             pointerUp = new EventTrigger.Entry
             {
                 eventID = EventTriggerType.PointerUp
             };
-            pointerUp.callback.AddListener((e) => Released());
+            pointerUp.callback.AddListener((e) => OnReleased());
 
             trigger.triggers.Add(pointerDown);
             trigger.triggers.Add(pointerUp);
@@ -135,48 +108,50 @@ namespace GibFrame.UI
 
         private void Update()
         {
-            if (enableLongPress && clicked)
+            if (enableLongPress && pointerInside && (!resetOnFire || clicked))
             {
                 currentPressTime += Time.unscaledDeltaTime * 1000F;
                 if (currentPressTime >= longPressDelay)
                 {
-                    onLongPressed.Invoke();
-                    OnLongPressEvent.Invoke();
-                    currentPressTime = 0;
-                    Released();
+                    if (pointerInside || !callbackOnlyOnPointerInside)
+                    {
+                        onLongPressed.Invoke();
+                        LongPressed.Invoke();
+                        currentPressTime = 0;
+                        OnReleased(true);
+                    }
                 }
             }
         }
 
-        private void Pressed()
+        private void OnPressed()
         {
             clicked = true;
             PressUI();
             onPressed.Invoke();
-            OnPressedEvent.Invoke();
+            Pressed.Invoke();
             foreach (var child in childButtons)
             {
                 child.onPressed?.Invoke();
             }
         }
 
-        private void Released()
+        private void OnReleased(bool fromLongPress = false)
         {
-            ResetUI();
+            if (!fromLongPress || resetOnFire)
+            {
+                ResetUI();
+            }
             clicked = false;
             currentPressTime = 0F;
-            if (canReleaseExecute || !callbackOnlyOnPointerInside)
+            if (pointerInside || !callbackOnlyOnPointerInside)
             {
                 onReleased.Invoke();
                 foreach (var child in childButtons)
                 {
                     child.onReleased?.Invoke();
                 }
-                OnReleaseEvent.Invoke();
-            }
-            else
-            {
-                OnCancelEvent.Invoke();
+                Released.Invoke();
             }
         }
 
@@ -186,7 +161,7 @@ namespace GibFrame.UI
             {
                 image.color = defaultColor;
             }
-            if (resizeOnPress)
+            if (pressedSizeEffect)
             {
                 image.rectTransform.localScale = Vector2.one;
             }
@@ -203,7 +178,7 @@ namespace GibFrame.UI
             {
                 image.color = pressedColor;
             }
-            if (resizeOnPress)
+            if (pressedSizeEffect)
             {
                 var newScale = new Vector2(image.rectTransform.localScale.x * pressedScaleMultiplier.x, image.rectTransform.localScale.y * pressedScaleMultiplier.y);
                 image.rectTransform.localScale = newScale;
