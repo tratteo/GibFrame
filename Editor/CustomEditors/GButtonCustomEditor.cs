@@ -14,55 +14,69 @@ namespace GibEditor
     internal class GButtonCustomEditor : Editor
     {
         private GUIStyle labelStyle;
+        private bool events;
+        private bool behaviour;
+        private bool graphics;
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+            SerializedProperty serProp;
+
             #region Events
 
-            EditorGUILayout.LabelField("Events", labelStyle);
-            EditorGUILayout.Space(5);
-            PropertyField("onPressed");
-            PropertyField("onReleased");
-            var lp = PropertyField("enableLongPress", "Long press");
-            if (lp.boolValue)
+            events = EditorGUILayout.Foldout(events, "Events", true);
+            if (events)
             {
-                PropertyField("longPressDelay", "Long press delay");
-                PropertyField("resetOnFire", "Reset on fire", "If disabled, keep firing the event when the button is pressed");
-                PropertyField("onLongPressed");
-            }
+                this.PropertyField("onPressed");
+                this.PropertyField("onReleased");
+                serProp = this.PropertyField("enableLongPress", "Long press");
+                if (serProp.boolValue)
+                {
+                    this.PropertyField("longPressDelay", "Long press delay");
+                    this.PropertyField("resetOnFire", "Reset on fire", "If disabled, keep firing the event when the button is pressed");
+                    this.PropertyField("onLongPressed");
+                }
 
-            EditorGUILayout.Space(10);
+                EditorGUILayout.Space(10);
+            }
 
             #endregion Events
 
             #region Behaviour
 
-            EditorGUILayout.LabelField("Behaviour", labelStyle);
-            EditorGUILayout.Space(5);
-            PropertyField("callbackOnlyOnPointerInside", "Events only on pointer inside");
-            PropertyField("inheritCallbackEvents", "Inherit callbacks activation");
+            behaviour = EditorGUILayout.Foldout(behaviour, "Behaviour", true);
+            if (behaviour)
+            {
+                this.PropertyField("callbackOnlyOnPointerInside", "Events only on pointer inside");
+                this.PropertyField("inheritCallbackEvents", "Inherit callbacks activation");
 
-            EditorGUILayout.Space(10);
+                EditorGUILayout.Space(10);
+            }
 
             #endregion Behaviour
 
             #region Graphics
 
-            EditorGUILayout.LabelField("Graphics", labelStyle);
-            EditorGUILayout.Space(5);
-            PropertyField("pressedSprite", "Pressed sprite");
-            lp = PropertyField("colorPressEffect", "Color effect");
-            if (lp.boolValue)
+            graphics = EditorGUILayout.Foldout(graphics, "Graphics", true);
+            if (graphics)
             {
-                PropertyField("pressedColor", "Pressed color");
-            }
-            lp = PropertyField("pressedSizeEffect", "Size effect");
-            if (lp.boolValue)
-            {
-                PropertyField("pressedScaleMultiplier", "Pressed scale");
+                this.PropertyField("pressedSprite", "Pressed sprite");
+                serProp = this.PropertyField("colorPressEffect", "Color effect");
+                if (serProp.boolValue)
+                {
+                    this.PropertyField("pressedColor", "Pressed color");
+                }
+                serProp = this.PropertyField("pressedSizeEffect", "Size effect");
+                if (serProp.boolValue)
+                {
+                    this.PropertyField("pressedScaleMultiplier", "Pressed scale");
+                }
             }
 
             #endregion Graphics
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         protected virtual void OnEnable()
@@ -72,38 +86,6 @@ namespace GibEditor
                 fontSize = 16
             };
             labelStyle.normal.textColor = Color.white;
-        }
-
-        private SerializedProperty PropertyField<T>(string propName, string label = null)
-        {
-            var prop = serializedObject.FindProperty(propName);
-            label ??= propName;
-            serializedObject.Update();
-            if (typeof(T) == typeof(bool))
-            {
-                prop.boolValue = EditorGUILayout.Toggle(label, prop.boolValue);
-            }
-            else if (typeof(T) == typeof(int))
-            {
-                prop.intValue = EditorGUILayout.IntField(label, prop.intValue);
-            }
-            else
-            {
-                EditorGUILayout.PropertyField(prop, new GUIContent(label));
-            }
-            serializedObject.ApplyModifiedProperties();
-            return prop;
-        }
-
-        private SerializedProperty PropertyField(string propName, string label = null, string tooltip = null)
-        {
-            var prop = serializedObject.FindProperty(propName);
-            label ??= propName;
-            tooltip ??= string.Empty;
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(prop, new GUIContent(label, tooltip));
-            serializedObject.ApplyModifiedProperties();
-            return prop;
         }
     }
 }
