@@ -10,35 +10,41 @@ using UnityEngine;
 
 namespace GibFrame.Selectors
 {
-    public abstract class Selector2D : MonoBehaviour
+    public abstract class Selector : MonoBehaviour
     {
         [Header("Filters")]
         public LayerMask mask = ~0;
         [Header("Behaviour")]
-        [Tooltip("Call the function for ISelectable components")]
-        public bool notifySelectables = true;
-        private readonly List<Predicate<Collider2D>> predicates = new List<Predicate<Collider2D>>();
+        private readonly List<Predicate<GameObject>> predicates = new List<Predicate<GameObject>>();
         [Header("Debug")]
         [SerializeField] private bool debugRender = true;
-        private Collider2D currentCollider2D;
+        private GameObject currentCollider;
         private ISelectable currentSelected = null;
+        [Header("Advanced")]
+        [SerializeField] private bool nonAlloc = false;
+        [Tooltip("Define the maximum buffer size when using the non alloc option")]
+        [SerializeField] private int bufferSize = 16;
 
-        public virtual bool Enabled { get; private set; } = true;
+        public bool Enabled { get; private set; } = true;
 
-        public Collider2D Selected => currentCollider2D;
+        public GameObject SelectedObj => currentCollider;
+
+        protected int BufferSize => bufferSize;
+
+        protected bool NonAlloc => nonAlloc;
 
         protected bool DebugRender => debugRender;
 
-        public event Action<Collider2D> OnSelected = delegate { };
+        public event Action<GameObject> Selected = delegate { };
 
-        public event Action<Collider2D> OnDeselected = delegate { };
+        public event Action<GameObject> Deselected = delegate { };
 
         public virtual void SetActive(bool state)
         {
             Enabled = state;
         }
 
-        public void InjectPredicates(params Predicate<Collider2D>[] pred)
+        public void InjectPredicates(params Predicate<GameObject>[] pred)
         {
             foreach (var p in pred)
             {
@@ -53,16 +59,16 @@ namespace GibFrame.Selectors
 
         public void ResetSelection()
         {
-            if (currentCollider2D)
+            if (currentCollider)
             {
-                OnDeselected?.Invoke(currentCollider2D);
+                Deselected?.Invoke(currentCollider);
             }
-            if (currentSelected != null && notifySelectables)
+            if (currentSelected != null)
             {
                 currentSelected.OnDeselect();
             }
             currentSelected = null;
-            currentCollider2D = null;
+            currentCollider = null;
         }
 
         protected virtual void Start()
@@ -73,29 +79,29 @@ namespace GibFrame.Selectors
         {
         }
 
-        protected bool IsCollider2DValid(Collider2D Collider2D)
+        protected bool IsGameObjectValid(GameObject collider)
         {
             foreach (var predicate in predicates)
             {
-                if (predicate != null && !predicate(Collider2D))
+                if (predicate != null && !predicate(collider))
                 {
                     return false;
                 }
             }
-            return Collider2D.gameObject && !Collider2D.gameObject.Equals(gameObject);
+            return collider.gameObject && !collider.Equals(gameObject);
         }
 
-        protected void Select(Collider2D newCollider2D)
+        protected void Select(GameObject newCollider)
         {
-            if (newCollider2D && newCollider2D.Equals(currentCollider2D))
+            if (newCollider && newCollider.Equals(currentCollider))
             {
                 return;
             }
             ResetSelection();
 
-            OnSelected?.Invoke(newCollider2D);
-            currentCollider2D = newCollider2D;
-            var newSelectable = newCollider2D.GetComponent<ISelectable>();
+            Selected?.Invoke(newCollider);
+            currentCollider = newCollider;
+            var newSelectable = newCollider.GetComponent<ISelectable>();
             currentSelected = newSelectable;
         }
     }

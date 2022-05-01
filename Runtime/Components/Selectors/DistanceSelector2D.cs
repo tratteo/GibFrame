@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace GibFrame.Selectors
 {
-    public class DistanceBasedSelector2D : DiscreteSelector2D
+    public class DistanceSelector2D : DiscreteSelector
     {
         public enum Paradigm
         { Closest, Farthest }
@@ -19,16 +19,13 @@ namespace GibFrame.Selectors
         [Header("Distance based")]
         public Paradigm paradigm;
         public float radius = 8F;
-        [Header("Advanced")]
-        [SerializeField] private bool nonAlloc = false;
-        [Tooltip("Define the maximum buffer size when using the non alloc option")]
-        [SerializeField] private int bufferSize = 16;
+
         private Collider2D[] buffer;
 
         protected override void Awake()
         {
             base.Awake();
-            buffer = new Collider2D[bufferSize];
+            buffer = new Collider2D[BufferSize];
         }
 
         protected override IEnumerator SelectCoroutine()
@@ -38,13 +35,13 @@ namespace GibFrame.Selectors
             while (Enabled)
             {
                 Collider2D selected;
-                if (nonAlloc)
+                if (NonAlloc)
                 {
                     var amount = Physics2D.OverlapCircleNonAlloc(transform.position, radius, buffer, mask);
                     selected = ChooseNonAlloc(buffer, amount);
                     if (selected)
                     {
-                        Select(selected);
+                        Select(selected.gameObject);
                     }
                     else
                     {
@@ -58,7 +55,7 @@ namespace GibFrame.Selectors
                     selected = ChooseNonAlloc(buffer, buffer.Length);
                     if (selected)
                     {
-                        Select(selected);
+                        Select(selected.gameObject);
                     }
                     else
                     {

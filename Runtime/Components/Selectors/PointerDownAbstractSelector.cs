@@ -9,15 +9,15 @@ using UnityEngine.Events;
 
 namespace GibFrame.Selectors
 {
-    public class PointerDownBasedSelector : Selector
+    public abstract class PointerDownAbstractSelector : Selector
     {
         public enum InputType
         { Mouse, Touch, Both }
 
         [Header("Pointer based")]
         public InputType input;
+
         [SerializeField] private UnityEvent OnMissed;
-        [SerializeField] private Camera targetCamera = null;
 
         protected void Update()
         {
@@ -31,20 +31,13 @@ namespace GibFrame.Selectors
                 if (Input.touchCount > 0)
                 {
                     var touch = Input.GetTouch(0);
-                    var ray = GetCamera().ScreenPointToRay(touch.position);
-                    if (UnityUtils.IsAnyPointerOverGameObject())
-                    {
-                        return;
-                    }
 
                     if (touch.phase == TouchPhase.Ended)
                     {
-                        if (Physics.Raycast(ray, out var hit, float.MaxValue, mask))
+                        var hit = HitObject(touch.position);
+                        if (hit && IsGameObjectValid(hit))
                         {
-                            if (IsColliderValid(hit.collider))
-                            {
-                                Select(hit.collider);
-                            }
+                            Select(hit);
                         }
                         else
                         {
@@ -59,18 +52,10 @@ namespace GibFrame.Selectors
             {
                 if (Input.GetMouseButtonUp(0))
                 {
-                    var ray = GetCamera().ScreenPointToRay(Input.mousePosition);
-                    if (UnityUtils.IsAnyPointerOverGameObject())
+                    var hit = HitObject(Input.mousePosition);
+                    if (hit && IsGameObjectValid(hit))
                     {
-                        return;
-                    }
-
-                    if (Physics.Raycast(ray, out var hit, float.MaxValue, mask))
-                    {
-                        if (IsColliderValid(hit.collider))
-                        {
-                            Select(hit.collider);
-                        }
+                        Select(hit);
                     }
                     else
                     {
@@ -81,10 +66,6 @@ namespace GibFrame.Selectors
             }
         }
 
-        private Camera GetCamera()
-        {
-            targetCamera = targetCamera != null ? targetCamera : Camera.main;
-            return targetCamera;
-        }
+        protected abstract GameObject HitObject(Vector2 screenPoint);
     }
 }

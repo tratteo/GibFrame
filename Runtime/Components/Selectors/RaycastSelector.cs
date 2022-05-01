@@ -9,11 +9,12 @@ using UnityEngine;
 
 namespace GibFrame.Selectors
 {
-    public class RaycastBasedSelector : DiscreteSelector
+    public class RaycastSelector : DiscreteSelector
     {
         private Vector3 direction;
         private bool directionOverride = false;
         private Vector3 offset;
+        private RaycastHit[] hitsBuffer;
 
         public void OverrideDirection(Vector3 direction)
         {
@@ -31,6 +32,12 @@ namespace GibFrame.Selectors
             this.offset = offset;
         }
 
+        protected override void Start()
+        {
+            base.Start();
+            hitsBuffer = new RaycastHit[BufferSize];
+        }
+
         protected override IEnumerator SelectCoroutine()
         {
             var delay = new WaitForSecondsRealtime(updateInterval);
@@ -39,16 +46,37 @@ namespace GibFrame.Selectors
             {
                 var dir = directionOverride ? direction : transform.forward;
 
-                if (Physics.Raycast(transform.position + offset, dir, out var hit, float.MaxValue, mask))
+                if (NonAlloc)
                 {
-                    if (IsColliderValid(hit.collider))
+                    var ray = new Ray(transform.position + offset, dir);
+                    var count = Physics.RaycastNonAlloc(ray, hitsBuffer, float.MaxValue, mask);
+                    if (count > 0)
                     {
-                        Select(hit.collider);
+                        var obj = hitsBuffer[0].collider.gameObject;
+                        if (IsGameObjectValid(obj))
+                        {
+                            Select(obj);
+                        }
+                    }
+                    else
+                    {
+                        ResetSelection();
                     }
                 }
                 else
                 {
-                    ResetSelection();
+                    if (Physics.Raycast(transform.position + offset, dir, out var hit, float.MaxValue, mask))
+                    {
+                        var obj = hit.collider.gameObject;
+                        if (IsGameObjectValid(obj))
+                        {
+                            Select(obj);
+                        }
+                    }
+                    else
+                    {
+                        ResetSelection();
+                    }
                 }
 
                 yield return delay;
