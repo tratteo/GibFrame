@@ -54,6 +54,16 @@ namespace GibFrame.UI
 
         public event Action Released = delegate { };
 
+        public void ClearAllPointerExit() => PointerExit = delegate { };
+
+        public void ClearAllPointerEnter() => PointerEnter = delegate { };
+
+        public void ClearAllPressed() => Pressed = delegate { };
+
+        public void ClearAllLongPressed() => LongPressed = delegate { };
+
+        public void ClearAllReleased() => Released = delegate { };
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             PointerEnter.Invoke();
