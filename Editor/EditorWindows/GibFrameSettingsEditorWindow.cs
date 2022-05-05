@@ -4,7 +4,6 @@
 //
 // All Rights Reserved
 
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -60,76 +59,6 @@ namespace GibEditor
             GibFrameEditorSettings.Data.restoreOpenedScenes = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.restoreOpenedScenes, defaultOptions);
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(10);
-            EditorGUILayout.LabelField(new GUIContent("Common Update"), sectionsStyle);
-            GUILayout.Space(5);
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("Enable Common Update", "Restore the opened scenes when the playmode is exited"), defaultOptions);
-            GibFrameEditorSettings.Data.enableCommonUpdate = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.enableCommonUpdate, defaultOptions);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("Enable Common Fixed Update", "Restore the opened scenes when the playmode is exited"), defaultOptions);
-            GibFrameEditorSettings.Data.enableCommonFixedUpdate = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.enableCommonFixedUpdate, defaultOptions);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("Enable Common Late Update", "Restore the opened scenes when the playmode is exited"), defaultOptions);
-            GibFrameEditorSettings.Data.enableCommonLateUpdate = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.enableCommonLateUpdate, defaultOptions);
-            EditorGUILayout.EndHorizontal();
-            if (EditorGUI.EndChangeCheck())
-            {
-                var addSymbols = new List<string>();
-                var removeSymbols = new List<string>();
-                if (!GibFrameEditorSettings.Data.enableCommonUpdate)
-                {
-                    addSymbols.Add(GibFrameEditorSettings.DISABLE_COMMUPDATE);
-                }
-                else
-                {
-                    removeSymbols.Add(GibFrameEditorSettings.DISABLE_COMMUPDATE);
-                }
-                if (!GibFrameEditorSettings.Data.enableCommonFixedUpdate)
-                {
-                    addSymbols.Add(GibFrameEditorSettings.DISABLE_COMMFIXEDUPDATE);
-                }
-                else
-                {
-                    removeSymbols.Add(GibFrameEditorSettings.DISABLE_COMMFIXEDUPDATE);
-                }
-                if (!GibFrameEditorSettings.Data.enableCommonLateUpdate)
-                {
-                    addSymbols.Add(GibFrameEditorSettings.DISABLE_COMMLATEUPDATE);
-                }
-                else
-                {
-                    removeSymbols.Add(GibFrameEditorSettings.DISABLE_COMMLATEUPDATE);
-                }
-                if (addSymbols.Count > 0)
-                {
-                    AddDefineSymbols(addSymbols.ToArray());
-                }
-                if (removeSymbols.Count > 0)
-                {
-                    RemoveDefineSymbols(removeSymbols.ToArray());
-                }
-                GibFrameEditorSettings.SaveSettings();
-            }
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(new GUIContent("Auto updater instantiate", "Automatically instantiate the CommonUpdateManager when needed in runtime, if not present in scene"), defaultOptions);
-            GibFrameEditorSettings.Data.runtimeCommonUpdateInstantiate = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.runtimeCommonUpdateInstantiate, defaultOptions);
-            EditorGUILayout.EndHorizontal();
-            if (EditorGUI.EndChangeCheck())
-            {
-                if (!GibFrameEditorSettings.Data.runtimeCommonUpdateInstantiate)
-                {
-                    AddDefineSymbols(GibFrameEditorSettings.DISABLE_RUNTIME_UPDATER_INSTANTIATE);
-                }
-                else
-                {
-                    RemoveDefineSymbols(GibFrameEditorSettings.DISABLE_RUNTIME_UPDATER_INSTANTIATE);
-                }
-                GibFrameEditorSettings.SaveSettings();
-            }
         }
     }
 }

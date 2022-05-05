@@ -12,10 +12,6 @@ namespace GibEditor
 {
     internal class GibFrameEditorSettings
     {
-        public const string DISABLE_COMMUPDATE = "GIB_NO_COMMUPDATE";
-        public const string DISABLE_COMMFIXEDUPDATE = "GIB_NO_COMMFIXEDUPDATE";
-        public const string DISABLE_COMMLATEUPDATE = "GIB_NO_COMMLATEUPDATE";
-        public const string DISABLE_RUNTIME_UPDATER_INSTANTIATE = "GIB_NO_COMM_RUNTIME_INSTANTIATE";
         internal const string PATH = ".gibconfig.json";
 
         public static GibFrameEditorSettingsData Data { get; private set; } = null;
