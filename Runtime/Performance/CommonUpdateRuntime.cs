@@ -10,7 +10,10 @@ using UnityEngine.SceneManagement;
 
 namespace GibFrame.Performance
 {
-    public class CommonUpdateManager : MonoBehaviour
+    /// <summary>
+    ///   The runtime allowing for common updates. Boost performance when managing scenes with a lot of entities
+    /// </summary>
+    public class CommonUpdateRuntime : MonoBehaviour
     {
         [Header("Preferences")]
         [SerializeField] protected bool persistent = false;
@@ -23,26 +26,25 @@ namespace GibFrame.Performance
         [Tooltip("Scan for all MonoBehaviours on scene loading")]
         [SerializeField] private bool scanOnSceneLoading = false;
 
-        [Tooltip("Clear all the subscriptions when rescanning")]
-        [SerializeField] private bool clearOnRescan = false;
-
         [Tooltip("Whether should disabled gameobjects be updated")]
         [SerializeField] private bool updateDisabled = false;
 
-        private static CommonUpdateManager Instance { get; set; }
+        private static CommonUpdateRuntime Instance { get; set; }
 
         /// <summary>
-        ///   Returns the number of successful registrations for this object. Returns <strong> -1 </strong> if the instance of the
-        ///   CommonUpdateManager is <strong> <c> null </c></strong>
+        ///   Install the class in the common update runtime
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <param name="update"> </param>
-        /// <returns> </returns>
-        public static int Register<T>(T update) where T : class
+        /// <returns>
+        ///   The number of successful installs for this object. <strong> -1 </strong> if the instance of the <see
+        ///   cref="CommonUpdateRuntime"/> is <strong> <c> null </c></strong>
+        /// </returns>
+        public static int Install<T>(T update) where T : class
         {
             if (Instance == null)
             {
-                Instance = FindObjectOfType<CommonUpdateManager>();
+                Instance = FindObjectOfType<CommonUpdateRuntime>();
 #if !GIB_NO_COMM_RUNTIME_INSTANTIATE
                 if (Instance == null)
                 {
@@ -50,7 +52,7 @@ namespace GibFrame.Performance
                     {
                         name = "CommonUpdateManagerRuntime"
                     };
-                    Instance = obj.AddComponent<CommonUpdateManager>();
+                    Instance = obj.AddComponent<CommonUpdateRuntime>();
                 }
 #endif
             }
@@ -85,23 +87,25 @@ namespace GibFrame.Performance
             }
             else
             {
-                UnityEngine.Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Either add a CommonUpdateManager in the scene or enable auto runtime instantiation in GibFrame settings");
+                Debug.LogWarning("Common updating is being used but the Instance of the CommonUpdateManager is null. Either add a CommonUpdateManager in the scene or enable auto runtime instantiation in GibFrame settings");
                 return -1;
             }
         }
 
         /// <summary>
-        ///   Returns the number of successful unregistrations for this object. Returns <strong> -1 </strong> if the instance of the
-        ///   CommonUpdateManager is <strong> <c> null </c></strong>
+        ///   Uninstall the class in the common update runtime
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <param name="update"> </param>
-        /// <returns> </returns>
-        public static int Unregister<T>(T update) where T : class
+        /// <returns>
+        ///   The number of successful uninstalls for this object. <strong> -1 </strong> if the instance of the <see
+        ///   cref="CommonUpdateRuntime"/> is <strong> <c> null </c></strong>
+        /// </returns>
+        public static int Uninstall<T>(T update) where T : class
         {
             if (Instance == null)
             {
-                Instance = FindObjectOfType<CommonUpdateManager>();
+                Instance = FindObjectOfType<CommonUpdateRuntime>();
             }
             if (Instance != null)
             {
@@ -127,19 +131,26 @@ namespace GibFrame.Performance
             }
         }
 
-        public void Rescan()
+        /// <summary>
+        ///   Perform a clean reinstallation
+        /// </summary>
+        public void CleanAndRescan()
         {
-            if (clearOnRescan)
-            {
-                commonUpdates.Clear();
-                commonFixedUpdates.Clear();
-                commonLateUpdates.Clear();
-            }
+            commonUpdates.Clear();
+            commonFixedUpdates.Clear();
+            commonLateUpdates.Clear();
+            Scan();
+        }
 
+        /// <summary>
+        ///   Scan the scene and install new behaviours
+        /// </summary>
+        public void Scan()
+        {
             var monos = FindObjectsOfType<MonoBehaviour>();
             foreach (var mono in monos)
             {
-                Register(mono);
+                Install(mono);
             }
         }
 
@@ -162,34 +173,15 @@ namespace GibFrame.Performance
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        private bool CanUpdate<T>(T update)
-        {
-            if (update is MonoBehaviour mono)
-            {
-                if (!mono)
-                {
-                    return false;
-                }
+        private bool CanUpdate<T>(T update) => update is MonoBehaviour mono ? mono && (mono.enabled && (updateDisabled || mono.gameObject.activeSelf)) : update != null;
 
-                return mono.enabled && (updateDisabled || mono.gameObject.activeSelf);
-            }
-            return update != null;
-        }
-
-        private bool IsValid<T>(T update)
-        {
-            if (update is MonoBehaviour mono)
-            {
-                return mono;
-            }
-            return update != null;
-        }
+        private bool IsValid<T>(T update) => update is MonoBehaviour mono ? (bool)mono : update != null;
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scanOnSceneLoading)
             {
-                Rescan();
+                CleanAndRescan();
             }
         }
 

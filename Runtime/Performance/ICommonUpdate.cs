@@ -8,6 +8,10 @@ namespace GibFrame.Performance
 {
     public interface ICommonUpdate
     {
+        /// <summary>
+        ///   Called by the <see cref="CommonUpdateRuntime"/> every Update
+        /// </summary>
+        /// <param name="deltaTime"> </param>
         void CommonUpdate(float deltaTime);
     }
 }

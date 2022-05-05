@@ -4,12 +4,12 @@
 //
 // All Rights Reserved
 
+using GibFrame.Meta;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using GibFrame.Meta;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ namespace GibEditor
     {
         internal static void VerifyGuardedObjects(bool scene, bool prefabs)
         {
-            List<UnityEngine.Object> objs = new List<UnityEngine.Object>();
+            var objs = new List<UnityEngine.Object>();
             if (scene)
             {
                 objs.AddRange(GetAllBehavioursInScene());
@@ -28,8 +28,8 @@ namespace GibEditor
             {
                 objs.AddRange(GetAllBehavioursInAssets());
             }
-            StringBuilder logBuilder = new StringBuilder();
-            for (int i = 0; i < objs.Count; i++)
+            var logBuilder = new StringBuilder();
+            for (var i = 0; i < objs.Count; i++)
             {
                 var obj = objs[i];
                 EditorUtility.DisplayProgressBar("Guarding members", $"Checking {obj.name}", (float)i / objs.Count);
@@ -41,46 +41,41 @@ namespace GibEditor
 
         internal static List<UnityEngine.Object> GetAllBehavioursInAssets(string path = "")
         {
-            List<UnityEngine.Object> sel = new List<UnityEngine.Object>();
-            string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + path);
-            foreach (string fileName in fileEntries)
+            var sel = new List<UnityEngine.Object>();
+            var fileEntries = Directory.GetFiles(Application.dataPath + "/" + path);
+            foreach (var fileName in fileEntries)
             {
-                int index = fileName.LastIndexOf("/");
-                string localPath = "Assets";
+                var index = fileName.LastIndexOf("/");
+                var localPath = "Assets";
 
-                if (index > 0)
-                {
-                    localPath += fileName[index..];
-                }
+                if (index > 0) localPath += fileName[index..];
 
-                UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
-                if (asset)
+                var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
+                if (!asset) continue;
+                if (asset is GameObject gameObject)
                 {
-                    if (asset is GameObject gameObject)
+                    var monos = gameObject.GetComponentsInChildren<MonoBehaviour>();
+                    if (monos != null && monos.Length > 0)
                     {
-                        MonoBehaviour[] monos = gameObject.GetComponentsInChildren<MonoBehaviour>();
-                        if (monos != null && monos.Length > 0)
-                        {
-                            sel.AddRange(monos);
-                        }
+                        sel.AddRange(monos);
                     }
-                    else if (asset is ScriptableObject so)
+                }
+                else if (asset is ScriptableObject so)
+                {
+                    if (so)
                     {
-                        if (so)
-                        {
-                            sel.Add(so);
-                        }
+                        sel.Add(so);
                     }
                 }
             }
-            string[] dirs = Directory.GetDirectories(Application.dataPath + "/" + path);
-            foreach (string dir in dirs)
+            var dirs = Directory.GetDirectories(Application.dataPath + "/" + path);
+            foreach (var dir in dirs)
             {
-                string relativePath = path;
-                int index = dir.LastIndexOfAny(new char[] { '/', '\\' });
+                var relativePath = path;
+                var index = dir.LastIndexOfAny(new char[] { '/', '\\' });
                 if (index > 0)
                 {
-                    string val = dir[index..];
+                    var val = dir[index..];
                     relativePath += val;
                     sel.AddRange(GetAllBehavioursInAssets(relativePath));
                 }
@@ -90,22 +85,22 @@ namespace GibEditor
 
         private static List<UnityEngine.Object> GetAllBehavioursInScene()
         {
-            UnityEngine.Object[] objs = UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
-            List<UnityEngine.Object> sel = new List<UnityEngine.Object>();
-            for (int i = 0; i < objs.Length; i++)
+            var objs = UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
+            var sel = new List<UnityEngine.Object>();
+            for (var i = 0; i < objs.Length; i++)
             {
                 var current = objs[i];
-                if (current)
+
+                if (!current) continue;
+
+                if (current is GameObject obj)
                 {
-                    if (current is GameObject obj)
-                    {
-                        MonoBehaviour[] monos = obj.GetComponentsInChildren<MonoBehaviour>();
-                        sel.AddRange(monos);
-                    }
-                    else if (current is ScriptableObject so)
-                    {
-                        sel.Add(so);
-                    }
+                    var monos = obj.GetComponents<MonoBehaviour>();
+                    sel.AddRange(monos);
+                }
+                else if (current is ScriptableObject so)
+                {
+                    sel.Add(so);
                 }
             }
 
@@ -123,20 +118,22 @@ namespace GibEditor
             {
                 logBuilder.Append("<color=magenta><b>Scene Object</b></color> =>");
             }
+            var path = AssetDatabase.GetAssetPath(obj);
             switch (guarded.Gravity)
             {
                 case GuardedAttribute.MissingValueGravity.INFO:
-                    logBuilder.AppendFormat("Field <b>{0}</b> of class <b>{1}</b> sitting on GameObject <b>{2}</b> is set to default value <b>{3}</b>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
+                    logBuilder.AppendFormat("Field <b>{0}</b> of class <b>{1}</b> sitting on GameObject <b>{2}:{3}</b> is set to default value <b>{4}</b>", field, parentClass, path, obj.name, fieldVal).Append("\n").Append(guarded.Message);
                     Debug.Log(logBuilder.ToString());
                     break;
 
                 case GuardedAttribute.MissingValueGravity.WARNING:
-                    logBuilder.AppendFormat("Field <color=yellow><b>{0}</b></color> of class <color=yellow><b>{1}</b></color> sitting on GameObject <b>{2}</b> is set to default value <color=yellow><b>{3}</b></color>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
+
+                    logBuilder.AppendFormat("Field <color=yellow><b>{0}</b></color> of class <color=yellow><b>{1}</b></color> sitting on GameObject <b>{2}:{3}</b> is set to default value <color=yellow><b>{4}</b></color>", field, parentClass, path, obj.name, fieldVal).Append("\n").Append(guarded.Message);
                     Debug.LogWarning(logBuilder.ToString());
                     break;
 
                 case GuardedAttribute.MissingValueGravity.ERROR:
-                    logBuilder.AppendFormat("Field <color=red><b>{0}</b></color> of class <color=red><b>{1}</b></color> sitting on GameObject <b>{2}</b> is set to default value <color=red><b>{3}</b></color>", field, parentClass, obj.name, fieldVal).Append("\n").Append(guarded.Message);
+                    logBuilder.AppendFormat("Field <color=red><b>{0}</b></color> of class <color=red><b>{1}</b></color> sitting on GameObject <b>{2}:{3}</b> is set to default value <color=red><b>{4}</b></color>", field, parentClass, path, obj.name, fieldVal).Append("\n").Append(guarded.Message);
                     Debug.LogError(logBuilder.ToString());
                     break;
             }
@@ -144,9 +141,10 @@ namespace GibEditor
 
         private static void GuardRecursively(object obj, UnityEngine.Object parentObj, StringBuilder logBuilder)
         {
-            if (obj == null) return;
-            FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            for (int i = 0; i < fields.Length; i++)
+            if (obj is null) return;
+
+            var fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            for (var i = 0; i < fields.Length; i++)
             {
                 var field = fields[i];
                 if (Attribute.GetCustomAttribute(field, typeof(GuardedAttribute)) is GuardedAttribute attribute)
@@ -157,28 +155,24 @@ namespace GibEditor
                         Print(attribute, field, value, obj.GetType(), parentObj, logBuilder);
                     }
                 }
-                //if (field.FieldType.IsClass)
-                //{
-                //    object val = field.GetValue(obj);
-                //    if (val != null)
-                //    {
-                //        GuardRecursively(val, parentObj, logBuilder);
-                //    }
-                //}
             }
         }
 
         private static bool IsNullOrDefault<T>(T arg)
         {
             if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
-            if (arg == null) return true;
+
+            if (arg is null) return true;
+
             if (Equals(arg, default(T))) return true;
-            Type methodType = typeof(T);
-            if (Nullable.GetUnderlyingType(methodType) != null) return false;
-            Type argumentType = arg.GetType();
+
+            var methodType = typeof(T);
+            if (Nullable.GetUnderlyingType(methodType) is not null) return false;
+
+            var argumentType = arg.GetType();
             if (argumentType.IsValueType && argumentType != methodType)
             {
-                object obj = Activator.CreateInstance(arg.GetType());
+                var obj = Activator.CreateInstance(arg.GetType());
                 return obj.Equals(arg);
             }
             return false;
