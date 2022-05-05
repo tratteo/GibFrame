@@ -8,7 +8,7 @@ using System;
 
 namespace GibFrame
 {
-    public static class GMath
+    public static class GibMath
     {
         public const float RadToDeg = 57.29578F;
         public const float DegToRad = 0.0174533F;
@@ -45,11 +45,11 @@ namespace GibFrame
                         return -90f;
                     }
 
-                    return (float)-Math.Atan(x / y) * GMath.RadToDeg;
+                    return (float)-Math.Atan(x / y) * GibMath.RadToDeg;
                 }
                 else
                 {
-                    return -180f + ((float)Math.Atan(x / -y) * GMath.RadToDeg);
+                    return -180f + ((float)Math.Atan(x / -y) * GibMath.RadToDeg);
                 }
             }
             else
@@ -61,11 +61,11 @@ namespace GibFrame
                         return 90f;
                     }
 
-                    return (float)Math.Atan(-x / y) * GMath.RadToDeg;
+                    return (float)Math.Atan(-x / y) * GibMath.RadToDeg;
                 }
                 else
                 {
-                    return 180f - ((float)Math.Atan(x / y) * GMath.RadToDeg);
+                    return 180f - ((float)Math.Atan(x / y) * GibMath.RadToDeg);
                 }
             }
         }

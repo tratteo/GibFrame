@@ -28,7 +28,16 @@ namespace GibFrame
         /// <typeparam name="TResult"> </typeparam>
         /// <param name="provider"> </param>
         /// <returns> The value if <see cref="obj"/> is not null, <see cref="default"/> otherwise </returns>
-        public TResult Get<TResult>(Func<T, TResult> provider) => IsNull() ? default : provider(obj);
+        public bool TryGet<TResult>(Func<T, TResult> provider, out TResult result)
+        {
+            if (IsNull())
+            {
+                result = default;
+                return false;
+            }
+            result = provider(obj);
+            return true;
+        }
 
         /// <summary>
         ///   Try execute a method on the underlying object
@@ -36,7 +45,11 @@ namespace GibFrame
         /// <param name="func"> </param>
         public void Try(Action<T> func)
         {
-            if (IsNull()) return;
+            if (IsNull())
+            {
+                return;
+            }
+
             func?.Invoke(obj);
         }
 

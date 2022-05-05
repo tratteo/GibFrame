@@ -12,13 +12,12 @@ namespace GibFrame
 {
     public class Timer
     {
-        private float delay;
-        private bool realtime;
+        private readonly MonoBehaviour context;
+        private readonly List<AbstractCallback> callbacks;
+        private readonly float delay;
+        private readonly bool realtime;
         private bool running;
-        private MonoBehaviour context;
         private Coroutine Countdown;
-
-        private List<AbstractCallback> callbacks;
 
         public Timer(MonoBehaviour context, float delay, bool realtime, bool start, params AbstractCallback[] callbacks)
         {
@@ -27,7 +26,7 @@ namespace GibFrame
             this.delay = delay;
             this.realtime = realtime;
             running = false;
-            foreach (AbstractCallback callback in callbacks)
+            foreach (var callback in callbacks)
             {
                 AddCallback(callback);
             }
@@ -37,15 +36,9 @@ namespace GibFrame
             }
         }
 
-        public void AddCallback<T>(T callback) where T : AbstractCallback
-        {
-            callbacks.Add(callback);
-        }
+        public void AddCallback(AbstractCallback callback) => callbacks.Add(callback);
 
-        public bool RemoveCallback<T>(T callback) where T : AbstractCallback
-        {
-            return callbacks.Remove(callback);
-        }
+        public bool RemoveCallback(AbstractCallback callback) => callbacks.Remove(callback);
 
         public void Start()
         {
@@ -76,7 +69,7 @@ namespace GibFrame
                 yield return new WaitForSeconds(delay);
             }
 
-            foreach (AbstractCallback callback in callbacks)
+            foreach (var callback in callbacks)
             {
                 callback.Invoke();
             }

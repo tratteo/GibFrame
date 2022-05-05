@@ -9,7 +9,7 @@ namespace GibFrame.Selectors
 
         protected override GameObject HitObject(Vector2 screenPos)
         {
-            if (UnityUtils.IsAnyPointerOverGameObject())
+            if (Gib.IsAnyPointerOverGameObject())
             {
                 return null;
             }

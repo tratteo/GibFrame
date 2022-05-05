@@ -54,7 +54,7 @@ namespace GibEditor
                 case PlayModeStateChange.EnteredEditMode:
                     if (GibFrameEditorSettings.Data.restoreOpenedScenes && EditorPrefs.GetBool(REQUESTED_BOOL))
                     {
-                        string key = EditorPrefs.GetString(USER_SCENE);
+                        var key = EditorPrefs.GetString(USER_SCENE);
                         if (File.Exists(key))
                         {
                             EditorSceneManager.OpenScene(key);
@@ -80,10 +80,7 @@ namespace GibEditor
             }
         }
 
-        private static bool IsDefaultSceneValid()
-        {
-            return GibFrameEditorSettings.Data.defaultSceneName != string.Empty && File.Exists(GibFrameEditorSettings.Data.defaultSceneName);
-        }
+        private static bool IsDefaultSceneValid() => GibFrameEditorSettings.Data.defaultSceneName != string.Empty && File.Exists(GibFrameEditorSettings.Data.defaultSceneName);
 
         [InitializeOnLoad]
         public class Startup

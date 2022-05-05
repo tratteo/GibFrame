@@ -21,12 +21,12 @@ namespace GibFrame.Performance
 
         public static BatchedJobsScheduler Compose(int batch, YieldInstruction yieldInstruction)
         {
-            GameObject obj = new GameObject
+            var obj = new GameObject
             {
                 hideFlags = HideFlags.HideInHierarchy,
                 name = "BatchedJob"
             };
-            BatchedJobsScheduler job = obj.AddComponent<BatchedJobsScheduler>();
+            var job = obj.AddComponent<BatchedJobsScheduler>();
             job.Setup(batch, yieldInstruction);
 
             return job;
@@ -71,11 +71,11 @@ namespace GibFrame.Performance
 
         private IEnumerator Dispatcher_C()
         {
-            int counter = 0;
+            var counter = 0;
             Dispatching = true;
             while (operations.Count > 0)
             {
-                AbstractCallback callback = operations.ElementAt(0);
+                var callback = operations.ElementAt(0);
                 operations.RemoveAt(0);
                 callback?.Invoke();
                 counter++;

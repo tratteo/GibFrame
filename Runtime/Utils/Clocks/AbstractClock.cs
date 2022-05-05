@@ -15,14 +15,14 @@ namespace GibFrame
         private enum RateParadigm
         { Fixed, RandomRange, ScaleFunc }
 
-        private RateParadigm paradigm;
+        private readonly MonoBehaviour context;
+        private readonly RateParadigm paradigm;
         private Vector2 rateRange;
         private float currentTime;
         private bool routineActive;
         private float rate;
         private float time;
         private bool isPaused = false;
-        private MonoBehaviour context;
         private Func<int, float> scaleFunc;
 
         protected AbstractClock(MonoBehaviour context, float fixedRate, bool startNow)
@@ -74,35 +74,17 @@ namespace GibFrame
             }
         }
 
-        public void Kill()
-        {
-            routineActive = false;
-        }
+        public void Kill() => routineActive = false;
 
-        public void Pause()
-        {
-            isPaused = true;
-        }
+        public void Pause() => isPaused = true;
 
-        public void Resume()
-        {
-            isPaused = false;
-        }
+        public void Resume() => isPaused = false;
 
-        public void EditRate(float newRate)
-        {
-            rate = newRate;
-        }
+        public void EditRate(float newRate) => rate = newRate;
 
-        public void EditRate(Vector2 newRate)
-        {
-            rateRange = newRate;
-        }
+        public void EditRate(Vector2 newRate) => rateRange = newRate;
 
-        public void EditRate(Func<int, float> newRate)
-        {
-            scaleFunc = newRate;
-        }
+        public void EditRate(Func<int, float> newRate) => scaleFunc = newRate;
 
         protected abstract void Callback();
 

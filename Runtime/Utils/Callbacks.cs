@@ -5,35 +5,9 @@
 // All Rights Reserved
 
 using System;
-using System.Collections.Generic;
 
 namespace GibFrame
 {
-    public class CallbackEvent
-    {
-        private readonly List<AbstractCallback> callbacks;
-
-        public CallbackEvent()
-        {
-            callbacks = new List<AbstractCallback>();
-        }
-
-        public void Subscribe(AbstractCallback callback)
-        {
-            callbacks.Add(callback);
-        }
-
-        public bool Unsubscribe(AbstractCallback callback)
-        {
-            return callbacks.Remove(callback);
-        }
-
-        public void Invoke()
-        {
-            callbacks.ForEach(c => c?.Invoke());
-        }
-    }
-
     public abstract class AbstractCallback
     {
         public abstract void Invoke();
@@ -46,7 +20,7 @@ namespace GibFrame
 
         public Callback(Action<T> action, T args)
         {
-            this.Event = action;
+            Event = action;
             this.args = args;
         }
 
@@ -65,7 +39,7 @@ namespace GibFrame
 
         public Callback(Action<T, E> action, T args0, E args1)
         {
-            this.Event = action;
+            Event = action;
             this.args0 = args0;
             this.args1 = args1;
         }
@@ -82,7 +56,7 @@ namespace GibFrame
 
         public Callback(Action action)
         {
-            this.Event = action;
+            Event = action;
         }
 
         public override void Invoke()

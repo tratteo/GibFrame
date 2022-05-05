@@ -11,7 +11,7 @@ using UnityEngine.EventSystems;
 
 namespace GibFrame
 {
-    public class UnityUtils
+    public class Gib
     {
         public static T FindObjectOfTypeWithName<T>(string name, bool inactive = false) where T : Component
         {

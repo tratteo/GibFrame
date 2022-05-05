@@ -51,7 +51,7 @@ namespace GibFrame.Data
             this.min = min;
             this.max = max;
             random = new System.Random(seed);
-            Provider = () => GMath.Map((float)random.NextDouble(), (0F, 1F), (min, max));
+            Provider = () => GibMath.Map((float)random.NextDouble(), (0F, 1F), (min, max));
         }
 
         public static implicit operator float(RandomizedFloat randomized) => randomized.GetNext();
@@ -96,7 +96,7 @@ namespace GibFrame.Data
             this.min = min;
             this.max = max;
             random = new System.Random(seed);
-            Provider = () => (int)GMath.Map((float)random.NextDouble(), (0F, 1F), (min, max));
+            Provider = () => (int)GibMath.Map((float)random.NextDouble(), (0F, 1F), (min, max));
         }
 
         public static implicit operator int(RandomizedInt randomized) => randomized.GetNext();

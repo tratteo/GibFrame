@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace GibFrame
 {
-    public class UIUtils
+    public static class GibUI
     {
         /// <summary>
         ///   Coroutine that fills an image in a specified time. (Image has to be set to filled image)
@@ -19,7 +19,7 @@ namespace GibFrame
         /// <param name="image"> </param>
         /// <param name="duration"> </param>
         /// <returns> IEnumerator reference </returns>
-        public static IEnumerator FillImage(MonoBehaviour context, Image image, float duration, bool realtime = false, float targetFillAmount = 1F, AbstractCallback callback = null)
+        public static IEnumerator FillImage(this MonoBehaviour context, Image image, float duration, bool realtime = false, float targetFillAmount = 1F, AbstractCallback callback = null)
         {
             var coroutine = FillImage_C(image, duration, targetFillAmount, realtime, callback);
             context.StartCoroutine(coroutine);
