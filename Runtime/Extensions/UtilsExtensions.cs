@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace GibFrame.Extensions
 {
@@ -44,33 +45,33 @@ namespace GibFrame.Extensions
             return set.ElementAt(index);
         }
 
-        public static T SelectWithProbability<T>(this T[] set, Func<T, float> ProbabilityProvider)
+        public static T SelectWithProbability<T>(this T[] set, Func<T, float> probabilityProvider)
         {
-            return set.ToList().SelectWithProbability(ProbabilityProvider);
+            return set.ToList().SelectWithProbability(probabilityProvider);
         }
 
-        public static T SelectWithProbability<T>(this T[] set, System.Random random, Func<T, float> ProbabilityProvider)
+        public static T SelectWithProbability<T>(this T[] set, System.Random random, Func<T, float> probabilityProvider)
         {
-            return set.SelectWithProbability(random, ProbabilityProvider);
+            return set.SelectWithProbability(random, probabilityProvider);
         }
 
-        public static T SelectWithProbability<T>(this List<T> set, Func<T, float> ProbabilityProvider)
+        public static T SelectWithProbability<T>(this List<T> set, Func<T, float> probabilityProvider)
         {
             var index = -1;
             var r = UnityEngine.Random.Range(0F, 1F);
             while (r > 0)
             {
-                r -= ProbabilityProvider(set.ElementAt(++index));
+                r -= probabilityProvider(set.ElementAt(++index));
             }
             return set.ElementAt(index);
         }
 
-        public static T SelectWithProbability<T>(this List<T> set, System.Random random, Func<T, float> ProbabilityProvider)
+        public static T SelectWithProbability<T>(this List<T> set, System.Random random, Func<T, float> probabilityProvider)
         {
-            return set.ToArray().SelectWithProbability(random, ProbabilityProvider);
+            return set.ToArray().SelectWithProbability(random, probabilityProvider);
         }
 
-        public static void NormalizeProbabilities<T>(this List<T> set, Func<T, float> value, Action<T, float> SetProbability)
+        public static void NormalizeProbabilities<T>(this List<T> set, Func<T, float> value, Action<T, float> setProbability)
         {
             float sum = 0;
             foreach (var elem in set)
@@ -81,14 +82,14 @@ namespace GibFrame.Extensions
             {
                 foreach (var elem1 in set)
                 {
-                    SetProbability(elem1, 1F / set.Count);
+                    setProbability(elem1, 1F / set.Count);
                 }
             }
             else
             {
                 foreach (var elem1 in set)
                 {
-                    SetProbability(elem1, value(elem1) / sum);
+                    setProbability(elem1, value(elem1) / sum);
                 }
             }
         }
@@ -103,9 +104,46 @@ namespace GibFrame.Extensions
             NormalizeProbabilities(selectables.ToList());
         }
 
-        public static void NormalizeProbabilities<T>(this T[] selectables, Func<T, float> GetProbability, Action<T, float> SetProbability)
+        public static void NormalizeProbabilities<T>(this T[] selectables, Func<T, float> getProbability, Action<T, float> setProbability)
         {
-            NormalizeProbabilities(selectables.ToList(), GetProbability, SetProbability);
+            NormalizeProbabilities(selectables.ToList(), getProbability, setProbability);
+        }
+
+        public static Color Redify(this Color color, float magnitude = 1F)
+        {
+            color.g -= magnitude;
+            color.b -= magnitude;
+            return color;
+        }
+
+        public static Color Greenify(this Color color, float magnitude = 1F)
+        {
+            color.r -= magnitude;
+            color.b -= magnitude;
+            return color;
+        }
+
+        public static Color Blueify(this Color color, float magnitude = 1F)
+        {
+            color.r -= magnitude;
+            color.g -= magnitude;
+            return color;
+        }
+
+        public static Color Blackify(this Color color, float magnitude = 1F)
+        {
+            color.r -= magnitude;
+            color.g -= magnitude;
+            color.b -= magnitude;
+            return color;
+        }
+
+        public static Color Whiteify(this Color color, float magnitude = 1F)
+        {
+            color.r += magnitude;
+            color.g += magnitude;
+            color.b += magnitude;
+            return color;
         }
     }
 }
