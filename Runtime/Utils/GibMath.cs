@@ -181,10 +181,7 @@ namespace GibFrame
             return sum;
         }
 
-        public static float Map(float val, (float, float) range, (float, float) newRange)
-        {
-            return (val - range.Item1) / (range.Item2 - range.Item1) * (newRange.Item2 - newRange.Item1) + newRange.Item1;
-        }
+        public static float Map(float val, (float, float) range, (float, float) newRange) => (val - range.Item1) / (range.Item2 - range.Item1) * (newRange.Item2 - newRange.Item1) + newRange.Item1;
 
         public static int RoundTo(int val, int seed = 2)
         {
