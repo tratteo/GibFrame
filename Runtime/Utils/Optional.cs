@@ -40,6 +40,14 @@ namespace GibFrame
         }
 
         /// <summary>
+        ///   Try to retrieve the underlying optional
+        /// </summary>
+        /// <typeparam name="TResult"> </typeparam>
+        /// <param name="provider"> </param>
+        /// <returns> The value if <see cref="obj"/> is not null, <see cref="default"/> otherwise </returns>
+        public bool TryGet(out T result) => TryGet((elem) => elem, out result);
+
+        /// <summary>
         ///   Try execute a method on the underlying object
         /// </summary>
         /// <param name="func"> </param>

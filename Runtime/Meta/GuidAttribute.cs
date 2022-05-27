@@ -12,9 +12,9 @@ namespace GibFrame.Meta
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class GuidAttribute : PropertyAttribute
     {
-        public bool ReadOnly { get; set; } = true;
+        public bool Readonly { get; set; } = true;
 
-        public bool AllowReset { get; set; } = false;
+        public bool Resettable { get; set; } = false;
 
         public GuidAttribute()
         {
