@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -13,9 +14,9 @@ namespace GibFrame.Editor
         /// <param name="root"> </param>
         /// <param name="exclusion"> Folders name to exclude from the query </param>
         /// <returns> All <see cref="UnityEngine.Object"/> in the specified path </returns>
-        public static List<Object> GetObjectsAtPath(string path, params string[] exclusion)
+        public static List<UnityEngine.Object> GetObjectsAtPath(string path, params string[] exclusion)
         {
-            if (!Directory.Exists(path)) return new List<Object>();
+            if (!Directory.Exists(path)) return new List<UnityEngine.Object>();
             var inAsset = path.Contains(Application.dataPath);
             if (inAsset)
             {
@@ -23,7 +24,7 @@ namespace GibFrame.Editor
                 path = string.IsNullOrWhiteSpace(path) ? "Assets" : $"Assets{path}";
             }
             var exclusionList = exclusion.ToList();
-            var sel = new List<Object>();
+            var sel = new List<UnityEngine.Object>();
             var fileEntries = Directory.GetFiles(path);
             foreach (var file in fileEntries)
             {
@@ -43,12 +44,32 @@ namespace GibFrame.Editor
             return sel;
         }
 
+        public static bool IsNullOrDefault<T>(this T arg)
+        {
+            if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
+
+            if (arg is null) return true;
+
+            if (Equals(arg, default(T))) return true;
+
+            var methodType = typeof(T);
+            if (Nullable.GetUnderlyingType(methodType) is not null) return false;
+
+            var argumentType = arg.GetType();
+            if (argumentType.IsValueType && argumentType != methodType)
+            {
+                var obj = Activator.CreateInstance(arg.GetType());
+                return obj.Equals(arg);
+            }
+            return false;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="root"> The root path to start searching from </param>
         /// <param name="exclusion"> Folders name to exclude from the query </param>
         /// <returns> All <see cref="UnityEngine.Object"/> in the Asset folder </returns>
-        public static List<Object> GetObjectsInAssets(string root = "", params string[] exclusion)
+        public static List<UnityEngine.Object> GetObjectsInAssets(string root = "", params string[] exclusion)
         {
             var compositePath = string.IsNullOrWhiteSpace(root) ? Application.dataPath : $"{Application.dataPath}{Path.AltDirectorySeparatorChar}{root}";
             return GetObjectsAtPath(compositePath, exclusion);
@@ -59,23 +80,23 @@ namespace GibFrame.Editor
         /// <typeparam name="T"> </typeparam>
         /// <param name="path"> </param>
         /// <returns> All behaviours of type T in the specified path. T can be either a <see cref="MonoBehaviour"/> or a <see cref="ScriptableObject"/> </returns>
-        public static List<T> GetAllBehavioursAtPath<T>(string path) where T : Object => GetBehaviours<T>(GetObjectsAtPath(path));
+        public static List<T> GetAllBehavioursAtPath<T>(string path) where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsAtPath(path));
 
         /// <summary>
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <param name="root"> </param>
         /// <returns> All behaviours of type T in the Asset folder. T can be either a <see cref="MonoBehaviour"/> or a <see cref="ScriptableObject"/> </returns>
-        public static List<T> GetAllBehavioursInAsset<T>(string root = "") where T : Object => GetBehaviours<T>(GetObjectsInAssets(root));
+        public static List<T> GetAllBehavioursInAsset<T>(string root = "") where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsInAssets(root));
 
         /// <summary>
         /// </summary>
         /// <returns> All the <see cref="Object"/> in the current scene </returns>
-        public static Object[] GetObjectsInScene() => Object.FindObjectsOfType<Object>();
+        public static UnityEngine.Object[] GetObjectsInScene() => UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
 
-        public static List<Object> GetBehaviours(IEnumerable<Object> objs)
+        public static List<UnityEngine.Object> GetBehaviours(IEnumerable<UnityEngine.Object> objs)
         {
-            var behaviours = new List<Object>();
+            var behaviours = new List<UnityEngine.Object>();
             foreach (var obj in objs)
             {
                 if (obj is ScriptableObject so)
@@ -90,12 +111,12 @@ namespace GibFrame.Editor
             return behaviours;
         }
 
-        public static List<T> GetBehaviours<T>(IEnumerable<Object> objs)
+        public static List<T> GetBehaviours<T>(IEnumerable<UnityEngine.Object> objs)
         {
             var behaviours = new List<T>();
             foreach (var obj in objs)
             {
-                if (typeof(T).IsSubclassOf(typeof(ScriptableObject)) || typeof(T).Equals(typeof(Object)))
+                if (typeof(T).IsSubclassOf(typeof(ScriptableObject)) || typeof(T).Equals(typeof(UnityEngine.Object)))
                 {
                     if (obj is T so)
                     {

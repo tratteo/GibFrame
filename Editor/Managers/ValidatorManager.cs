@@ -1,4 +1,5 @@
-﻿using GibFrame.Validators;
+﻿using GibFrame.Editor.Validators;
+using GibFrame.Validators;
 using System.Text;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace GibFrame.Editor
     public static class ValidatorManager
     {
         /// <summary>
-        ///   Validate all groups found in the Asset folder and sub-folders
+        ///   Validate all <see cref="ValidationGroup"/> found in the Asset folder and sub-folders
         /// </summary>
         public static bool ValidateAllGroupsInAssets()
         {
@@ -35,6 +36,9 @@ namespace GibFrame.Editor
             return !failure;
         }
 
+        /// <summary>
+        ///   Validate all the fields marked with the <see cref="Meta.GuardedAttribute"/>
+        /// </summary>
         public static bool ValidateGuarded()
         {
             var res = GibEditor.GetAllBehavioursInAsset<EditorGuardedValidator>($"Editor");

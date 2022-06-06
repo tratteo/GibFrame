@@ -7,7 +7,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibFrame.Editor
+namespace GibFrame.Editor.Validators
 {
     [CreateAssetMenu(menuName = "GibFrame/Validators/GuardedValidator", fileName = "guarded_validator")]
     public class EditorGuardedValidator : Validator
@@ -80,33 +80,13 @@ namespace GibFrame.Editor
                 if (Attribute.GetCustomAttribute(field, typeof(GuardedAttribute)) is GuardedAttribute attribute)
                 {
                     var value = field.GetValue(obj);
-                    if (IsNullOrDefault(value))
+                    if (GibEditor.IsNullOrDefault(value))
                     {
                         failures.Add(Analyze(attribute, field, value, obj.GetType(), parentObj));
                     }
                 }
             }
             return failures;
-        }
-
-        private bool IsNullOrDefault<T>(T arg)
-        {
-            if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
-
-            if (arg is null) return true;
-
-            if (Equals(arg, default(T))) return true;
-
-            var methodType = typeof(T);
-            if (Nullable.GetUnderlyingType(methodType) is not null) return false;
-
-            var argumentType = arg.GetType();
-            if (argumentType.IsValueType && argumentType != methodType)
-            {
-                var obj = Activator.CreateInstance(arg.GetType());
-                return obj.Equals(arg);
-            }
-            return false;
         }
     }
 }

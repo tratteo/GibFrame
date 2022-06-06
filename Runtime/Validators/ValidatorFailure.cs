@@ -24,7 +24,8 @@ namespace GibFrame.Validators
 
         public override string ToString()
         {
-            var builder = new StringBuilder($"{Validator} | [{Code}]: {Reason} -> ");
+            var builder = new StringBuilder($"{Validator} failure [{Code}]: {Reason}");
+            if (Causers.Length > 0) builder.Append(". Caused by ");
             for (var i = 0; i < Causers.Length; i++)
             {
                 var o = Causers[i];
@@ -32,7 +33,7 @@ namespace GibFrame.Validators
                 builder.Append(o);
                 if (i < Causers.Length - 1)
                 {
-                    builder.Append(" - ");
+                    builder.Append(" | ");
                 }
             }
             return builder.ToString();

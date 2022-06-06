@@ -9,7 +9,7 @@ namespace GibFrame.Validators
     [CreateAssetMenu(menuName = "GibFrame/Validators/Group", fileName = "validator_group")]
     public sealed class ValidationGroup : ScriptableObject
     {
-        [SerializeField] private SerializableInterface<IValidable>[] validables;
+        [SerializeField] private Validator[] validables;
 
         /// <summary>
         ///   Validate all the <see cref="IValidable"/> in this group
@@ -21,8 +21,8 @@ namespace GibFrame.Validators
             var failures = new List<ValidatorFailure>();
             foreach (var v in validables)
             {
-                if (v.Value is null) continue;
-                var res = v.Value.Validate();
+                if (v is null) continue;
+                var res = v.Validate();
                 if (res is not null && res.Count > 0)
                 {
                     failures.AddRange(res);
