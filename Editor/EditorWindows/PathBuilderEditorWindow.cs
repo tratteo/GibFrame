@@ -25,7 +25,7 @@ namespace GibFrame.Editor
 
         private void OnEnable()
         {
-            waypoint = Resources.Load("GibFrame/PathBuilder/Waypoint_P") as GameObject;
+            waypoint = UnityEngine.Resources.Load("GibFrame/PathBuilder/Waypoint_P") as GameObject;
             sectionsStyle = new GUIStyle();
             to = new List<Waypoint>();
             from = null;

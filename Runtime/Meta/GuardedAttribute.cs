@@ -13,13 +13,13 @@ namespace GibFrame.Meta
     public class GuardedAttribute : PropertyAttribute
     {
         public enum MissingValueGravity
-        { INFO, WARNING, ERROR }
+        { Info, Warning, Error }
 
         public string Message { get; private set; }
 
         public MissingValueGravity Gravity { get; private set; }
 
-        public GuardedAttribute() : this(string.Empty, MissingValueGravity.WARNING)
+        public GuardedAttribute() : this(string.Empty, MissingValueGravity.Warning)
         {
         }
 
@@ -27,7 +27,7 @@ namespace GibFrame.Meta
         {
         }
 
-        public GuardedAttribute(string message) : this(message, MissingValueGravity.WARNING)
+        public GuardedAttribute(string message) : this(message, MissingValueGravity.Warning)
         {
         }
 

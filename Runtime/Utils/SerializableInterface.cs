@@ -5,7 +5,6 @@
 // All Rights Reserved
 
 using System;
-using GibFrame.Meta;
 using UnityEngine;
 
 namespace GibFrame
@@ -13,8 +12,7 @@ namespace GibFrame
     [Serializable]
     public class SerializableInterface<T> where T : class
     {
-        [SerializeField, Readonly] private string interfaceType = typeof(T).AssemblyQualifiedName;
-        [SerializeField] private Behaviour interfaceBehaviour;
+        [SerializeField] private UnityEngine.Object interfaceBehaviour;
 
         public T Value => this;
 
