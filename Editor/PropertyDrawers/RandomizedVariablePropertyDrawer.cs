@@ -8,7 +8,7 @@ using GibFrame.Data;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     [CustomPropertyDrawer(typeof(RandomizedInt))]
     [CustomPropertyDrawer(typeof(RandomizedFloat))]

@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     public static class EditorExtensions
     {
-        public static SerializedProperty PropertyField(this Editor editor, string propName, string label = null, string tooltip = null)
+        public static SerializedProperty PropertyField(this UnityEditor.Editor editor, string propName, string label = null, string tooltip = null)
         {
             var prop = editor.serializedObject.FindProperty(propName);
             label ??= propName;

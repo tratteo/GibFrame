@@ -4,7 +4,7 @@
 //
 // All Rights Reserved
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     [System.Serializable]
     internal class GibFrameEditorSettingsData

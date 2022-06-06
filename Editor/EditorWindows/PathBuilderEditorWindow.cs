@@ -4,12 +4,12 @@
 //
 // All Rights Reserved
 
-using System.Collections.Generic;
 using GibFrame.PathBuilder;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     internal class PathBuilderEditorWindow : EditorWindow
     {
@@ -78,7 +78,7 @@ namespace GibEditor
             EditorGUILayout.LabelField(new GUIContent("Pathing"), sectionsStyle);
             GUILayout.Space(5);
             from = EditorGUILayout.ObjectField("From", from, typeof(Waypoint), true) as Waypoint;
-            SerializedProperty toProp = so.FindProperty("to");
+            var toProp = so.FindProperty("to");
             EditorGUILayout.PropertyField(toProp, new GUIContent("To"), true, null);
 
             if (GUILayout.Button(new GUIContent("Link")))
@@ -102,7 +102,7 @@ namespace GibEditor
         {
             if (Selection.gameObjects.Length == 1)
             {
-                Path p = Selection.gameObjects[0].GetComponent<Path>();
+                var p = Selection.gameObjects[0].GetComponent<Path>();
                 if (p != null && p != path)
                 {
                     path = p;
@@ -123,7 +123,7 @@ namespace GibEditor
         {
             if (from != null)
             {
-                foreach (Waypoint w in to)
+                foreach (var w in to)
                 {
                     from.RemoveOption(w);
                 }
@@ -132,9 +132,9 @@ namespace GibEditor
 
         private void TryDeleteStartPoints()
         {
-            foreach (GameObject obj in Selection.gameObjects)
+            foreach (var obj in Selection.gameObjects)
             {
-                Waypoint w = obj.GetComponent<Waypoint>();
+                var w = obj.GetComponent<Waypoint>();
                 if (path.RemoveStartPoint(w))
                 {
                     DestroyImmediate(w.gameObject);
@@ -144,9 +144,9 @@ namespace GibEditor
 
         private void TryDeleteWaypoints()
         {
-            foreach (GameObject obj in Selection.gameObjects)
+            foreach (var obj in Selection.gameObjects)
             {
-                Waypoint w = obj.GetComponent<Waypoint>();
+                var w = obj.GetComponent<Waypoint>();
                 if (path.RemoveWaypoint(w))
                 {
                     DestroyImmediate(w.gameObject);
@@ -158,7 +158,7 @@ namespace GibEditor
         {
             if (from != null)
             {
-                foreach (Waypoint w in to)
+                foreach (var w in to)
                 {
                     if (w != null)
                     {
@@ -175,14 +175,14 @@ namespace GibEditor
                 Debug.LogWarning("Select or attach a path first!");
                 return;
             }
-            GameObject obj = Instantiate(waypoint, Vector3.zero, Quaternion.identity);
+            var obj = Instantiate(waypoint, Vector3.zero, Quaternion.identity);
             obj.transform.SetParent(path.transform);
-            Waypoint way = obj.GetComponent<Waypoint>();
+            var way = obj.GetComponent<Waypoint>();
             path.AddWaypoint(way);
             obj.name = "Waypoint_" + (waypointsIndex++).ToString();
-            foreach (GameObject o in Selection.gameObjects)
+            foreach (var o in Selection.gameObjects)
             {
-                Waypoint point = o.GetComponent<Waypoint>();
+                var point = o.GetComponent<Waypoint>();
                 if (point != null)
                 {
                     point.AddOption(way);
@@ -202,10 +202,10 @@ namespace GibEditor
                 Debug.LogWarning("Select or attach a path first!");
                 return;
             }
-            GameObject obj = Instantiate(waypoint, Vector3.zero, Quaternion.identity);
+            var obj = Instantiate(waypoint, Vector3.zero, Quaternion.identity);
             obj.transform.SetParent(path.transform);
             obj.name = "Startpoint_" + (startPointsIndex++).ToString();
-            Waypoint way = obj.GetComponent<Waypoint>();
+            var way = obj.GetComponent<Waypoint>();
             path.AddStartPoint(way, prob);
             Selection.activeGameObject = obj;
         }

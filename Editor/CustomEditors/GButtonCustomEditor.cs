@@ -8,10 +8,10 @@ using GibFrame.UI;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     [CustomEditor(typeof(GButton))]
-    internal class GButtonCustomEditor : Editor
+    internal class GButtonCustomEditor : UnityEditor.Editor
     {
         private GUIStyle labelStyle;
         private bool events;

@@ -4,12 +4,11 @@
 //
 // All Rights Reserved
 
-using GibFrame;
 using GibFrame.Meta;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     [CustomPropertyDrawer(typeof(SceneStringAttribute))]
     public class SceneStringAttributePropertyDrawer : PropertyDrawer

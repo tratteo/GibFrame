@@ -8,7 +8,7 @@ using GibFrame.Meta;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     [CustomPropertyDrawer(typeof(ReadonlyAttribute))]
     public class ReadonlyAttributePropertyDrawer : PropertyDrawer

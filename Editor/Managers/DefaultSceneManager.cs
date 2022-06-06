@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     internal static class DefaultSceneManager
     {

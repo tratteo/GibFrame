@@ -7,13 +7,13 @@
 using GibFrame.Meta;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     internal class GuardedManager
     {
@@ -22,11 +22,11 @@ namespace GibEditor
             var objs = new List<UnityEngine.Object>();
             if (scene)
             {
-                objs.AddRange(GetAllBehavioursInScene());
+                objs.AddRange(GetBehaviours(GibEditor.GetObjectsInScene()));
             }
             if (prefabs)
             {
-                objs.AddRange(GetAllBehavioursInAssets());
+                objs.AddRange(GetBehaviours(GibEditor.GetObjectsInAssets()));
             }
             var logBuilder = new StringBuilder();
             for (var i = 0; i < objs.Count; i++)
@@ -39,60 +39,13 @@ namespace GibEditor
             Debug.Log($"Guarding process completed, analyzed {objs.Count} elements");
         }
 
-        internal static List<UnityEngine.Object> GetAllBehavioursInAssets(string path = "")
+        private static List<UnityEngine.Object> GetBehaviours(IEnumerable<UnityEngine.Object> objects)
         {
             var sel = new List<UnityEngine.Object>();
-            var fileEntries = Directory.GetFiles(Application.dataPath + "/" + path);
-            foreach (var fileName in fileEntries)
+            for (var i = 0; i < objects.Count(); i++)
             {
-                var index = fileName.LastIndexOf("/");
-                var localPath = "Assets";
-
-                if (index > 0) localPath += fileName[index..];
-
-                var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(localPath);
-                if (!asset) continue;
-                if (asset is GameObject gameObject)
-                {
-                    var monos = gameObject.GetComponentsInChildren<MonoBehaviour>();
-                    if (monos != null && monos.Length > 0)
-                    {
-                        sel.AddRange(monos);
-                    }
-                }
-                else if (asset is ScriptableObject so)
-                {
-                    if (so)
-                    {
-                        sel.Add(so);
-                    }
-                }
-            }
-            var dirs = Directory.GetDirectories(Application.dataPath + "/" + path);
-            foreach (var dir in dirs)
-            {
-                var relativePath = path;
-                var index = dir.LastIndexOfAny(new char[] { '/', '\\' });
-                if (index > 0)
-                {
-                    var val = dir[index..];
-                    relativePath += val;
-                    sel.AddRange(GetAllBehavioursInAssets(relativePath));
-                }
-            }
-            return sel;
-        }
-
-        private static List<UnityEngine.Object> GetAllBehavioursInScene()
-        {
-            var objs = UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
-            var sel = new List<UnityEngine.Object>();
-            for (var i = 0; i < objs.Length; i++)
-            {
-                var current = objs[i];
-
+                var current = objects.ElementAt(i);
                 if (!current) continue;
-
                 if (current is GameObject obj)
                 {
                     var monos = obj.GetComponents<MonoBehaviour>();
@@ -103,7 +56,6 @@ namespace GibEditor
                     sel.Add(so);
                 }
             }
-
             return sel;
         }
 

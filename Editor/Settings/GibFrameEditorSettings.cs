@@ -8,7 +8,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace GibEditor
+namespace GibFrame.Editor
 {
     internal class GibFrameEditorSettings
     {
