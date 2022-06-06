@@ -9,10 +9,11 @@ namespace GibFrame.Editor
         /// <summary>
         ///   Validate all groups found in the Asset folder and sub-folders
         /// </summary>
-        public static void ValidateAllGroupsInAssets()
+        public static bool ValidateAllGroupsInAssets()
         {
             var objs = GibEditor.GetAllBehavioursInAsset<ValidationGroup>();
 
+            var failure = false;
             foreach (var o in objs)
             {
                 var res = o.ValidateAll();
@@ -22,6 +23,7 @@ namespace GibFrame.Editor
                 }
                 else
                 {
+                    failure = true;
                     var builder = new StringBuilder($"{o.name} -> Validation failed with {res.Count} errors X(\nClick me for more info\n");
                     foreach (var r in res)
                     {
@@ -30,9 +32,10 @@ namespace GibFrame.Editor
                     Debug.LogError(builder.ToString(), o);
                 }
             }
+            return failure;
         }
 
-        public static void ValidateGuarded()
+        public static bool ValidateGuarded()
         {
             var res = GibEditor.GetAllBehavioursInAsset<EditorGuardedValidator>($"Editor");
             if (res.Count > 0)
@@ -45,9 +48,10 @@ namespace GibFrame.Editor
                 if (res.Count <= 0)
                 {
                     Debug.LogWarning($"Unable to find {nameof(EditorGuardedValidator)}");
-                    return;
+                    return false;
                 }
             }
+            var failure = false;
             foreach (var o in res)
             {
                 Debug.Log(o.name + " | Verifying with policy: " + o.GuardPolicy);
@@ -58,6 +62,7 @@ namespace GibFrame.Editor
                 }
                 else
                 {
+                    failure = true;
                     var builder = new StringBuilder($"{o.name} -> Validation failed with {failures.Count} errors X(\nClick me for more info\n");
                     foreach (var r in failures)
                     {
@@ -66,6 +71,7 @@ namespace GibFrame.Editor
                     Debug.LogError(builder.ToString(), o);
                 }
             }
+            return failure;
         }
     }
 }
