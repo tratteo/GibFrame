@@ -32,7 +32,7 @@ namespace GibFrame.Editor
                     Debug.LogError(builder.ToString(), o);
                 }
             }
-            return failure;
+            return !failure;
         }
 
         public static bool ValidateGuarded()
@@ -71,7 +71,7 @@ namespace GibFrame.Editor
                     Debug.LogError(builder.ToString(), o);
                 }
             }
-            return failure;
+            return !failure;
         }
     }
 }
