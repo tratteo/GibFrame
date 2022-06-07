@@ -4,7 +4,7 @@ using UnityEngine;
 namespace GibFrame.Editor
 {
     [CustomPropertyDrawer(typeof(Optional<>))]
-    public class OptionalPropertyDrawer : PropertyDrawer
+    internal class OptionalPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

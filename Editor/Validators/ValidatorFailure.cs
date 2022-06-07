@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace GibFrame.Validators
+namespace GibFrame.Editor.Validators
 {
     public class ValidatorFailure
     {

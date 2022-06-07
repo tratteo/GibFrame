@@ -1,5 +1,4 @@
 ﻿using GibFrame.Editor.Validators;
-using GibFrame.Validators;
 using System.Text;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ namespace GibFrame.Editor
     public static class ValidatorManager
     {
         /// <summary>
-        ///   Validate all <see cref="ValidationGroup"/> found in the Asset folder and sub-folders
+        ///   Validate all <see cref="ValidationGroup"/> found in the <i> Asset </i> folder and sub-folders
         /// </summary>
         public static bool ValidateAllGroupsInAssets()
         {
@@ -37,21 +36,23 @@ namespace GibFrame.Editor
         }
 
         /// <summary>
-        ///   Validate all the fields marked with the <see cref="Meta.GuardedAttribute"/>
+        ///   Validate all the fields marked with the <see cref="Meta.GuardedAttribute"/> using the default <see cref="GuardedValidator"/>
+        ///   embedded in GibFrame. In order to override the default validator, create a new <see cref="GuardedValidator"/> in the <i>
+        ///   Asset/Editor </i> folder.
         /// </summary>
         public static bool ValidateGuarded()
         {
-            var res = GibEditor.GetAllBehavioursInAsset<EditorGuardedValidator>($"Editor");
+            var res = GibEditor.GetAllBehavioursInAsset<GuardedValidator>($"Editor");
             if (res.Count > 0)
             {
                 Debug.Log("User editor guard override");
             }
             else
             {
-                res = GibEditor.GetAllBehavioursAtPath<EditorGuardedValidator>(Resources.PackageEditorPath);
+                res = GibEditor.GetAllBehavioursAtPath<GuardedValidator>(Resources.PackageEditorPath);
                 if (res.Count <= 0)
                 {
-                    Debug.LogWarning($"Unable to find {nameof(EditorGuardedValidator)}");
+                    Debug.LogWarning($"Unable to find {nameof(GuardedValidator)}");
                     return false;
                 }
             }

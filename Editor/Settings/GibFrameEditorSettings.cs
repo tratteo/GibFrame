@@ -1,71 +1,32 @@
 ﻿// Copyright (c) Matteo Beltrame
 //
-// com.tratteo.gibframe.Editor -> GibEditor : GibFrameEditorSettings.cs
+// com.tratteo.gibframe.Editor -> GibEditor : GibFrameEditorSettingsData.cs
 //
 // All Rights Reserved
 
-using System.IO;
-using UnityEditor;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace GibFrame.Editor
 {
-    internal class GibFrameEditorSettings
+    [System.Serializable]
+    public class GibFrameEditorSettings
     {
-        internal const string PATH = ".gibconfig.json";
+        [JsonProperty("loadDefaultSceneOnPlay")]
+        public bool LoadDefaultSceneOnPlay { get; set; }
 
-        public static GibFrameEditorSettingsData Data { get; private set; } = null;
+        [JsonProperty("restoreOpenedScenes")]
+        public bool RestoreOpenedScenes { get; set; }
 
-        internal static void LoadSettings()
+        [JsonProperty("DefaultSceneName")]
+        public string DefaultSceneName { get; set; }
+
+        public GibFrameEditorSettings()
         {
-            if (File.Exists(PATH))
-            {
-                Data = JsonUtility.FromJson<GibFrameEditorSettingsData>(File.ReadAllText(PATH));
-            }
-            else
-            {
-                var data = new GibFrameEditorSettingsData();
-                File.WriteAllText(PATH, JsonUtility.ToJson(data));
-                Data = data;
-            }
+            LoadDefaultSceneOnPlay = false;
+            RestoreOpenedScenes = true;
+            DefaultSceneName = string.Empty;
         }
 
-        internal static void SaveSettings()
-        {
-            File.WriteAllText(PATH, JsonUtility.ToJson(Data));
-        }
-
-        private static void OnPlayModeChanged(PlayModeStateChange state)
-        {
-            switch (state)
-            {
-                case PlayModeStateChange.EnteredEditMode:
-                    LoadSettings();
-                    break;
-
-                case PlayModeStateChange.EnteredPlayMode:
-
-                    break;
-
-                case PlayModeStateChange.ExitingEditMode:
-                    SaveSettings();
-                    break;
-
-                case PlayModeStateChange.ExitingPlayMode:
-
-                    break;
-            }
-        }
-
-        [InitializeOnLoad]
-        public static class Setup
-        {
-            static Setup()
-            {
-                LoadSettings();
-                EditorApplication.playModeStateChanged += OnPlayModeChanged;
-                EditorApplication.quitting += SaveSettings;
-            }
-        }
+        public string Serialize() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }

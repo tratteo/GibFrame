@@ -11,7 +11,7 @@ using UnityEngine;
 namespace GibFrame.Editor
 {
     [CustomPropertyDrawer(typeof(SceneStringAttribute))]
-    public class SceneStringAttributePropertyDrawer : PropertyDrawer
+    internal class SceneStringAttributePropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

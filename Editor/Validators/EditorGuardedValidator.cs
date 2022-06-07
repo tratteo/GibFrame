@@ -1,5 +1,4 @@
 ﻿using GibFrame.Meta;
-using GibFrame.Validators;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,7 +9,7 @@ using UnityEngine;
 namespace GibFrame.Editor.Validators
 {
     [CreateAssetMenu(menuName = "GibFrame/Validators/GuardedValidator", fileName = "guarded_validator")]
-    public class EditorGuardedValidator : Validator
+    public class GuardedValidator : Validator
     {
         public enum Policy
         { Assets, Scene, Both }
@@ -80,7 +79,7 @@ namespace GibFrame.Editor.Validators
                 if (Attribute.GetCustomAttribute(field, typeof(GuardedAttribute)) is GuardedAttribute attribute)
                 {
                     var value = field.GetValue(obj);
-                    if (GibEditor.IsNullOrDefault(value))
+                    if (value.IsNullOrDefault())
                     {
                         failures.Add(Analyze(attribute, field, value, obj.GetType(), parentObj));
                     }

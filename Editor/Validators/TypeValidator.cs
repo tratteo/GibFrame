@@ -1,5 +1,4 @@
-﻿using GibFrame.Validators;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace GibFrame.Editor.Validators

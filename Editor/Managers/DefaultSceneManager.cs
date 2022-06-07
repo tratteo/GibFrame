@@ -11,21 +11,21 @@ using UnityEngine;
 
 namespace GibFrame.Editor
 {
-    internal static class DefaultSceneManager
+    public static class DefaultSceneManager
     {
-        internal const string USER_SCENE = "u_scene";
-        internal const string REQUESTED_BOOL = "d_requested";
+        internal const string UserScene = "u_scene";
+        internal const string RequestedBool = "d_requested";
         private static bool isLoadingDefaultScene = false;
 
-        internal static void PlayDefaultScene()
+        public static void PlayDefaultScene()
         {
             if (IsDefaultSceneValid())
             {
                 isLoadingDefaultScene = true;
-                EditorPrefs.SetString(USER_SCENE, UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).path);
-                EditorPrefs.SetBool(REQUESTED_BOOL, true);
+                EditorPrefs.SetString(UserScene, UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).path);
+                EditorPrefs.SetBool(RequestedBool, true);
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                EditorSceneManager.OpenScene(GibFrameEditorSettings.Data.defaultSceneName);
+                EditorSceneManager.OpenScene(GibFrameEditorSettingsManager.LoadSettings().DefaultSceneName);
                 EditorApplication.EnterPlaymode();
             }
             else
@@ -34,12 +34,12 @@ namespace GibFrame.Editor
             }
         }
 
-        internal static void LoadDefaultScene()
+        public static void LoadDefaultScene()
         {
             if (IsDefaultSceneValid())
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                EditorSceneManager.OpenScene(GibFrameEditorSettings.Data.defaultSceneName);
+                EditorSceneManager.OpenScene(GibFrameEditorSettingsManager.LoadSettings().DefaultSceneName);
             }
             else
             {
@@ -52,15 +52,15 @@ namespace GibFrame.Editor
             switch (state)
             {
                 case PlayModeStateChange.EnteredEditMode:
-                    if (GibFrameEditorSettings.Data.restoreOpenedScenes && EditorPrefs.GetBool(REQUESTED_BOOL))
+                    if (GibFrameEditorSettingsManager.LoadSettings().RestoreOpenedScenes && EditorPrefs.GetBool(RequestedBool))
                     {
-                        var key = EditorPrefs.GetString(USER_SCENE);
+                        var key = EditorPrefs.GetString(UserScene);
                         if (File.Exists(key))
                         {
                             EditorSceneManager.OpenScene(key);
                         }
                     }
-                    EditorPrefs.SetBool(REQUESTED_BOOL, false);
+                    EditorPrefs.SetBool(RequestedBool, false);
                     break;
 
                 case PlayModeStateChange.EnteredPlayMode:
@@ -68,7 +68,7 @@ namespace GibFrame.Editor
                     break;
 
                 case PlayModeStateChange.ExitingEditMode:
-                    if (GibFrameEditorSettings.Data.loadDefaultSceneOnPlay && !isLoadingDefaultScene)
+                    if (GibFrameEditorSettingsManager.LoadSettings().LoadDefaultSceneOnPlay && !isLoadingDefaultScene)
                     {
                         PlayDefaultScene();
                     }
@@ -80,7 +80,11 @@ namespace GibFrame.Editor
             }
         }
 
-        private static bool IsDefaultSceneValid() => GibFrameEditorSettings.Data.defaultSceneName != string.Empty && File.Exists(GibFrameEditorSettings.Data.defaultSceneName);
+        private static bool IsDefaultSceneValid()
+        {
+            var data = GibFrameEditorSettingsManager.LoadSettings();
+            return !string.IsNullOrWhiteSpace(data.DefaultSceneName) && File.Exists(data.DefaultSceneName);
+        }
 
         [InitializeOnLoad]
         public class Startup

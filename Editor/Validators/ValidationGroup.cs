@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace GibFrame.Validators
+namespace GibFrame.Editor.Validators
 {
     /// <summary>
     ///   A collection of <see cref="IValidable"/> elements that can be validated in the Editor

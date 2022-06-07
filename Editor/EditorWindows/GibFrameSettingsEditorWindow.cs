@@ -14,6 +14,7 @@ namespace GibFrame.Editor
     {
         private GUILayoutOption[] defaultOptions;
         private GUIStyle sectionsStyle;
+        private GibFrameEditorSettings settings;
 
         internal static void AddDefineSymbols(params string[] symbols)
         {
@@ -31,6 +32,11 @@ namespace GibFrame.Editor
             PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, string.Join(";", allDefines.ToArray()));
         }
 
+        private void OnDisable()
+        {
+            GibFrameEditorSettingsManager.SaveSettings(settings);
+        }
+
         private void OnEnable()
         {
             sectionsStyle = new GUIStyle
@@ -39,6 +45,7 @@ namespace GibFrame.Editor
             };
             sectionsStyle.normal.textColor = Color.white;
             defaultOptions = new GUILayoutOption[] { GUILayout.Width(200) };
+            settings = GibFrameEditorSettingsManager.LoadSettings();
         }
 
         private void OnGUI()
@@ -48,15 +55,15 @@ namespace GibFrame.Editor
             GUILayout.Space(5);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(new GUIContent("Default scene path", "The path of the default scene, starting from the root folder.\nRequires to specify the extension .unity\nExample: Assets/Scenes/Initializer.unity"), defaultOptions);
-            GibFrameEditorSettings.Data.defaultSceneName = EditorGUILayout.TextField(GibFrameEditorSettings.Data.defaultSceneName);
+            settings.DefaultSceneName = EditorGUILayout.TextField(settings.DefaultSceneName);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(new GUIContent("Load default scene on play", "Load the specified scene whenever the playmode is entered"), defaultOptions);
-            GibFrameEditorSettings.Data.loadDefaultSceneOnPlay = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.loadDefaultSceneOnPlay, defaultOptions);
+            settings.LoadDefaultSceneOnPlay = EditorGUILayout.Toggle(settings.LoadDefaultSceneOnPlay, defaultOptions);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(new GUIContent("Restore opened scenes", "Restore the opened scenes when the playmode is exited"), defaultOptions);
-            GibFrameEditorSettings.Data.restoreOpenedScenes = EditorGUILayout.Toggle(GibFrameEditorSettings.Data.restoreOpenedScenes, defaultOptions);
+            settings.RestoreOpenedScenes = EditorGUILayout.Toggle(settings.RestoreOpenedScenes, defaultOptions);
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(10);
         }

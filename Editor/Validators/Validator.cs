@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace GibFrame.Validators
+namespace GibFrame.Editor.Validators
 {
     /// <summary>
     ///   Extend this base class to create any kind of validator <see cref="ScriptableObject"/> able to be validated

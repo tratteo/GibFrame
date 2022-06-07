@@ -11,7 +11,7 @@ using UnityEngine;
 namespace GibFrame.Editor
 {
     [CustomPropertyDrawer(typeof(ReadonlyAttribute))]
-    public class ReadonlyAttributePropertyDrawer : PropertyDrawer
+    internal class ReadonlyAttributePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUI.GetPropertyHeight(property, label, true);
 

@@ -11,6 +11,32 @@ namespace GibFrame.Editor
 
         private delegate FieldInfo GetFieldInfoAndStaticTypeFromProperty(SerializedProperty property, out Type type);
 
+        public static bool IsNullOrDefault(this object arg)
+        {
+            if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
+
+            if (arg is null) return true;
+
+            if (Equals(arg, default)) return true;
+
+            var methodType = arg.GetType();
+            if (Nullable.GetUnderlyingType(methodType) is not null) return false;
+
+            var argumentType = arg.GetType();
+            if (argumentType.IsValueType && argumentType != methodType)
+            {
+                var obj = Activator.CreateInstance(arg.GetType());
+                return obj.Equals(arg);
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///   Get the <see cref="Type"/> and <see cref="FieldInfo"/> for the specified <see cref="SerializedProperty"/>
+        /// </summary>
+        /// <param name="prop"> </param>
+        /// <param name="type"> </param>
+        /// <returns> </returns>
         public static FieldInfo GetFieldInfoAndStaticType(this SerializedProperty prop, out Type type)
         {
             if (getFieldInfoAndStaticTypeFromPropertyDelegate == null)
@@ -38,12 +64,26 @@ namespace GibFrame.Editor
             return getFieldInfoAndStaticTypeFromPropertyDelegate(prop, out type);
         }
 
+        /// <summary>
+        ///   Get a custom attribute for the specified <see cref="SerializedProperty"/>
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="prop"> </param>
+        /// <returns> </returns>
         public static T GetCustomAttributeFromProperty<T>(this SerializedProperty prop) where T : System.Attribute
         {
             var info = prop.GetFieldInfoAndStaticType(out _);
             return info.GetCustomAttribute<T>();
         }
 
+        /// <summary>
+        ///   Create and manage a property field
+        /// </summary>
+        /// <param name="editor"> </param>
+        /// <param name="propName"> </param>
+        /// <param name="label"> </param>
+        /// <param name="tooltip"> </param>
+        /// <returns> </returns>
         public static SerializedProperty PropertyField(this UnityEditor.Editor editor, string propName, string label = null, string tooltip = null)
         {
             var prop = editor.serializedObject.FindProperty(propName);

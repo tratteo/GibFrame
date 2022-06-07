@@ -44,26 +44,6 @@ namespace GibFrame.Editor
             return sel;
         }
 
-        public static bool IsNullOrDefault<T>(this T arg)
-        {
-            if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
-
-            if (arg is null) return true;
-
-            if (Equals(arg, default(T))) return true;
-
-            var methodType = typeof(T);
-            if (Nullable.GetUnderlyingType(methodType) is not null) return false;
-
-            var argumentType = arg.GetType();
-            if (argumentType.IsValueType && argumentType != methodType)
-            {
-                var obj = Activator.CreateInstance(arg.GetType());
-                return obj.Equals(arg);
-            }
-            return false;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="root"> The root path to start searching from </param>
