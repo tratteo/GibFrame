@@ -11,5 +11,9 @@
     "name": "Tratteo",
     "url": "https://github.com/tratteo/"
   },
-  "samples": []
+  "samples": [],
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2"
+  },
+  "type": "tool"
 }
