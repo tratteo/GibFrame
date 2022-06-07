@@ -17,7 +17,7 @@ namespace GibFrame.Editor
         [JsonProperty("restoreOpenedScenes")]
         public bool RestoreOpenedScenes { get; set; }
 
-        [JsonProperty("DefaultSceneName")]
+        [JsonProperty("defaultSceneName")]
         public string DefaultSceneName { get; set; }
 
         public GibFrameEditorSettings()
