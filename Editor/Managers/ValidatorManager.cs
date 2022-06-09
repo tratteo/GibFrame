@@ -1,5 +1,6 @@
 ﻿using GibFrame.Editor.Validators;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 namespace GibFrame.Editor
@@ -13,8 +14,11 @@ namespace GibFrame.Editor
         {
             var objs = GibEditor.GetAllBehavioursInAsset<ValidatorGroup>();
             var failure = false;
-            foreach (var o in objs)
+
+            for (var i = 0; i < objs.Count; i++)
             {
+                var o = objs[i];
+                EditorUtility.DisplayProgressBar("Validation", "Validating groups...", (float)i / objs.Count);
                 var res = o.Validate();
                 if (res.Count <= 0)
                 {
@@ -31,6 +35,7 @@ namespace GibFrame.Editor
                     Debug.LogError(builder.ToString(), o);
                 }
             }
+            EditorUtility.ClearProgressBar();
             return !failure;
         }
 
@@ -56,8 +61,10 @@ namespace GibFrame.Editor
                 }
             }
             var failure = false;
-            foreach (var o in res)
+            for (var i = 0; i < res.Count; i++)
             {
+                var o = res[i];
+                EditorUtility.DisplayProgressBar("Validation", "Validating guardeds...", (float)i / res.Count);
                 var validatorName = o.name;
                 var failures = o.Validate();
                 if (failures.Count <= 0)
@@ -75,6 +82,7 @@ namespace GibFrame.Editor
                     Debug.LogError(builder.ToString());
                 }
             }
+            EditorUtility.ClearProgressBar();
             return !failure;
         }
 
