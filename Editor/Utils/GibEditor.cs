@@ -84,8 +84,13 @@ namespace GibFrame.Editor
         {
             var count = 0;
             var openedScene = SceneManager.GetActiveScene();
-            var isOpenedScene = openedScene.path.Equals(scenePath);
-            var sceneRef = isOpenedScene ? openedScene : EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+            var openedScenePath = openedScene.path;
+            var isOpenedScene = openedScenePath.Equals(scenePath);
+            if (!isOpenedScene)
+            {
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+            }
+            var sceneRef = isOpenedScene ? openedScene : EditorSceneManager.OpenScene(scenePath);
 
             var scenesObjs = sceneRef.GetRootGameObjects();
             foreach (var obj in scenesObjs)
@@ -97,7 +102,7 @@ namespace GibFrame.Editor
                     count++;
                 }
             }
-            if (!isOpenedScene) EditorSceneManager.CloseScene(sceneRef, true);
+            if (!isOpenedScene) EditorSceneManager.OpenScene(openedScenePath);
             return count;
         }
 
