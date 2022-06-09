@@ -58,20 +58,21 @@ namespace GibFrame.Editor
             var failure = false;
             foreach (var o in res)
             {
+                var validatorName = o.name;
                 var failures = o.Validate();
                 if (failures.Count <= 0)
                 {
-                    Debug.Log($"{o.name} -> <color=#55d971>Validation successful! <b>:D</b></color>", o);
+                    Debug.Log($"{validatorName} -> <color=#55d971>Validation successful! <b>:D</b></color>");
                 }
                 else
                 {
                     failure = true;
-                    var builder = new StringBuilder($"{o.name} -> <color=#ed4e4e>Validation failed with {failures.Count} errors</color>\nClick for more info\n");
+                    var builder = new StringBuilder($"{validatorName} -> <color=#ed4e4e>Validation failed with {failures.Count} errors</color>\nClick for more info\n");
                     foreach (var r in failures)
                     {
                         builder.Append(r.ToString() + "\n");
                     }
-                    Debug.LogError(builder.ToString(), o);
+                    Debug.LogError(builder.ToString());
                 }
             }
             return !failure;
