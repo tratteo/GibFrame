@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GibFrame.Editor
 {
@@ -11,27 +10,6 @@ namespace GibFrame.Editor
 
         public static class Icons
         {
-            private static Texture2D error;
-            private static Texture2D check;
-
-            public static IconRequest Error()
-            {
-                if (!error)
-                {
-                    error = AssetDatabase.LoadAssetAtPath<Texture2D>($"{Path}{System.IO.Path.AltDirectorySeparatorChar}error.png");
-                }
-                return new IconRequest(error);
-            }
-
-            public static IconRequest Check()
-            {
-                if (!check)
-                {
-                    check = AssetDatabase.LoadAssetAtPath<Texture2D>($"{Path}{System.IO.Path.AltDirectorySeparatorChar}check.png");
-                }
-                return new IconRequest(check);
-            }
-
             public class IconRequest
             {
                 public Texture2D icon;

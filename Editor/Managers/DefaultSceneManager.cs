@@ -22,7 +22,7 @@ namespace GibFrame.Editor
             if (IsDefaultSceneValid())
             {
                 isLoadingDefaultScene = true;
-                EditorPrefs.SetString(UserScene, UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).path);
+                EditorPrefs.SetString(UserScene, UnityEngine.SceneManagement.SceneManager.GetActiveScene().path);
                 EditorPrefs.SetBool(RequestedBool, true);
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 EditorSceneManager.OpenScene(GibFrameEditorSettingsManager.LoadSettings().DefaultSceneName);

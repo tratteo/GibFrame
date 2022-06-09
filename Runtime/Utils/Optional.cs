@@ -63,7 +63,7 @@ namespace GibFrame
 
         public bool IsNull()
         {
-            if (obj.Equals(null)) return true;
+            if (obj == null) return true;
             if (obj is UnityEngine.Object uObj && !uObj) return true;
             if (obj is null) return true;
             if (Equals(obj, default)) return true;

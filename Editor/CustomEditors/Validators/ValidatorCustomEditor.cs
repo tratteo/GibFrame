@@ -5,27 +5,28 @@ using UnityEngine;
 
 namespace GibFrame.Editor
 {
-    [CustomEditor(typeof(ValidationGroup))]
-    internal class ValidatorGroupCustomEditor : UnityEditor.Editor
+    [CustomEditor(typeof(Validator))]
+    public abstract class ValidatorCustomEditor : UnityEditor.Editor
     {
-        private ValidationGroup validationGroup;
+        protected IValidable validable;
         private bool showResults = false;
         private List<ValidatorFailure> latestResults = new List<ValidatorFailure>();
         private Vector2 scrollPos;
         private bool resultsFoldout = false;
         private GUIStyle labelStyle;
-        private Texture checkIcon;
-        private Texture errorIcon;
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            this.PropertyField("validables", "Validables");
+
+            DrawProperties();
+
+            EditorGUILayout.Space(10);
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Validate"))
             {
-                latestResults = validationGroup.ValidateAll();
+                latestResults = validable.Validate();
                 showResults = true;
             }
             EditorGUI.BeginDisabledGroup(!showResults);
@@ -39,11 +40,9 @@ namespace GibFrame.Editor
             if (showResults)
             {
                 var hasErrors = latestResults.Count > 0;
-                var content = new GUIContent()
-                {
-                    text = $" Validation completed with {latestResults.Count} errors",
-                    image = hasErrors ? errorIcon : checkIcon
-                };
+                var content = hasErrors ?
+                    EditorGUIUtility.TrTextContentWithIcon($" Validation completed with {latestResults.Count} errors", "winbtn_mac_close@2x") :
+                    EditorGUIUtility.TrTextContentWithIcon($" Validation completed with {latestResults.Count} errors", "winbtn_mac_max@2x");
 
                 EditorGUILayout.LabelField(content, labelStyle);
                 resultsFoldout = EditorGUILayout.Foldout(resultsFoldout, "Results");
@@ -61,11 +60,11 @@ namespace GibFrame.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void OnEnable()
+        protected abstract void DrawProperties();
+
+        protected virtual void OnEnable()
         {
-            errorIcon = Resources.Icons.Error().Resize(24, 24);
-            checkIcon = Resources.Icons.Check().Resize(24, 24);
-            validationGroup = target as ValidationGroup;
+            validable = target as IValidable;
             labelStyle = new GUIStyle()
             {
                 wordWrap = true,

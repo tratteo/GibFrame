@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bdd7b23fb20ffa4e86713f70659de63, type: 3}
+  m_Script: {fileID: 11500000, guid: 2023492fe1615c14699b26f76d46f803, type: 3}
   m_Name: guarded_validator
   m_EditorClassIdentifier: 
-  guardPolicy: 2
+  validateAssets: 1
+  allScenes: 1
+  scenes: []

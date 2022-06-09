@@ -60,21 +60,21 @@ namespace GibFrame.Editor
         /// <typeparam name="T"> </typeparam>
         /// <param name="path"> </param>
         /// <returns> All behaviours of type T in the specified path. T can be either a <see cref="MonoBehaviour"/> or a <see cref="ScriptableObject"/> </returns>
-        public static List<T> GetAllBehavioursAtPath<T>(string path) where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsAtPath(path));
+        public static List<T> GetAllBehavioursAtPath<T>(string path) where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsAtPath(path).ToArray());
 
         /// <summary>
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <param name="root"> </param>
         /// <returns> All behaviours of type T in the Asset folder. T can be either a <see cref="MonoBehaviour"/> or a <see cref="ScriptableObject"/> </returns>
-        public static List<T> GetAllBehavioursInAsset<T>(string root = "") where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsInAssets(root));
+        public static List<T> GetAllBehavioursInAsset<T>(string root = "") where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsInAssets(root).ToArray());
 
         /// <summary>
         /// </summary>
         /// <returns> All the <see cref="Object"/> in the current scene </returns>
         public static UnityEngine.Object[] GetObjectsInScene() => UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
 
-        public static List<UnityEngine.Object> GetBehaviours(IEnumerable<UnityEngine.Object> objs)
+        public static List<UnityEngine.Object> GetBehaviours(params UnityEngine.Object[] objs)
         {
             var behaviours = new List<UnityEngine.Object>();
             foreach (var obj in objs)
@@ -91,7 +91,7 @@ namespace GibFrame.Editor
             return behaviours;
         }
 
-        public static List<T> GetBehaviours<T>(IEnumerable<UnityEngine.Object> objs)
+        public static List<T> GetBehaviours<T>(params UnityEngine.Object[] objs)
         {
             var behaviours = new List<T>();
             foreach (var obj in objs)

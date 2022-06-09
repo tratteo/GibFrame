@@ -4,22 +4,20 @@ using UnityEngine;
 namespace GibFrame.Editor.Validators
 {
     /// <summary>
-    ///   A collection of <see cref="IValidable"/> elements that can be validated in the Editor
+    ///   A collection of <see cref="Validator"/> elements that can be validated in the Editor
     /// </summary>
     [CreateAssetMenu(menuName = "GibFrame/Validators/Group", fileName = "validator_group")]
-    public sealed class ValidationGroup : ScriptableObject
+    public sealed class ValidatorGroup : ScriptableObject, IValidable
     {
-        [SerializeField] private Validator[] validables;
+        [SerializeField] private List<Validator> validators;
 
-        /// <summary>
-        ///   Validate all the <see cref="IValidable"/> in this group
-        /// </summary>
-        /// <returns> </returns>
-        public List<ValidatorFailure> ValidateAll()
+        public IReadOnlyCollection<Validator> Validators => validators;
+
+        public List<ValidatorFailure> Validate()
         {
-            if (validables is null || validables.Length < 0) return new List<ValidatorFailure>();
             var failures = new List<ValidatorFailure>();
-            foreach (var v in validables)
+            if (validators is null || validators.Count < 0) return failures;
+            foreach (var v in validators)
             {
                 if (v is null) continue;
                 var res = v.Validate();
