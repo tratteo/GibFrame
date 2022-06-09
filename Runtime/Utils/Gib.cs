@@ -4,7 +4,6 @@
 //
 // All Rights Reserved
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,10 +12,38 @@ namespace GibFrame
 {
     public class Gib
     {
-        public static T FindObjectOfTypeWithName<T>(string name, bool inactive = false) where T : Component
+        /// <summary>
+        ///   For each object:
+        ///   <list>
+        ///     <item>
+        ///       <description> - If it is a <see cref="GameObject"/>, retrieve all components of type T </description>
+        ///     </item>
+        ///     <item>
+        ///       <description> - If it is a <see cref="ScriptableObject"/>, retrieve it if it's of type T </description>
+        ///     </item>
+        ///   </list>
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="objs"> </param>
+        /// <returns> </returns>
+        public static List<T> GetAllBehaviours<T>(params UnityEngine.Object[] objs) where T : class
         {
-            var transforms = UnityEngine.Object.FindObjectsOfType<T>(inactive);
-            return Array.Find(transforms, (elem) => elem.name.Equals(name));
+            var behaviours = new List<T>();
+            foreach (var obj in objs)
+            {
+                if (typeof(T).IsSubclassOf(typeof(ScriptableObject)) || typeof(T).Equals(typeof(UnityEngine.Object)))
+                {
+                    if (obj is T so)
+                    {
+                        behaviours.Add(so);
+                    }
+                }
+                else if (typeof(T).IsSubclassOf(typeof(Component)) && obj is GameObject gObj)
+                {
+                    behaviours.AddRange(gObj.GetComponents<T>());
+                }
+            }
+            return behaviours;
         }
 
         public static List<T> GetInterfacesOfType<T>(bool inactive = false) where T : class
@@ -29,19 +56,6 @@ namespace GibFrame
                 interfaces.AddRange(elems);
             }
             return interfaces;
-        }
-
-        public static T GetFirstInterfaceOfType<T>(bool inactive = false) where T : class
-        {
-            var monoBehaviours = UnityEngine.Object.FindObjectsOfType<GameObject>(inactive);
-            foreach (var item in monoBehaviours)
-            {
-                if (item.TryGetComponent<T>(out var elem))
-                {
-                    return elem;
-                }
-            }
-            return default;
         }
 
         public static Vector3 GetCoordinateCenter(params Vector3[] positions)

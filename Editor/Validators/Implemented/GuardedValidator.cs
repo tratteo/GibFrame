@@ -5,9 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace GibFrame.Editor.Validators
 {
@@ -31,7 +29,7 @@ namespace GibFrame.Editor.Validators
             var objs = new List<UnityEngine.Object>();
             if (validateAssets)
             {
-                objs.AddRange(GibEditor.GetBehaviours(GibEditor.GetObjectsInAssets().ToArray()));
+                objs.AddRange(Gib.GetAllBehaviours<Transform>(GibEditor.GetUnityObjectsInAssets().ToArray()));
             }
             for (var i = 0; i < objs.Count; i++)
             {
@@ -82,22 +80,13 @@ namespace GibFrame.Editor.Validators
             {
                 return failures;
             }
-            var openedScene = SceneManager.GetActiveScene();
+
             foreach (var scene in scenesPaths)
             {
-                var isOpenedScene = openedScene.path.Equals(scene);
-                var sceneRef = isOpenedScene ? openedScene : EditorSceneManager.OpenScene(scene, OpenSceneMode.Additive);
-
-                var scenesObjs = sceneRef.GetRootGameObjects();
-                foreach (var obj in scenesObjs)
+                GibEditor.ExecuteForComponentsInScene<MonoBehaviour>(scene, m =>
                 {
-                    var behaviours = GibEditor.GetBehaviours(obj);
-                    foreach (var behaviour in behaviours)
-                    {
-                        failures.AddRange(GuardRecursively(behaviour, obj, scene));
-                    }
-                }
-                if (!isOpenedScene) EditorSceneManager.CloseScene(sceneRef, true);
+                    failures.AddRange(GuardRecursively(m, m.gameObject, scene));
+                });
             }
             Log($"Validated {(allScenes ? "all" : scenesPaths.Count)} scenes");
             return failures;

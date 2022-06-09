@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GibFrame.Editor
 {
@@ -14,7 +16,7 @@ namespace GibFrame.Editor
         /// <param name="root"> </param>
         /// <param name="exclusion"> Folders name to exclude from the query </param>
         /// <returns> All <see cref="UnityEngine.Object"/> in the specified path </returns>
-        public static List<UnityEngine.Object> GetObjectsAtPath(string path, params string[] exclusion)
+        public static List<UnityEngine.Object> GetUnityObjectsAtPath(string path, params string[] exclusion)
         {
             if (!Directory.Exists(path)) return new List<UnityEngine.Object>();
             var inAsset = path.Contains(Application.dataPath);
@@ -39,7 +41,7 @@ namespace GibFrame.Editor
                 var dirInfo = new DirectoryInfo(dir);
                 if (exclusionList.Contains(dirInfo.Name)) continue;
                 var localPath = $"{path}{Path.DirectorySeparatorChar}{dirInfo.Name}";
-                sel.AddRange(GetObjectsAtPath(localPath));
+                sel.AddRange(GetUnityObjectsAtPath(localPath));
             }
             return sel;
         }
@@ -49,66 +51,74 @@ namespace GibFrame.Editor
         /// <param name="root"> The root path to start searching from </param>
         /// <param name="exclusion"> Folders name to exclude from the query </param>
         /// <returns> All <see cref="UnityEngine.Object"/> in the Asset folder </returns>
-        public static List<UnityEngine.Object> GetObjectsInAssets(string root = "", params string[] exclusion)
+        public static List<UnityEngine.Object> GetUnityObjectsInAssets(string root = "", params string[] exclusion)
         {
             var compositePath = string.IsNullOrWhiteSpace(root) ? Application.dataPath : $"{Application.dataPath}{Path.AltDirectorySeparatorChar}{root}";
-            return GetObjectsAtPath(compositePath, exclusion);
+            return GetUnityObjectsAtPath(compositePath, exclusion);
         }
 
         /// <summary>
-        /// </summary>
-        /// <typeparam name="T"> </typeparam>
-        /// <param name="path"> </param>
-        /// <returns> All behaviours of type T in the specified path. T can be either a <see cref="MonoBehaviour"/> or a <see cref="ScriptableObject"/> </returns>
-        public static List<T> GetAllBehavioursAtPath<T>(string path) where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsAtPath(path).ToArray());
-
-        /// <summary>
+        ///   Applied to all <see cref="UnityEngine.Object"/> in the specified <i> path </i> folder. <inheritdoc cref="Gib.GetAllBehaviours{T}(UnityEngine.Object[])"/>
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <param name="root"> </param>
-        /// <returns> All behaviours of type T in the Asset folder. T can be either a <see cref="MonoBehaviour"/> or a <see cref="ScriptableObject"/> </returns>
-        public static List<T> GetAllBehavioursInAsset<T>(string root = "") where T : UnityEngine.Object => GetBehaviours<T>(GetObjectsInAssets(root).ToArray());
+        /// <returns> </returns>
+        public static List<T> GetAllBehavioursAtPath<T>(string path) where T : UnityEngine.Object => Gib.GetAllBehaviours<T>(GetUnityObjectsAtPath(path).ToArray());
 
         /// <summary>
+        ///   Applied to all <see cref="UnityEngine."/> in the <i> Asset </i> folder. <inheritdoc cref="Gib.GetAllBehaviours{T}(UnityEngine.Object[])"/>
         /// </summary>
-        /// <returns> All the <see cref="Object"/> in the current scene </returns>
-        public static UnityEngine.Object[] GetObjectsInScene() => UnityEngine.Object.FindObjectsOfType<UnityEngine.Object>();
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="root"> </param>
+        /// <returns> </returns>
+        public static List<T> GetAllBehavioursInAsset<T>(string root = "") where T : UnityEngine.Object => Gib.GetAllBehaviours<T>(GetUnityObjectsInAssets(root).ToArray());
 
-        public static List<UnityEngine.Object> GetBehaviours(params UnityEngine.Object[] objs)
+        /// <summary>
+        ///   Execute an <see cref="Action"/> on all the <see cref="GameObject"/> in the specified scene
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="scenePath"> </param>
+        /// <param name="action"> </param>
+        /// <returns> The number of <see cref="GameObject"/> the <see cref="Action"/> has been run on </returns>
+        public static int ExecuteForGameObjectsInScene(string scenePath, Action<GameObject> action = null)
         {
-            var behaviours = new List<UnityEngine.Object>();
-            foreach (var obj in objs)
+            var count = 0;
+            var openedScene = SceneManager.GetActiveScene();
+            var isOpenedScene = openedScene.path.Equals(scenePath);
+            var sceneRef = isOpenedScene ? openedScene : EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+
+            var scenesObjs = sceneRef.GetRootGameObjects();
+            foreach (var obj in scenesObjs)
             {
-                if (obj is ScriptableObject so)
+                var children = obj.GetComponentsInChildren<Transform>(true);
+                foreach (var t in children)
                 {
-                    behaviours.Add(so);
-                }
-                else if (obj is GameObject gObj)
-                {
-                    behaviours.AddRange(gObj.GetComponents<MonoBehaviour>());
+                    action?.Invoke(t.gameObject);
+                    count++;
                 }
             }
-            return behaviours;
+            if (!isOpenedScene) EditorSceneManager.CloseScene(sceneRef, true);
+            return count;
         }
 
-        public static List<T> GetBehaviours<T>(params UnityEngine.Object[] objs)
+        /// <summary>
+        ///   Execute an <see cref="Action"/> on all the components of type T in the specified scene
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="scenePath"> </param>
+        /// <param name="action"> </param>
+        /// <returns> The number of components the <see cref="Action"/> has been run on </returns>
+        public static int ExecuteForComponentsInScene<T>(string scenePath, Action<T> action = null) where T : Component
         {
-            var behaviours = new List<T>();
-            foreach (var obj in objs)
+            var count = 0;
+            ExecuteForGameObjectsInScene(scenePath, obj =>
             {
-                if (typeof(T).IsSubclassOf(typeof(ScriptableObject)) || typeof(T).Equals(typeof(UnityEngine.Object)))
-                {
-                    if (obj is T so)
-                    {
-                        behaviours.Add(so);
-                    }
-                }
-                else if (typeof(T).IsSubclassOf(typeof(Component)) && obj is GameObject gObj)
-                {
-                    behaviours.AddRange(gObj.GetComponents<T>());
-                }
-            }
-            return behaviours;
+                var comps = obj.GetComponents<T>();
+                foreach (var c in comps) action?.Invoke(c);
+                count += comps.Length;
+            });
+
+            return count;
         }
     }
 }

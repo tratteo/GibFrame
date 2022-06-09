@@ -11,6 +11,12 @@ namespace GibFrame.Editor
 {
     internal class MenuItems
     {
+        [MenuItem("GibFrame/Tests/1", false, 0)]
+        internal static void Test1()
+        {
+            Debug.Log(GibEditor.ExecuteForComponentsInScene<MonoBehaviour>("Assets/Scenes/Test1.unity"));
+        }
+
         [MenuItem("GibFrame/Path Builder", false, 22)]
         internal static void ShowPathBuilderWindow() => EditorWindow.GetWindow(typeof(PathBuilderEditorWindow)).titleContent = new GUIContent("Path Builder");
 
