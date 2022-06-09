@@ -61,6 +61,18 @@ namespace GibFrame
             func?.Invoke(obj);
         }
 
-        public bool IsNull() => (obj is null) || (obj is UnityEngine.Object uobj && !uobj);
+        public bool IsNull()
+        {
+            if (obj is UnityEngine.Object uObj && !uObj) return true;
+
+            if (obj is null) return true;
+
+            if (Equals(obj, default)) return true;
+
+            var methodType = obj.GetType();
+            if (Nullable.GetUnderlyingType(methodType) is not null) return false;
+
+            return false;
+        }
     }
 }
