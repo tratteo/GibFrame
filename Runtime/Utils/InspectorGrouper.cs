@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InspectorGrouper : MonoBehaviour
 {
-    private List<Group> groups;
+    [SerializeField] private List<Group> groups;
 
     public List<Group> Groups
     {
@@ -21,13 +21,11 @@ public class InspectorGrouper : MonoBehaviour
     public class Group
     {
         public string name;
+        public bool isVisible = true;
+        public bool isEditable = true;
         [SerializeField] private List<Component> components;
 
         public List<Component> Members => components;
-
-        public bool IsVisible { get; set; } = true;
-
-        public bool IsEditable { get; set; } = true;
 
         public Group()
         {

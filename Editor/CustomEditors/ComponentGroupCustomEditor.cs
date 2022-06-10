@@ -48,7 +48,7 @@ namespace GibFrame.Editor
         private void DrawGroup(int index, bool guiEnabled, Color guiColor)
         {
             var group = grouper.Groups[index];
-            if (group.IsEditable)
+            if (group.isEditable)
             {
                 var objectComponents = grouper.GetComponents<Component>();
 
@@ -57,7 +57,7 @@ namespace GibFrame.Editor
                 group.name = GUILayout.TextField(group.name);
 
                 if (GUILayout.Button("Done", GUILayout.Width(ButtonWidth)))
-                    group.IsEditable = false;
+                    group.isEditable = false;
 
                 GUILayout.EndHorizontal();
 
@@ -82,7 +82,7 @@ namespace GibFrame.Editor
                         }
                         else
                         {
-                            if (!group.IsVisible)
+                            if (!group.isVisible)
                             {
                                 comp.hideFlags |= HideFlags.HideInInspector;
                                 EditorUtility.SetDirty(target);
@@ -103,11 +103,11 @@ namespace GibFrame.Editor
             {
                 GUILayout.BeginHorizontal();
 
-                GUILayout.Label(group.IsVisible ? visibleIcon : hiddenIcon, GUILayout.Width(ButtonWidth / 2));
+                GUILayout.Label(group.isVisible ? visibleIcon : hiddenIcon, GUILayout.Width(ButtonWidth / 2));
 
-                GUI.color = group.IsVisible ? visibleColor : hiddenColor;
+                GUI.color = group.isVisible ? visibleColor : hiddenColor;
                 if (GUILayout.Button(group.name))
-                    ChangeVisibility(group, !group.IsVisible);
+                    ChangeVisibility(group, !group.isVisible);
                 GUI.color = guiColor;
                 if (GUILayout.Button("H", GUILayout.Width(ButtonWidth / 2)))
                     ChangeVisibility(group, false);
@@ -118,7 +118,7 @@ namespace GibFrame.Editor
                 if (GUILayout.Button("Edit", GUILayout.Width(ButtonWidth)))
                 {
                     //ChangeVisibility(group, true);
-                    group.IsEditable = true;
+                    group.isEditable = true;
                 }
 
                 GUI.enabled = index > 0;
@@ -167,7 +167,7 @@ namespace GibFrame.Editor
                     }
                     else
                     {
-                        ChangeVisibility(group, group.IsVisible);
+                        ChangeVisibility(group, group.isVisible);
                     }
                 }
             }
@@ -196,7 +196,7 @@ namespace GibFrame.Editor
                 }
             }
 
-            group.IsVisible = visible;
+            group.isVisible = visible;
             if (target)
             {
                 EditorUtility.SetDirty(target);
