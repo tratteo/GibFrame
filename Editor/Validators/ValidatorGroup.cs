@@ -27,7 +27,7 @@ namespace GibFrame.Editor.Validators
             for (var i = 0; i < validators.Count; i++)
             {
                 var v = validators[i];
-                if (v is null) continue;
+                if (!v) continue;
                 progressVal.value = (float)i / validators.Count;
                 progress?.Invoke(progressVal);
                 var res = v.Validate(progress);
