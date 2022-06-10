@@ -21,7 +21,7 @@ namespace GibFrame.Editor.Validators
             var assets = new List<UnityEngine.Object>();
             var progressVal = new IValidable.Progress(nameof(GuardedValidator), "Retrieving assets...", 0);
             progress?.Invoke(progressVal);
-            if (validateAssets) assets.AddRange(Gib.GetAllBehaviours<Transform>(GibEditor.GetUnityObjectsInAssets().ToArray()));
+            if (validateAssets) assets.AddRange(Gib.GetAllBehaviours<MonoBehaviour>(GibEditor.GetUnityObjectsInAssets().ToArray()));
             progressVal.description = "Retrieving scenes...";
             progress?.Invoke(progressVal);
             var scenesPaths = new List<string>();
