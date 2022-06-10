@@ -27,7 +27,7 @@ namespace GibFrame.Editor.Validators
                 if (v is null) continue;
                 progressVal.value = (float)i / validators.Count;
                 progress?.Invoke(progressVal);
-                var res = v.Validate();
+                var res = v.Validate(progress);
                 if (res is not null && res.Count > 0)
                 {
                     failures.AddRange(res);
