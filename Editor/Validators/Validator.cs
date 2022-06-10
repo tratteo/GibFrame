@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using static GibFrame.Editor.Validators.IValidable;
 
 namespace GibFrame.Editor.Validators
 {
@@ -10,15 +12,15 @@ namespace GibFrame.Editor.Validators
     {
         public bool IsBeingValidated { get; private set; }
 
-        public List<ValidatorFailure> Validate()
+        public List<ValidatorFailure> Validate(Action<Progress> progress = null)
         {
             IsBeingValidated = true;
             var failures = new List<ValidatorFailure>();
-            Validate(failures);
+            Validate(failures, progress);
             IsBeingValidated = false;
             return failures;
         }
 
-        public abstract void Validate(List<ValidatorFailure> failures);
+        public abstract void Validate(List<ValidatorFailure> failures, Action<Progress> progress = null);
     }
 }

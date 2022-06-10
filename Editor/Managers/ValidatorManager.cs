@@ -1,4 +1,5 @@
 ﻿using GibFrame.Editor.Validators;
+using System;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -12,14 +13,25 @@ namespace GibFrame.Editor
         /// </summary>
         public static bool ValidateAllGroups()
         {
+            static void Progress(IValidable.Progress p) => EditorUtility.DisplayProgressBar(p.phase, p.description, p.value);
+            var res = ValidateAllGroups(Progress);
+            EditorUtility.ClearProgressBar();
+            return res;
+        }
+
+        /// <summary>
+        ///   <inheritdoc cref="ValidateAllGroups"/>
+        /// </summary>
+        public static bool ValidateAllGroups(Action<IValidable.Progress> progress)
+        {
+            var progressVal = new IValidable.Progress(nameof(ValidatorManager), "Retrieving groups...", 0);
+            progress?.Invoke(progressVal);
             var objs = GibEditor.GetAllBehavioursInAsset<ValidatorGroup>();
             var failure = false;
-
             for (var i = 0; i < objs.Count; i++)
             {
                 var o = objs[i];
-                EditorUtility.DisplayProgressBar("Validation", "Validating groups...", (float)i / objs.Count);
-                var res = o.Validate();
+                var res = o.Validate(progress);
                 if (res.Count <= 0)
                 {
                     Debug.Log($"{o.name} -> <color=#55d971>Validation successful! <b>:D</b></color>", o);
@@ -35,7 +47,6 @@ namespace GibFrame.Editor
                     Debug.LogError(builder.ToString(), o);
                 }
             }
-            EditorUtility.ClearProgressBar();
             return !failure;
         }
 
@@ -45,6 +56,17 @@ namespace GibFrame.Editor
         ///   Asset/Editor </i> folder of the project.
         /// </summary>
         public static bool ValidateGuarded()
+        {
+            static void Progress(IValidable.Progress p) => EditorUtility.DisplayProgressBar(p.phase, p.description, p.value);
+            var res = ValidateGuarded(Progress);
+            EditorUtility.ClearProgressBar();
+            return res;
+        }
+
+        /// <summary>
+        ///   <inheritdoc cref="ValidateGuarded"/>
+        /// </summary>
+        public static bool ValidateGuarded(Action<IValidable.Progress> progress)
         {
             var res = GibEditor.GetAllBehavioursInAsset<GuardedValidator>($"Editor");
             if (res.Count > 0)
@@ -60,29 +82,25 @@ namespace GibFrame.Editor
                     return false;
                 }
             }
+            var validator = res[0];
             var failure = false;
-            for (var i = 0; i < res.Count; i++)
+            var validatorName = validator.name;
+            var failures = validator.Validate(progress);
+            if (failures.Count <= 0)
             {
-                var o = res[i];
-                EditorUtility.DisplayProgressBar("Validation", "Validating guardeds...", (float)i / res.Count);
-                var validatorName = o.name;
-                var failures = o.Validate();
-                if (failures.Count <= 0)
-                {
-                    Debug.Log($"{validatorName} -> <color=#55d971>Validation successful! <b>:D</b></color>");
-                }
-                else
-                {
-                    failure = true;
-                    var builder = new StringBuilder($"{validatorName} -> <color=#ed4e4e>Validation failed with {failures.Count} errors</color>\nClick for more info\n");
-                    foreach (var r in failures)
-                    {
-                        builder.Append(r.ToString() + "\n");
-                    }
-                    Debug.LogError(builder.ToString());
-                }
+                Debug.Log($"{validatorName} -> <color=#55d971>Validation successful! <b>:D</b></color>");
             }
-            EditorUtility.ClearProgressBar();
+            else
+            {
+                failure = true;
+                var builder = new StringBuilder($"{validatorName} -> <color=#ed4e4e>Validation failed with {failures.Count} errors</color>\nClick for more info\n");
+                foreach (var r in failures)
+                {
+                    builder.Append(r.ToString() + "\n");
+                }
+                Debug.LogError(builder.ToString());
+            }
+
             return !failure;
         }
 
@@ -90,6 +108,13 @@ namespace GibFrame.Editor
         ///   Validate everything that is validable <b> :D </b>
         /// </summary>
         /// <returns> </returns>
-        public static bool Validate() => ValidateAllGroups() | ValidateGuarded();
+        public static bool Validate()
+        {
+            static void Progress(IValidable.Progress p) => EditorUtility.DisplayProgressBar(p.phase, p.description, p.value);
+            var groups = ValidateAllGroups(Progress);
+            var guardeds = ValidateGuarded(Progress);
+            EditorUtility.ClearProgressBar();
+            return groups && guardeds;
+        }
     }
 }

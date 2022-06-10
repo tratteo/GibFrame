@@ -16,28 +16,54 @@ namespace GibFrame.Editor.Validators
         [SerializeField] private bool allScenes = false;
         [SerializeField] private SceneReference[] scenes;
 
-        public override void Validate(List<ValidatorFailure> failures)
+        public override void Validate(List<ValidatorFailure> failures, Action<IValidable.Progress> progress = null)
         {
-            failures.AddRange(ValidateAssets());
-            failures.AddRange(ValidateScenes());
-        }
-
-        private List<ValidatorFailure> ValidateAssets()
-        {
-            var failures = new List<ValidatorFailure>();
-            if (!validateAssets) return failures;
-            var objs = new List<UnityEngine.Object>();
-            if (validateAssets)
+            var assets = new List<UnityEngine.Object>();
+            var progressVal = new IValidable.Progress(nameof(GuardedValidator), "Retrieving assets...", 0);
+            progress?.Invoke(progressVal);
+            if (validateAssets) assets.AddRange(Gib.GetAllBehaviours<Transform>(GibEditor.GetUnityObjectsInAssets().ToArray()));
+            progressVal.description = "Retrieving scenes...";
+            progress?.Invoke(progressVal);
+            var scenesPaths = new List<string>();
+            if (allScenes)
             {
-                objs.AddRange(Gib.GetAllBehaviours<Transform>(GibEditor.GetUnityObjectsInAssets().ToArray()));
+                if (EditorBuildSettings.scenes.Length <= 0)
+                {
+                    Log("No scenes in build settings", LogType.Warning);
+                }
+                else
+                {
+                    scenesPaths.AddRange(from s in EditorBuildSettings.scenes select s.path);
+                }
             }
-            for (var i = 0; i < objs.Count; i++)
+            else if (scenes is not null && scenes.Length > 0)
             {
-                var obj = objs[i];
+                scenesPaths.AddRange(from s in scenes select s.Path);
+            }
+            progressVal.description = "Validating assets...";
+            var totalLength = assets.Count + scenesPaths.Count;
+            var count = 0;
+            for (var i = 0; i < assets.Count; i++, count++)
+            {
+                var obj = assets[i];
                 failures.AddRange(GuardRecursively(obj, obj, AssetDatabase.GetAssetPath(obj)));
+                progressVal.value = (float)count / totalLength;
+                progress?.Invoke(progressVal);
             }
-            Log($"Validated {objs.Count} assets");
-            return failures;
+            Log($"Validated {assets.Count} assets");
+
+            if (scenesPaths.Count > 0)
+            {
+                for (var i = 0; i < scenesPaths.Count; i++, count++)
+                {
+                    var scene = scenesPaths[i];
+                    progressVal.description = "Validating scene: " + scene;
+                    GibEditor.ExecuteForComponentsInScene<MonoBehaviour>(scene, m => failures.AddRange(GuardRecursively(m, m.gameObject, scene)));
+                    progressVal.value = (float)count / totalLength;
+                    progress?.Invoke(progressVal);
+                }
+                Log($"Validated {(allScenes ? "all" : scenesPaths.Count)} scenes");
+            }
         }
 
         private void Log(string message, LogType type = LogType.Log)
@@ -56,40 +82,6 @@ namespace GibFrame.Editor.Validators
                     Debug.LogError($"<b>[GuardedValidator]</b> -> {message}");
                     break;
             }
-        }
-
-        private List<ValidatorFailure> ValidateScenes()
-        {
-            var failures = new List<ValidatorFailure>();
-
-            var scenesPaths = new List<string>();
-            if (allScenes)
-            {
-                if (EditorBuildSettings.scenes.Length <= 0)
-                {
-                    Log("No scenes in build settings", LogType.Warning);
-                    return failures;
-                }
-                scenesPaths.AddRange(from s in EditorBuildSettings.scenes select s.path);
-            }
-            else if (scenes is not null && scenes.Length > 0)
-            {
-                scenesPaths.AddRange(from s in scenes select s.Path);
-            }
-            if (scenesPaths.Count <= 0)
-            {
-                return failures;
-            }
-
-            foreach (var scene in scenesPaths)
-            {
-                GibEditor.ExecuteForComponentsInScene<MonoBehaviour>(scene, m =>
-                {
-                    failures.AddRange(GuardRecursively(m, m.gameObject, scene));
-                });
-            }
-            Log($"Validated {(allScenes ? "all" : scenesPaths.Count)} scenes");
-            return failures;
         }
 
         private ValidatorFailure BuildFailure(GuardedAttribute guarded, FieldInfo field, Type parentClass, string path, bool isAsset)

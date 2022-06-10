@@ -80,7 +80,7 @@ namespace GibFrame.Editor
         /// <param name="scenePath"> </param>
         /// <param name="action"> </param>
         /// <returns> The number of <see cref="GameObject"/> the <see cref="Action"/> has been run on </returns>
-        public static int ExecuteForGameObjectsInScene(string scenePath, Action<GameObject> action = null)
+        public static int ExecuteForGameObjectsInScene(string scenePath, Action<int, GameObject> action = null)
         {
             var count = 0;
             var openedScene = SceneManager.GetActiveScene();
@@ -93,12 +93,13 @@ namespace GibFrame.Editor
             var sceneRef = isOpenedScene ? openedScene : EditorSceneManager.OpenScene(scenePath);
 
             var scenesObjs = sceneRef.GetRootGameObjects();
+
             foreach (var obj in scenesObjs)
             {
                 var children = obj.GetComponentsInChildren<Transform>(true);
                 foreach (var t in children)
                 {
-                    action?.Invoke(t.gameObject);
+                    action?.Invoke(scenesObjs.Length, t.gameObject);
                     count++;
                 }
             }
@@ -116,7 +117,7 @@ namespace GibFrame.Editor
         public static int ExecuteForComponentsInScene<T>(string scenePath, Action<T> action = null) where T : Component
         {
             var count = 0;
-            ExecuteForGameObjectsInScene(scenePath, obj =>
+            ExecuteForGameObjectsInScene(scenePath, (count, obj) =>
             {
                 var comps = obj.GetComponents<T>();
                 foreach (var c in comps) action?.Invoke(c);
