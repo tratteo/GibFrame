@@ -1,5 +1,4 @@
 ﻿using GibFrame.Editor.Validators;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,10 +8,8 @@ namespace GibFrame.Editor
     public abstract class ValidatorCustomEditor : UnityEditor.Editor
     {
         protected IValidable validable;
-        private bool showResults = false;
-        private List<ValidatorFailure> latestResults = new List<ValidatorFailure>();
         private Vector2 scrollPos;
-        private bool resultsFoldout = false;
+        private bool resultsFoldout;
         private GUIStyle labelStyle;
 
         public override void OnInspectorGUI()
@@ -21,37 +18,50 @@ namespace GibFrame.Editor
 
             DrawProperties();
 
+            var latestResultsProp = serializedObject.FindProperty("latestResultsStrings");
+            var showResultsProp = serializedObject.FindProperty("showResults");
             EditorGUILayout.Space(10);
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Validate"))
             {
-                latestResults = validable.Validate();
-                showResults = true;
+                validable.Validate();
+                latestResultsProp = serializedObject.FindProperty("latestResultsStrings");
+                showResultsProp = serializedObject.FindProperty("showResults");
+                showResultsProp.boolValue = true;
             }
-            EditorGUI.BeginDisabledGroup(!showResults);
+            EditorGUI.BeginDisabledGroup(!showResultsProp.boolValue);
             if (GUILayout.Button("Clear"))
             {
-                showResults = false;
-                latestResults.Clear();
+                showResultsProp.boolValue = false;
+                latestResultsProp.ClearArray();
             }
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndHorizontal();
-            if (showResults)
+            if (showResultsProp.boolValue)
             {
-                var hasErrors = latestResults.Count > 0;
+                EditorGUILayout.Space(10);
+                var rect = EditorGUILayout.GetControlRect(false, 2);
+                EditorGUI.DrawRect(rect, new Color(0.5F, 0.5F, 0.5F, 1));
+                EditorGUILayout.Space(10);
+                var dateTimeProp = serializedObject.FindProperty("lastValidationTime");
+                var count = latestResultsProp.arraySize;
+                var hasErrors = count > 0;
                 var content = hasErrors ?
-                    EditorGUIUtility.TrTextContentWithIcon($" Validation completed with {latestResults.Count} errors", "winbtn_mac_close@2x") :
-                    EditorGUIUtility.TrTextContentWithIcon($" Validation completed with {latestResults.Count} errors", "winbtn_mac_max@2x");
+                    EditorGUIUtility.TrTextContentWithIcon($" Validation completed with {count} errors", "winbtn_mac_close@2x") :
+                    EditorGUIUtility.TrTextContentWithIcon($" Validation completed with {count} errors", "winbtn_mac_max@2x");
 
                 EditorGUILayout.LabelField(content, labelStyle);
+                EditorGUILayout.LabelField(EditorGUIUtility.TrTextContentWithIcon($" {dateTimeProp.stringValue}", "TestStopwatch"), labelStyle);
+
+                EditorGUILayout.Space(10);
                 resultsFoldout = EditorGUILayout.Foldout(resultsFoldout, "Results");
                 if (resultsFoldout)
                 {
                     scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-                    foreach (var f in latestResults)
+                    for (var i = 0; i < count; i++)
                     {
-                        EditorGUILayout.LabelField(new GUIContent(f.ToString()), labelStyle);
+                        EditorGUILayout.LabelField(new GUIContent(latestResultsProp.GetArrayElementAtIndex(i).stringValue + "\n"), labelStyle);
                     }
                     EditorGUILayout.EndScrollView();
                 }
@@ -68,8 +78,7 @@ namespace GibFrame.Editor
             labelStyle = new GUIStyle()
             {
                 wordWrap = true,
-                imagePosition = ImagePosition.ImageLeft,
-                padding = new RectOffset(0, 0, 10, 10)
+                imagePosition = ImagePosition.ImageLeft
             };
             labelStyle.normal.textColor = Color.white;
         }

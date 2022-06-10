@@ -10,15 +10,21 @@ namespace GibFrame.Editor.Validators
     /// </summary>
     public abstract class Validator : ScriptableObject, IValidable
     {
+        [SerializeField, HideInInspector] private bool showResults;
+        [SerializeField, HideInInspector] private List<string> latestResultsStrings;
+        [SerializeField, HideInInspector] private string lastValidationTime = string.Empty;
+
         public bool IsBeingValidated { get; private set; }
 
         public List<ValidatorFailure> Validate(Action<Progress> progress = null)
         {
             IsBeingValidated = true;
-            var failures = new List<ValidatorFailure>();
-            Validate(failures, progress);
+            var res = new List<ValidatorFailure>();
+            Validate(res, progress);
             IsBeingValidated = false;
-            return failures;
+            latestResultsStrings = res.ConvertAll(s => s.ToString());
+            lastValidationTime = DateTime.Now.ToString();
+            return res;
         }
 
         public abstract void Validate(List<ValidatorFailure> failures, Action<Progress> progress = null);

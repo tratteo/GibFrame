@@ -21,7 +21,10 @@ namespace GibFrame.Editor
             var scene = EditorGUI.ObjectField(position, label, GetSceneAsset(sceneNameProp.stringValue).Item1, typeof(SceneAsset), true);
             if (!scene)
             {
+                property.serializedObject.Update();
                 scenePathProp.stringValue = string.Empty;
+                sceneNameProp.stringValue = string.Empty;
+                property.serializedObject.ApplyModifiedProperties();
             }
             else if (scene.name != sceneNameProp.stringValue)
             {

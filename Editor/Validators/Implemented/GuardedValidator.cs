@@ -19,6 +19,11 @@ namespace GibFrame.Editor.Validators
         public override void Validate(List<ValidatorFailure> failures, Action<IValidable.Progress> progress = null)
         {
             var assets = new List<UnityEngine.Object>();
+            var managedProgress = progress is not null;
+            if (!managedProgress)
+            {
+                progress = EditorProgressReport;
+            }
             var progressVal = new IValidable.Progress(nameof(GuardedValidator), "Retrieving assets...", 0);
             progress?.Invoke(progressVal);
             if (validateAssets) assets.AddRange(Gib.GetAllBehaviours<MonoBehaviour>(GibEditor.GetUnityObjectsInAssets().ToArray()));
@@ -52,6 +57,7 @@ namespace GibFrame.Editor.Validators
             }
             Log($"Validated {assets.Count} assets");
 
+            scenesPaths.RemoveAll(s => string.IsNullOrWhiteSpace(s));
             if (scenesPaths.Count > 0)
             {
                 for (var i = 0; i < scenesPaths.Count; i++, count++)
@@ -64,7 +70,13 @@ namespace GibFrame.Editor.Validators
                 }
                 Log($"Validated {(allScenes ? "all" : scenesPaths.Count)} scenes");
             }
+            if (!managedProgress)
+            {
+                EditorUtility.ClearProgressBar();
+            }
         }
+
+        private void EditorProgressReport(IValidable.Progress progress) => EditorUtility.DisplayProgressBar(progress.phase, progress.description, progress.value);
 
         private void Log(string message, LogType type = LogType.Log)
         {
