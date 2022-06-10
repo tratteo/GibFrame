@@ -12,6 +12,9 @@ namespace GibFrame.Editor.Validators
     public sealed class ValidatorGroup : ScriptableObject, IValidable
     {
         [SerializeField] private List<Validator> validators;
+        [SerializeField, HideInInspector] private bool showResults;
+        [SerializeField, HideInInspector] private List<string> latestResultsStrings;
+        [SerializeField, HideInInspector] private string lastValidationTime = string.Empty;
 
         public IReadOnlyCollection<Validator> Validators => validators;
 
@@ -33,6 +36,9 @@ namespace GibFrame.Editor.Validators
                     failures.AddRange(res);
                 }
             }
+            latestResultsStrings = failures.ConvertAll(s => s.ToString());
+            lastValidationTime = DateTime.Now.ToString();
+            showResults = true;
             return failures;
         }
     }

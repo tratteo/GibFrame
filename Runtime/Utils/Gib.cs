@@ -31,9 +31,13 @@ namespace GibFrame
             var behaviours = new List<T>();
             foreach (var obj in objs)
             {
-                if (typeof(T).IsSubclassOf(typeof(ScriptableObject)) || typeof(T).Equals(typeof(UnityEngine.Object)))
+                if (typeof(T).IsSubclassOf(typeof(ScriptableObject)))
                 {
-                    if (obj is T so)
+                    if (typeof(T).Equals(typeof(UnityEngine.Object)))
+                    {
+                        behaviours.Add(obj as T);
+                    }
+                    else if (obj is T so)
                     {
                         behaviours.Add(so);
                     }
