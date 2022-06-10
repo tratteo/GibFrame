@@ -16,6 +16,7 @@ namespace GibFrame.Editor
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
             var initialColor = GUI.color;
             var initialEnabled = GUI.enabled;
 
@@ -30,6 +31,7 @@ namespace GibFrame.Editor
                 DrawGroup(i, initialEnabled, initialColor);
                 if (i < grouper.Groups.Count - 1) GUILayout.Space(10);
             }
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void OnDisable()
@@ -69,21 +71,29 @@ namespace GibFrame.Editor
                     GUI.enabled = comp != grouper && (compGroup == group || compGroup is null);
 
                     if (compGroup is not null) name += $" [{compGroup.name}]";
-                    //if ((comp.hideFlags & HideFlags.HideInInspector) != 0)
-                    //{
-                    //    GUI.color = new Color(0.1F, 0.1F, 0.1F);
-                    //}
-                    //else
-                    //{
-                    //    GUI.color = new Color(50, 50, 50);
-                    //}
 
                     if (GUILayout.Toggle(isInCurrentGroup, name) != isInCurrentGroup)
                     {
                         if (isInCurrentGroup)
+                        {
                             group.Members.Remove(comp);
+                            comp.hideFlags &= ~HideFlags.HideInInspector;
+                            EditorUtility.SetDirty(target);
+                        }
                         else
+                        {
+                            if (!group.IsVisible)
+                            {
+                                comp.hideFlags |= HideFlags.HideInInspector;
+                                EditorUtility.SetDirty(target);
+                            }
+                            else
+                            {
+                                comp.hideFlags &= ~HideFlags.HideInInspector;
+                                EditorUtility.SetDirty(target);
+                            }
                             group.Members.Add(comp);
+                        }
                     }
                 }
 
@@ -132,6 +142,7 @@ namespace GibFrame.Editor
                 {
                     grouper.Groups.Remove(group);
                     ChangeVisibility(group, true);
+                    EditorUtility.SetDirty(target);
                 }
 
                 GUILayout.EndHorizontal();
