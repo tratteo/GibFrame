@@ -48,6 +48,7 @@ namespace GibFrame.Editor
         private void DrawGroup(int index, bool guiEnabled, Color guiColor)
         {
             var group = grouper.Groups[index];
+            var dirty = false;
             if (group.isEditable)
             {
                 var objectComponents = grouper.GetComponents<Component>();
@@ -78,19 +79,19 @@ namespace GibFrame.Editor
                         {
                             group.Members.Remove(comp);
                             comp.hideFlags &= ~HideFlags.HideInInspector;
-                            EditorUtility.SetDirty(target);
+                            dirty = true;
                         }
                         else
                         {
                             if (!group.isVisible)
                             {
                                 comp.hideFlags |= HideFlags.HideInInspector;
-                                EditorUtility.SetDirty(target);
+                                dirty = true;
                             }
                             else
                             {
                                 comp.hideFlags &= ~HideFlags.HideInInspector;
-                                EditorUtility.SetDirty(target);
+                                dirty = true;
                             }
                             group.Members.Add(comp);
                         }
@@ -126,7 +127,7 @@ namespace GibFrame.Editor
                 {
                     grouper.Groups.RemoveAt(index);
                     grouper.Groups.Insert(index - 1, group);
-                    EditorUtility.SetDirty(target);
+                    dirty = true;
                 }
 
                 GUI.enabled = index < grouper.Groups.Count - 1;
@@ -134,7 +135,7 @@ namespace GibFrame.Editor
                 {
                     grouper.Groups.RemoveAt(index);
                     grouper.Groups.Insert(index + 1, group);
-                    EditorUtility.SetDirty(target);
+                    dirty = true;
                 }
 
                 GUI.enabled = true;
@@ -142,11 +143,13 @@ namespace GibFrame.Editor
                 {
                     grouper.Groups.Remove(group);
                     ChangeVisibility(group, true);
-                    EditorUtility.SetDirty(target);
+                    dirty = true;
                 }
 
                 GUILayout.EndHorizontal();
                 GUI.color = guiColor;
+
+                if (dirty) EditorUtility.SetDirty(target);
             }
         }
 
