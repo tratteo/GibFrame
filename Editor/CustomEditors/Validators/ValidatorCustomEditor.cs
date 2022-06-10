@@ -28,7 +28,6 @@ namespace GibFrame.Editor
                 validable.Validate();
                 latestResultsProp = serializedObject.FindProperty("latestResultsStrings");
                 showResultsProp = serializedObject.FindProperty("showResults");
-                showResultsProp.boolValue = true;
             }
             EditorGUI.BeginDisabledGroup(!showResultsProp.boolValue);
             if (GUILayout.Button("Clear"))

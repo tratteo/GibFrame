@@ -24,6 +24,7 @@ namespace GibFrame.Editor.Validators
             IsBeingValidated = false;
             latestResultsStrings = res.ConvertAll(s => s.ToString());
             lastValidationTime = DateTime.Now.ToString();
+            showResults = true;
             return res;
         }
 
