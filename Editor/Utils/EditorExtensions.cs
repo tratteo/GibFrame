@@ -11,26 +11,6 @@ namespace GibFrame.Editor
 
         private delegate FieldInfo GetFieldInfoAndStaticTypeFromProperty(SerializedProperty property, out Type type);
 
-        public static bool IsNullOrDefault(this object arg)
-        {
-            if (arg is UnityEngine.Object && !(arg as UnityEngine.Object)) return true;
-
-            if (arg is null) return true;
-
-            if (Equals(arg, default)) return true;
-
-            var methodType = arg.GetType();
-            if (Nullable.GetUnderlyingType(methodType) is not null) return false;
-
-            var argumentType = arg.GetType();
-            if (argumentType.IsValueType && argumentType != methodType)
-            {
-                var obj = Activator.CreateInstance(arg.GetType());
-                return obj.Equals(arg);
-            }
-            return false;
-        }
-
         /// <summary>
         ///   Get the <see cref="Type"/> and <see cref="FieldInfo"/> for the specified <see cref="SerializedProperty"/>
         /// </summary>
