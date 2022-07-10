@@ -57,7 +57,7 @@ namespace GibFrame.Editor
             {
                 var errorStyle = new GUIStyle();
                 errorStyle.normal.textColor = Color.red;
-                EditorGUI.LabelField(position, label.text, "Use [Guid] with strings.", errorStyle);
+                EditorGUI.LabelField(position, label.text, $"Use [{nameof(GuidAttribute)}] with strings.", errorStyle);
             }
             EditorGUI.EndProperty();
         }
