@@ -1,47 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GibFrame
 {
     /// <summary>
-    ///   Safely execute methods that needs to run on Unity's main thread from any other thread
+    ///   Safely execute methods that need to run on Unity's main thread from any other thread
     /// </summary>
-    public class MainThread : MonoSingleton<MainThread>
+    public class MainThread : MonoBehaviour
     {
+        private static MainThread instance;
         private Queue<Action> updateJobs;
         private Queue<Action> fixedUpdateJobs;
         private Queue<Action> lateUpdateJobs;
 
         public static void InUpdate(Action action)
         {
-            lock (Instance.updateJobs)
+            TryInitialize();
+            lock (instance.updateJobs)
             {
-                Instance.updateJobs.Enqueue(action);
+                instance.updateJobs.Enqueue(action);
             }
         }
 
         public static void InFixedUpdate(Action action)
         {
-            lock (Instance.fixedUpdateJobs)
+            TryInitialize();
+            lock (instance.fixedUpdateJobs)
             {
-                Instance.fixedUpdateJobs.Enqueue(action);
+                instance.fixedUpdateJobs.Enqueue(action);
             }
         }
 
         public static void InLateUpdate(Action action)
         {
-            lock (Instance.lateUpdateJobs)
+            TryInitialize();
+            lock (instance.lateUpdateJobs)
             {
-                Instance.lateUpdateJobs.Enqueue(action);
+                instance.lateUpdateJobs.Enqueue(action);
             }
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
+            if (instance && instance != this)
+            {
+                DestroyImmediate(gameObject);
+                return;
+            }
+
             updateJobs = new Queue<Action>();
             fixedUpdateJobs = new Queue<Action>();
             lateUpdateJobs = new Queue<Action>();
+        }
+
+        private static void TryInitialize()
+        {
+            if (instance) return;
+            var obj = new GameObject()
+            {
+                name = "MainThreadRunner",
+                hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy | HideFlags.NotEditable
+            };
+            instance = obj.AddComponent<MainThread>();
         }
 
         private void Update()
