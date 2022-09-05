@@ -13,6 +13,3 @@ To install, move into the project folder and run the command:
 openupm add com.tratteo.gibframe
 ```
 The OpenUPM CLI is required, for installation instruction check out the [installation guide](https://github.com/openupm/openupm-cli#installation)
-### Github
-To install the package from Git, copy the HTTPS link and in Unity:    
-**Window > Package manager > + > Add from Git > Paste the link**
