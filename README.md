@@ -1,6 +1,9 @@
 [![openupm](https://img.shields.io/npm/v/com.tratteo.gibframe?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.tratteo.gibframe/)
 # GibFrame
 A Unity package for gibbons coders  🐒
+<p align="left">
+  <img src="https://raw.githubusercontent.com/tratteo/GibFrame/main/logo.png" width=256>
+</p>  
 
 ## Installation
 ### OpenUPM
