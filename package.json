@@ -14,6 +14,6 @@
   "samples": [],
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.0.2",
-    "com.tratteo.pury": "1.0.0"
+    "com.tratteo.pury": "1.0.1"
   }
 }
