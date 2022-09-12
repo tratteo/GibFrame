@@ -16,20 +16,20 @@ namespace GibFrame.Editor
         //{
         //}
 
-        [MenuItem("GibFrame/Path Builder", false, 22)]
+        [MenuItem("Window/GibFrame/Path Builder", false, 22)]
         internal static void ShowPathBuilderWindow() => EditorWindow.GetWindow(typeof(PathBuilderEditorWindow)).titleContent = new GUIContent("Path Builder");
 
-        [MenuItem("GibFrame/Settings", false, 1 << 10)]
+        [MenuItem("Window/GibFrame/Settings", false, 1 << 10)]
         internal static void ShowSettingsWindow()
         {
             EditorWindow.GetWindow(typeof(GibFrameSettingsEditorWindow)).titleContent = new GUIContent("GibFrame settings");
             GibFrameEditorSettingsManager.LoadSettings();
         }
 
-        [MenuItem("GibFrame/Play default scene %&LEFT", false, 64)]
+        [MenuItem("Window/GibFrame/Play default scene %&LEFT", false, 64)]
         internal static void PlayDefaultScene() => DefaultSceneManager.PlayDefaultScene();
 
-        [MenuItem("GibFrame/Load default scene %l", false, 64)]
+        [MenuItem("Window/GibFrame/Load default scene %l", false, 64)]
         internal static void LoadDefaultScene() => DefaultSceneManager.LoadDefaultScene();
     }
 }

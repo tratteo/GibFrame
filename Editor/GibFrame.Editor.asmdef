@@ -2,7 +2,8 @@
     "name": "GibFrame.Editor",
     "rootNamespace": "GibFrame.Editor",
     "references": [
-        "GUID:aca4f4cfb37fb8f44ac2c3086652ae75"
+        "GUID:aca4f4cfb37fb8f44ac2c3086652ae75",
+        "GUID:11a92748be0e64e4a870599e86605ccc"
     ],
     "includePlatforms": [
         "Editor"

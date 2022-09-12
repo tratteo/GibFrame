@@ -62,6 +62,10 @@ namespace GibFrame.PathBuilder
 
         private void Awake()
         {
+            if(options is null)
+            {
+                options = new List<PathingOption>();
+            }
             options.NormalizeProbabilities();
         }
 
