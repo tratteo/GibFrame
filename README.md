@@ -1,4 +1,9 @@
-[![openupm](https://img.shields.io/npm/v/com.tratteo.gibframe?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.tratteo.gibframe/)
+[![openupm](https://img.shields.io/npm/v/com.tratteo.gibframe?label=OpenUPM&registry_uri=https://package.openupm.com)](
+https://openupm.com/packages/com.tratteo.gibframe/)
+![GitHub](https://img.shields.io/github/license/tratteo/GibFrame?color=orange&label=License)
+![GitHub top language](https://img.shields.io/github/languages/top/tratteo/GibFrame?color=5027d5&label=C%23&logo=.net)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/tratteo/GibFrame/main?label=Last%20commit&color=brightgreen&logo=github)
+
 # GibFrame
 A Unity package for gibbons coders  🐒
 <p align="left">
