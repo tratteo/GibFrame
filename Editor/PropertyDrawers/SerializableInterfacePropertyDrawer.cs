@@ -22,12 +22,14 @@ namespace GibFrame.Editor
             GUI.contentColor = new Color(185 / 255F, 255 / 255F, 185 / 255F);
             EditorGUI.PropertyField(position, behaviourProp, label, true);
             GUI.contentColor = Color.white;
-            if (EditorGUI.EndChangeCheck())
+            if (EditorGUI.EndChangeCheck() && behaviourProp.objectReferenceValue is not null)
             {
                 if (!TryAssignInterface(behaviourProp.objectReferenceValue, interfaceType, out var assigned))
                 {
                     property.serializedObject.Update();
-                    UnityEngine.Debug.LogWarning($"Unable to find interface of type {interfaceType.Name} in behaviour {behaviourProp.objectReferenceValue}");
+                    UnityEngine.Debug.LogWarning($"Unable to find interface of type {interfaceType.Name} " +
+                        $"in behaviour {behaviourProp.objectReferenceValue}");
+
                     behaviourProp.objectReferenceValue = null;
                     property.serializedObject.ApplyModifiedPropertiesWithoutUndo();
                 }
@@ -43,7 +45,15 @@ namespace GibFrame.Editor
 
         private bool TryAssignInterface(UnityEngine.Object propertyObject, Type interfaceType, out UnityEngine.Object assigned)
         {
-            if (propertyObject is GameObject obj)
+            if (propertyObject is MonoBehaviour behaviour)
+            {
+                if (interfaceType.IsAssignableFrom(behaviour.GetType()))
+                {
+                    assigned = behaviour;
+                    return true;
+                }
+            }
+            else if (propertyObject is GameObject obj)
             {
                 if (obj.TryGetComponent(interfaceType, out var component))
                 {

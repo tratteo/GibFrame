@@ -12,12 +12,25 @@ namespace GibFrame.Editor
         {
             var guidAttribute = attribute as GuidAttribute;
             var valueRect = new Rect(position.x, position.y, position.width, position.height / 2F);
-            var generateButtonRect = new Rect(position.x, position.y + valueRect.height, position.width / 2F, position.height / 2F);
-            var resetButtonRect = new Rect(position.x + generateButtonRect.width, generateButtonRect.y, position.width / 2F, position.height / 2F);
+            var generateButtonRect = new Rect(
+                position.x, position.y + valueRect.height,
+                position.width / 2F,
+                position.height / 2F);
+            var resetButtonRect = new Rect(
+                position.x + generateButtonRect.width,
+                generateButtonRect.y,
+                position.width / 2F, position.height / 2F);
 
             EditorGUI.BeginProperty(position, label, property);
 
-            if (property.propertyType == SerializedPropertyType.String)
+            if (property.propertyType != SerializedPropertyType.String)
+            {
+                var errorStyle = new GUIStyle();
+                errorStyle.normal.textColor = Color.red;
+                EditorGUI.LabelField(position, label.text,
+                    $"Use [{nameof(GuidAttribute)}] with strings.", errorStyle);
+            }
+            else
             {
                 if (guidAttribute.Readonly)
                 {
@@ -42,8 +55,11 @@ namespace GibFrame.Editor
                 EditorGUI.BeginDisabledGroup(!guidAttribute.Resettable || !hasValue);
                 if (GUI.Button(resetButtonRect, "Reset"))
                 {
-                    if (EditorUtility.DisplayDialog("Guid reset", "Are you sure you want to reset the Guid?\n" +
-                        "This will clear the field. Every dependency that referenced this object by this Guid will lose the reference.", "Reset", "Cancel"))
+                    if (EditorUtility.DisplayDialog("Guid reset",
+                        "Are you sure you want to reset the Guid?\n" +
+                        "This will clear the field. " +
+                        "Every dependency that referenced this object by this Guid will lose the reference.",
+                        "Reset", "Cancel"))
                     {
                         property.serializedObject.Update();
                         property.stringValue = null;
@@ -53,15 +69,19 @@ namespace GibFrame.Editor
                 }
                 EditorGUI.EndDisabledGroup();
             }
-            else
-            {
-                var errorStyle = new GUIStyle();
-                errorStyle.normal.textColor = Color.red;
-                EditorGUI.LabelField(position, label.text, $"Use [{nameof(GuidAttribute)}] with strings.", errorStyle);
-            }
             EditorGUI.EndProperty();
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => property.propertyType == SerializedPropertyType.String ? base.GetPropertyHeight(property, label) * 2F : base.GetPropertyHeight(property, label);
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            if (property.propertyType == SerializedPropertyType.String)
+            {
+                return base.GetPropertyHeight(property, label) * 2F;
+            }
+            else
+            {
+                return base.GetPropertyHeight(property, label);
+            }
+        }
     }
 }

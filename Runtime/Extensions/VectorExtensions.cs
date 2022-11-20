@@ -14,7 +14,7 @@ namespace GibFrame.Extensions
 
         public static Vector3 AsPositive(this Vector3 source)
         {
-            Vector3 res = source;
+            var res = source;
             res.Positivize();
             return res;
         }
@@ -28,7 +28,7 @@ namespace GibFrame.Extensions
 
         public static Vector3 AsNegative(this Vector3 source)
         {
-            Vector3 res = source;
+            var res = source;
             res.Negativize();
             return res;
         }
@@ -57,10 +57,10 @@ namespace GibFrame.Extensions
 
         public static Vector3 Perturbate(this Vector3 source, int seed, float magnitude = 1F)
         {
-            System.Random rand = new System.Random(seed);
-            float x = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
-            float y = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
-            float z = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var rand = new System.Random(seed);
+            var x = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var y = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var z = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
             return source + new Vector3(x, y, z);
         }
 
@@ -71,9 +71,9 @@ namespace GibFrame.Extensions
 
         public static Vector3 Perturbate(this Vector3 source, System.Random random, float magnitude = 1F)
         {
-            float x = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
-            float y = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
-            float z = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var x = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var y = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var z = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
             return source + new Vector3(x, y, z);
         }
 
@@ -98,9 +98,9 @@ namespace GibFrame.Extensions
 
         public static Vector2 Perturbate(this Vector2 source, int seed, float magnitude = 1F)
         {
-            System.Random rand = new System.Random(seed);
-            float x = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
-            float y = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var rand = new System.Random(seed);
+            var x = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var y = GibMath.Map((float)rand.NextDouble(), (0F, 1F), (-magnitude, magnitude));
             return source + new Vector2(x, y);
         }
 
@@ -111,8 +111,8 @@ namespace GibFrame.Extensions
 
         public static Vector2 Perturbate(this Vector2 source, System.Random random, float magnitude = 1F)
         {
-            float x = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
-            float y = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var x = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
+            var y = GibMath.Map((float)random.NextDouble(), (0F, 1F), (-magnitude, magnitude));
             return source + new Vector2(x, y);
         }
 
@@ -124,14 +124,14 @@ namespace GibFrame.Extensions
 
         public static Vector2 AsPositive(this Vector2 source)
         {
-            Vector2 res = source;
+            var res = source;
             res.Positivize();
             return res;
         }
 
         public static Vector2 AsNegative(this Vector2 source)
         {
-            Vector2 res = source;
+            var res = source;
             res.Negativize();
             return res;
         }

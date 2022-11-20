@@ -7,7 +7,7 @@ namespace GibFrame.Editor
 {
     public static class EditorExtensions
     {
-        private static GetFieldInfoAndStaticTypeFromProperty getFieldInfoAndStaticTypeFromPropertyDelegate;
+        private static GetFieldInfoAndStaticTypeFromProperty cachedDelegate;
 
         private delegate FieldInfo GetFieldInfoAndStaticTypeFromProperty(SerializedProperty property, out Type type);
 
@@ -19,7 +19,7 @@ namespace GibFrame.Editor
         /// <returns> </returns>
         public static FieldInfo GetFieldInfoAndStaticType(this SerializedProperty prop, out Type type)
         {
-            if (getFieldInfoAndStaticTypeFromPropertyDelegate == null)
+            if (cachedDelegate == null)
             {
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
@@ -27,21 +27,24 @@ namespace GibFrame.Editor
                     {
                         if (t.Name == "ScriptAttributeUtility")
                         {
-                            var mi = t.GetMethod("GetFieldInfoAndStaticTypeFromProperty", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                            getFieldInfoAndStaticTypeFromPropertyDelegate = (GetFieldInfoAndStaticTypeFromProperty)Delegate.CreateDelegate(typeof(GetFieldInfoAndStaticTypeFromProperty), mi);
+                            var mi = t.GetMethod("GetFieldInfoAndStaticTypeFromProperty",
+                                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                            cachedDelegate = (GetFieldInfoAndStaticTypeFromProperty)
+                                Delegate.CreateDelegate(typeof(GetFieldInfoAndStaticTypeFromProperty), mi);
                             break;
                         }
                     }
-                    if (getFieldInfoAndStaticTypeFromPropertyDelegate != null) break;
+                    if (cachedDelegate != null) break;
                 }
-                if (getFieldInfoAndStaticTypeFromPropertyDelegate == null)
+                if (cachedDelegate == null)
                 {
                     Debug.LogError("GetFieldInfoAndStaticType::Reflection failed!");
                     type = null;
                     return null;
                 }
             }
-            return getFieldInfoAndStaticTypeFromPropertyDelegate(prop, out type);
+            return cachedDelegate(prop, out type);
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace GibFrame
     [CreateAssetMenu(menuName = "GibFrame/Descriptor", fileName = "custom_desc")]
     public class Descriptor : ScriptableObject
     {
-        [SerializeField, Guid] private string guid;
+        [SerializeField, Guid(Resettable = true)] private string guid;
         [SerializeField] private new string name;
         [SerializeField] private Sprite icon;
         [SerializeField, TextArea] private string description;

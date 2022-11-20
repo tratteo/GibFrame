@@ -1,10 +1,4 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : GuidAttribute.cs
-//
-// All Rights Reserved
-
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace GibFrame.Meta
