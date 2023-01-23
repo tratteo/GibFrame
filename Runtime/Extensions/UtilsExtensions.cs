@@ -5,6 +5,7 @@
 // All Rights Reserved
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,6 +34,11 @@ namespace GibFrame.Extensions
             }
             return set.ElementAt(index);
         }
+
+        /// <summary>
+        ///   Execute a function after the specified delay
+        /// </summary>
+        public static Coroutine ExecuteAfterDelay(this MonoBehaviour mono, float delay, Action callback) => mono.StartCoroutine(Delayed_C(delay, callback));
 
         public static T SelectWithProbability<T>(this List<T> set, System.Random random) where T : IProbSelectable
         {
@@ -144,6 +150,12 @@ namespace GibFrame.Extensions
             color.g += magnitude;
             color.b += magnitude;
             return color;
+        }
+
+        private static IEnumerator Delayed_C(float delay, Action callback)
+        {
+            yield return new WaitForSeconds(delay);
+            callback?.Invoke();
         }
     }
 }
