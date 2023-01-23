@@ -1,24 +1,24 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : ValueContainerSystem.cs
-//
-// All Rights Reserved
-
-using System;
-using UnityEngine;
+﻿using System;
 
 namespace GibFrame
 {
-    public class ValueSystem : MonoBehaviour, IValueSystem
+    [Serializable]
+    public class ValueSystem
     {
-        [SerializeField] private float maxValue;
         private float currentValue;
+        private float maxValue;
 
         public float Value => currentValue;
 
         public float MaxValue => maxValue;
 
         public float ValuePercentage => Value / maxValue;
+
+        public ValueSystem(float maxValue)
+        {
+            this.maxValue = maxValue;
+            currentValue = maxValue;
+        }
 
         public event Action<float> OnDecrease;
 
@@ -54,11 +54,6 @@ namespace GibFrame
         public void SetMaxValue(float maxHealth)
         {
             maxValue = maxHealth;
-        }
-
-        private void Awake()
-        {
-            currentValue = maxValue;
         }
     }
 }
