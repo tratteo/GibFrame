@@ -6,6 +6,8 @@ https://openupm.com/packages/com.tratteo.gibframe/)
 
 # GibFrame
 A Unity package for gibbons coders  🐒
+
+Check out the Youtube [video](https://www.youtube.com/watch?v=gXSB7h1Bklg) to get to knwow what the package offers!
 <p align="left">
   <img src="https://raw.githubusercontent.com/tratteo/GibFrame/main/logo.png" width=256>
 </p>  
