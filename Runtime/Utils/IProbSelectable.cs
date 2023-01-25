@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : IProbSelectable.cs
-//
-// All Rights Reserved
-
 namespace GibFrame
 {
     /// <summary>

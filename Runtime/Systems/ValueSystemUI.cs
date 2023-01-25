@@ -1,4 +1,4 @@
-﻿using GibFrame;
+using GibFrame;
 using UnityEngine;
 using UnityEngine.UI;
 

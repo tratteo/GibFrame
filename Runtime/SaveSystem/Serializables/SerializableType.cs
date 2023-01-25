@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.SaveSystem.Serializables : SerializableType.cs
-//
-// All Rights Reserved
-
 using System;
 
 namespace GibFrame.SaveSystem.Serializables

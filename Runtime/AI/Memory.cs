@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.AI : Memory.cs
-//
-// All Rights Reserved
-
 using System;
 using System.Collections.Generic;
 using System.Threading;

@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.UI : TabButton.cs
-//
-// All Rights Reserved
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,7 +7,8 @@ namespace GibFrame.UI
     [RequireComponent(typeof(Image))]
     public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
-        public enum TabState { IDLE, SELECTED, HOVER }
+        public enum TabState
+        { IDLE, SELECTED, HOVER }
 
         [SerializeField] private Color selected;
         [SerializeField] private Color idle;

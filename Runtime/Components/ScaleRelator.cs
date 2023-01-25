@@ -1,4 +1,4 @@
-﻿using GibFrame.Extensions;
+using GibFrame.Extensions;
 using UnityEngine;
 
 namespace GibFrame

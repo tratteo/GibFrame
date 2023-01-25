@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.Performance : UpdateJob.cs
-//
-// All Rights Reserved
-
 namespace GibFrame.Performance
 {
     public class UpdateJob

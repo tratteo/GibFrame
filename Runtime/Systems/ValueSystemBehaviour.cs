@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : ValueContainerSystem.cs
-//
-// All Rights Reserved
-
 using System;
 using UnityEngine;
 

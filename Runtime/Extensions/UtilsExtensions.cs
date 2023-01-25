@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : UtilsExtensions.cs
-//
-// All Rights Reserved
-
 using System;
 using System.Collections;
 using System.Collections.Generic;

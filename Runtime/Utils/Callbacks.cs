@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : Callbacks.cs
-//
-// All Rights Reserved
-
 using System;
 
 namespace GibFrame

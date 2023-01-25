@@ -1,9 +1,4 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : DistanceBasedSelector.cs
-//
-// All Rights Reserved
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +8,13 @@ namespace GibFrame.Selectors
 {
     public class DistanceSelector : DiscreteSelector
     {
-        public enum Paradigm
-        { Closest, Farthest }
-
         [Header("Distance based")]
-        public Paradigm paradigm;
+        public DistanceSelectorParadigm paradigm;
         public float radius = 8F;
 
         private Collider[] buffer;
+
+        public event Action<IEnumerable<Collider>> Detected = delegate { };
 
         protected override void Awake()
         {
@@ -38,6 +32,7 @@ namespace GibFrame.Selectors
                 if (NonAlloc)
                 {
                     var amount = Physics.OverlapSphereNonAlloc(transform.position, radius, buffer, mask);
+                    Detected?.Invoke(buffer.Take(amount).Where(c => IsGameObjectValid(c.gameObject)));
                     selected = ChooseNonAlloc(buffer, amount);
                     if (selected)
                     {
@@ -51,7 +46,7 @@ namespace GibFrame.Selectors
                 else
                 {
                     buffer = Physics.OverlapSphere(transform.position, radius, mask);
-
+                    Detected?.Invoke(buffer.Where(c => IsGameObjectValid(c.gameObject)));
                     selected = ChooseNonAlloc(buffer, buffer.Length);
                     if (selected)
                     {
@@ -71,7 +66,10 @@ namespace GibFrame.Selectors
             Collider selected = null;
             switch (paradigm)
             {
-                case Paradigm.Closest:
+                case DistanceSelectorParadigm.DetectOnly:
+                    return selected;
+
+                case DistanceSelectorParadigm.Closest:
                     var min = float.MaxValue;
                     for (var i = 0; i < bufferMatch; i++)
                     {
@@ -84,7 +82,7 @@ namespace GibFrame.Selectors
                     }
                     return selected;
 
-                case Paradigm.Farthest:
+                case DistanceSelectorParadigm.Farthest:
                     var max = float.MinValue;
                     for (var i = 0; i < bufferMatch; i++)
                     {

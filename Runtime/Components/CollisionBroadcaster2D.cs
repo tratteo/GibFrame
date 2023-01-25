@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : CollisionBroadcaster2D.cs
-//
-// All Rights Reserved
-
 using System;
 using UnityEngine;
 using UnityEngine.Events;

@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.Joystick : FloatingJoystick.cs
-//
-// All Rights Reserved
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 

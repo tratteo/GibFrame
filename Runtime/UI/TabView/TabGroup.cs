@@ -1,12 +1,6 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.UI : TabGroup.cs
-//
-// All Rights Reserved
-
+using GibFrame.Extensions;
 using System;
 using System.Collections.Generic;
-using GibFrame.Extensions;
 using UnityEngine;
 
 namespace GibFrame.UI

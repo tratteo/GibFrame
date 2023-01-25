@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : GMath.cs
-//
-// All Rights Reserved
-
 using System;
 
 namespace GibFrame

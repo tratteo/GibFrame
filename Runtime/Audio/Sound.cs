@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.Audio : Sound.cs
-//
-// All Rights Reserved
-
 using UnityEngine;
 
 namespace GibFrame.Audio

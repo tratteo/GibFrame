@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : UnityUtils.cs
-//
-// All Rights Reserved
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;

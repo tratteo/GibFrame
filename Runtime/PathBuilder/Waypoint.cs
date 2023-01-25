@@ -1,12 +1,6 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : Waypoint.cs
-//
-// All Rights Reserved
-
+using GibFrame.Extensions;
 using System;
 using System.Collections.Generic;
-using GibFrame.Extensions;
 using UnityEngine;
 
 namespace GibFrame.PathBuilder
@@ -62,7 +56,7 @@ namespace GibFrame.PathBuilder
 
         private void Awake()
         {
-            if(options is null)
+            if (options is null)
             {
                 options = new List<PathingOption>();
             }

@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : PointerDownBasedSelector.cs
-//
-// All Rights Reserved
-
 using UnityEngine;
 using UnityEngine.Events;
 

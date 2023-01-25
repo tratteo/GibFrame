@@ -1,4 +1,4 @@
-﻿namespace GibFrame
+namespace GibFrame
 {
     public interface IDescriptable
     {

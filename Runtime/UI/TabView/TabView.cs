@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.UI : TabView.cs
-//
-// All Rights Reserved
-
 using GibFrame.Extensions;
 using UnityEngine;
 

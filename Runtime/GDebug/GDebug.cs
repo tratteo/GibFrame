@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : GDebug.cs
-//
-// All Rights Reserved
-
 using UnityEngine;
 
 namespace GibFrame.GDebug

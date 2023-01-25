@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : Selector.cs
-//
-// All Rights Reserved
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +8,8 @@ namespace GibFrame.Selectors
     {
         [Header("Filters")]
         public LayerMask mask = ~0;
-        [Header("Behaviour")]
         private readonly List<Predicate<GameObject>> predicates = new List<Predicate<GameObject>>();
+        [SerializeField] private bool allowSelfSelection = true;
         [Header("Debug")]
         [SerializeField] private bool debugRender = true;
         private GameObject currentCollider;
@@ -30,6 +24,8 @@ namespace GibFrame.Selectors
         public GameObject SelectedObj => currentCollider;
 
         protected int BufferSize => bufferSize;
+
+        protected bool AllowSelfSelection => allowSelfSelection;
 
         protected bool NonAlloc => nonAlloc;
 
@@ -63,10 +59,7 @@ namespace GibFrame.Selectors
             {
                 Deselected?.Invoke(currentCollider);
             }
-            if (currentSelected != null)
-            {
-                currentSelected.OnDeselect();
-            }
+            currentSelected?.OnDeselect();
             currentSelected = null;
             currentCollider = null;
         }
@@ -81,6 +74,7 @@ namespace GibFrame.Selectors
 
         protected bool IsGameObjectValid(GameObject collider)
         {
+            if (!allowSelfSelection && collider.Equals(gameObject)) return false;
             foreach (var predicate in predicates)
             {
                 if (predicate != null && !predicate(collider))
@@ -88,7 +82,7 @@ namespace GibFrame.Selectors
                     return false;
                 }
             }
-            return collider.gameObject && !collider.Equals(gameObject);
+            return collider;
         }
 
         protected void Select(GameObject newCollider)

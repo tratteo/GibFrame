@@ -1,11 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.UI : GButton.cs
-//
-// All Rights Reserved
-
-using System;
 using GibFrame.Extensions;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;

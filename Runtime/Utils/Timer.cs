@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : Timer.cs
-//
-// All Rights Reserved
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

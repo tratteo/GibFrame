@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : OnDisableAnimPerformer.cs
-//
-// All Rights Reserved
-
 using System.Collections;
 using UnityEngine;
 

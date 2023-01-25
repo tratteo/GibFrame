@@ -1,11 +1,5 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame : Path.cs
-//
-// All Rights Reserved
-
-using System.Collections.Generic;
 using GibFrame.Extensions;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GibFrame.PathBuilder

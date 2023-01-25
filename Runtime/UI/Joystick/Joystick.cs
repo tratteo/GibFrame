@@ -1,9 +1,3 @@
-﻿// Copyright (c) Matteo Beltrame
-//
-// com.tratteo.gibframe -> GibFrame.Joystick : Joystick.cs
-//
-// All Rights Reserved
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,7 +5,8 @@ namespace GibFrame.Joystick
 {
     public abstract class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
     {
-        public enum JoystickMode { ALL_AXIS, VERTICAL, HORIZONTAL }
+        public enum JoystickMode
+        { ALL_AXIS, VERTICAL, HORIZONTAL }
 
         [SerializeField] protected RectTransform handle;
         [SerializeField] protected RectTransform background;

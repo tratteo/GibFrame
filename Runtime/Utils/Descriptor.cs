@@ -1,4 +1,4 @@
-﻿using GibFrame.Meta;
+using GibFrame.Meta;
 using UnityEngine;
 
 namespace GibFrame
