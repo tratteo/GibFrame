@@ -20,3 +20,8 @@ To install, move into the project folder and run the command:
 openupm add com.tratteo.gibframe
 ```
 The OpenUPM CLI is required, for installation instruction check out the [installation guide](https://github.com/openupm/openupm-cli#installation)
+
+## Wiki
+The package has been developed during months of game development for my projects. For this reason GibFrame includes various systems and functionalities that would require months to write a (pretty useless) documentation about. Since the package is open source, the best way to get to know the functionalities is to directly check out the package source and structure at both [runtime](https://github.com/tratteo/GibFrame/tree/main/Runtime) and [editor](https://github.com/tratteo/GibFrame/tree/main/Editor).
+
+Also, remember to check out my [YouTube](https://www.youtube.com/@tratteo), for other possible future videos about this!
