@@ -2,7 +2,7 @@ using GibFrame;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RogueDuel.UI
+namespace GibFrame.UI
 {
     public class ValueSystemUI : MonoBehaviour
     {
